@@ -30,6 +30,7 @@
             --btn-shadow-light: rgba(255, 255, 255, 1);
             --btn-shadow-dark: rgba(0, 0, 0, 0.05);
             --glass-border: rgba(255, 255, 255, 0.9);
+            --footer-bg: rgba(45, 27, 26, 0.95); /* Màu nâu trầm sang trọng */
         }
 
         /* BIẾN MÀU CHẾ ĐỘ TỐI (DARK MODE) */
@@ -44,6 +45,7 @@
             --btn-shadow-light: rgba(55, 65, 81, 0.5);
             --btn-shadow-dark: rgba(0, 0, 0, 0.4);
             --glass-border: rgba(255, 255, 255, 0.1);
+            --footer-bg: rgba(20, 10, 10, 0.95); /* Nâu đen khi tắt đèn */
         }
 
         body {
@@ -52,11 +54,9 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column; /* Bố cục dọc để đẩy footer xuống đáy */
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
             color: var(--text-main);
             transition: background 0.5s ease, color 0.5s ease;
         }
@@ -65,6 +65,15 @@
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+
+        /* Vùng bọc nội dung chính để căn giữa thẻ menu */
+        .main-wrapper {
+            flex: 1; /* Chiếm hết khoảng trống còn lại */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
         }
 
         /* Nút Bật/Tắt Đèn Nổi */
@@ -140,6 +149,45 @@
         [data-theme="dark"] .btn-tunhien { color: #2dd4bf; }
         .btn-tunhien:hover { border-color: rgba(12, 130, 129, 0.3); transform: translateY(-4px); }
         .btn-tunhien:hover i { transform: scale(1.1) rotate(5deg); }
+
+        /* FOOTER MÀU NÂU (ĐỒNG BỘ THEO YÊU CẦU) */
+        footer {
+            background: var(--footer-bg);
+            backdrop-filter: blur(20px);
+            color: #fce4ec;
+            padding: 25px 8vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        footer p {
+            margin: 0;
+            font-size: 14.5px;
+            color: #f8bbd0;
+            font-weight: 500;
+        }
+        footer .social-row {
+            display: flex;
+            gap: 12px;
+        }
+        footer .social-row a {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .3s ease; text-decoration: none;
+            font-size: 18px;
+        }
+        footer .social-row a:hover {
+            background: #ff2a7a; border-color: #ff2a7a;
+            transform: translateY(-3px); box-shadow: 0 0 15px rgba(255, 42, 122, 0.4);
+        }
+
+        @media(max-width: 600px) {
+            footer { justify-content: center; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -149,37 +197,52 @@
         <i class="fa-solid fa-moon"></i>
     </button>
 
-    <div class="menu-container">
-        <div class="badge-vip">
-            <i class="fa-solid fa-crown"></i> Chỉ dành cho CSCANAer
-        </div>
-        
-        <h1>Trạm Ôn Tập CSCA Tiếng Trung</h1>
+    <!-- Khu vực bọc nội dung chính để đẩy Footer xuống đáy -->
+    <div class="main-wrapper">
+        <div class="menu-container">
+            <div class="badge-vip">
+                <i class="fa-solid fa-crown"></i> Chỉ dành cho CSCANAer
+            </div>
+            
+            <h1>Trạm Ôn Tập CSCA Tiếng Trung</h1>
 
-        <div class="teacher-note">
-            <i class="fa-solid fa-heart quote-icon" style="background: #ffe4e6; color: #ff2a7a;"></i>
-            <h3>Lời nhắn gửi từ Mentor Ngọc Ánh:</h3>
-            <p>Trạm học tập này là tâm huyết chị dành riêng cho các thành viên nhà mình. Nơi đây lưu trữ toàn bộ tinh hoa: Lý thuyết, Đề thi thật, và Đề mô phỏng (Song ngữ Trung - Việt) của phân môn Xã hội & Tự nhiên.</p>
-            <p>Để đảm bảo web không bị quá tải và quan trọng nhất là <span class="highlight-text">giữ vững lợi thế cạnh tranh</span> của đội nhà, các em tuyệt đối <strong>BÍ MẬT</strong> và không share link ra ngoài nhé! 😉</p>
-            <p style="font-style: italic; font-size: 13.5px; opacity: 0.8; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--note-border);">
-                * P/s: Vì chị cũng tự mày mò học tiếng Trung nên nếu trong tài liệu có hạt "sạn" hay lỗi gõ phím nào, các em cứ mạnh dạn báo lại để chị update kịp thời nha!
-            </p>
-        </div>
-        
-        <div class="btn-wrapper">
-            <a href="xa-hoi.html" class="btn btn-xahoi">
-                <i class="fa-solid fa-earth-asia"></i> 
-                <span>Tiếng Trung Xã Hội</span>
-            </a>
-            <a href="tu-nhien.html" class="btn btn-tunhien">
-                <i class="fa-solid fa-atom"></i> 
-                <span>Tiếng Trung Tự Nhiên</span>
-            </a>
+            <div class="teacher-note">
+                <i class="fa-solid fa-heart quote-icon" style="background: #ffe4e6; color: #ff2a7a;"></i>
+                <h3>Lời nhắn gửi từ Mentor Ngọc Ánh:</h3>
+                <p>Trạm học tập này là tâm huyết chị dành riêng cho các thành viên nhà mình. Nơi đây lưu trữ toàn bộ tinh hoa: Lý thuyết, Đề thi thật, và Đề mô phỏng (Song ngữ Trung - Việt) của phân môn Xã hội & Tự nhiên.</p>
+                <p>Để đảm bảo web không bị quá tải và quan trọng nhất là <span class="highlight-text">giữ vững lợi thế cạnh tranh</span> của đội nhà, các em tuyệt đối <strong>BÍ MẬT</strong> và không share link ra ngoài nhé!</p>
+                <p style="font-style: italic; font-size: 13.5px; opacity: 0.8; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--note-border);">
+                    * P/s: Vì chị cũng tự mày mò học tiếng Trung nên nếu trong tài liệu có hạt "sạn" hay lỗi gõ phím nào, các em cứ mạnh dạn báo lại để chị update kịp thời nha!
+                </p>
+            </div>
+            
+            <div class="btn-wrapper">
+                <a href="xa-hoi.html" class="btn btn-xahoi">
+                    <i class="fa-solid fa-earth-asia"></i> 
+                    <span>Tiếng Trung Xã Hội</span>
+                </a>
+                <a href="tu-nhien.html" class="btn btn-tunhien">
+                    <i class="fa-solid fa-atom"></i> 
+                    <span>Tiếng Trung Tự Nhiên</span>
+                </a>
+            </div>
         </div>
     </div>
 
-    <!-- Script điều khiển Đèn -->
+    <!-- FOOTER NÂU TRẦM -->
+    <footer>
+        <p>&copy; <span id="currentYear"></span> Hồ Ngọc Ánh | Bí mật dành riêng cho CSCANA-ers.</p>
+        <div class="social-row">
+            <a href="https://www.facebook.com/profile.php?id=61586852915723" target="_blank" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://zalo.me/0819078236" target="_blank" title="Zalo"><i class="fa-solid fa-comment-dots"></i></a>
+        </div>
+    </footer>
+
+    <!-- Script điều khiển Đèn & Footer -->
     <script>
+        // Tự động lấy năm hiện tại cho Footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
         const themeToggle = document.getElementById('themeToggle');
         const icon = themeToggle.querySelector('i');
         const htmlElement = document.documentElement;
