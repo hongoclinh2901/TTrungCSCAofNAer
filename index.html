@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trạm Ôn Tập Bí Mật | CSCANAer</title>
+    
+    <!-- Đồng bộ Font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Font Awesome cho icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Nền Gradient tươi sáng, chuyển động nhẹ nhàng tạo cảm giác vui tươi */
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: linear-gradient(-45deg, #ffe0ec, #e0f2fe, #fef08a, #dcfce7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: #1a2a40;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Khối Menu 3D (Neumorphism kết hợp Glassmorphism) */
+        .menu-container {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 50px 40px;
+            border-radius: 24px;
+            box-shadow: 
+                0 25px 50px rgba(0,0,0,0.05), 
+                0 5px 15px rgba(0,0,0,0.02),
+                inset 0 0 0 2px rgba(255,255,255,0.9);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            transform: perspective(1000px) translateY(0);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .menu-container:hover {
+            transform: perspective(1000px) translateY(-5px);
+            box-shadow: 
+                0 30px 60px rgba(0,0,0,0.08), 
+                0 5px 15px rgba(0,0,0,0.02),
+                inset 0 0 0 2px rgba(255,255,255,1);
+        }
+
+        /* Badge Độc quyền */
+        .badge-vip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #ff2a7a, #ff758c);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 42, 122, 0.3);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: 30px;
+            font-weight: 700;
+            color: #1a2a40;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        /* Hộp tin nhắn từ Giáo viên (Làm lõm 3D) */
+        .teacher-note {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 35px;
+            text-align: left;
+            /* Đổ bóng lõm (inset) tạo cảm giác hộp chứa tin nhắn */
+            box-shadow: inset 4px 4px 10px rgba(0,0,0,0.03), inset -4px -4px 10px rgba(255,255,255,1);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .teacher-note i.quote-icon {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #fef08a;
+            color: #ca8a04;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(202, 138, 4, 0.2);
+        }
+
+        .teacher-note h3 {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 16px;
+            color: #0c8281;
+            margin-bottom: 10px;
+            margin-top: 0;
+            font-weight: 700;
+        }
+
+        .teacher-note p {
+            color: #475569;
+            font-size: 14.5px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .teacher-note p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight-text {
+            color: #ff2a7a;
+            font-weight: 700;
+        }
+
+        /* Khu vực Nút bấm 3D */
+        .btn-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media(max-width: 500px) {
+            .btn-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 20px 15px;
+            border-radius: 16px;
+            background: #ffffff;
+            /* Đổ bóng kiểu phím bấm vật lý 3D */
+            box-shadow: 
+                6px 6px 14px rgba(0, 0, 0, 0.05), 
+                -6px -6px 14px rgba(255, 255, 255, 1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 2px solid transparent;
+        }
+
+        .btn i {
+            font-size: 28px;
+            margin-bottom: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Nút nhấn xuống (Click effect) */
+        .btn:active {
+            box-shadow: 
+                inset 4px 4px 10px rgba(0, 0, 0, 0.05), 
+                inset -4px -4px 10px rgba(255, 255, 255, 1);
+            transform: translateY(2px);
+        }
+
+        /* Nút Tiếng Trung Xã Hội (Hồng) */
+        .btn-xahoi { color: #ff2a7a; }
+        .btn-xahoi:hover {
+            box-shadow: 0 15px 30px rgba(255, 42, 122, 0.15);
+            border-color: rgba(255, 42, 122, 0.3);
+            transform: translateY(-4px);
+        }
+        .btn-xahoi:hover i { transform: scale(1.1) rotate(-5deg); }
+
+        /* Nút Tiếng Trung Tự Nhiên (Xanh) */
+        .btn-tunhien { color: #0c8281; }
+        .btn-tunhien:hover {
+            box-shadow: 0 15px 30px rgba(12, 130, 129, 0.15);
+            border-color: rgba(12, 130, 129, 0.3);
+            transform: translateY(-4px);
+        }
+        .btn-tunhien:hover i { transform: scale(1.1) rotate(5deg); }
+
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <div class="badge-vip">
+            <i class="fa-solid fa-crown"></i> Chỉ dành cho CSCANAer
+        </div>
+        
+        <h1>Trạm Ôn Tập CSCA Tiếng Trung</h1>
+
+        <!-- Hộp tin nhắn của giáo viên -->
+        <div class="teacher-note">
+            <i class="fa-solid fa-heart quote-icon" style="background: #ffe4e6; color: #ff2a7a;"></i>
+            <h3>Lời nhắn gửi từ Mentor Ngọc Ánh:</h3>
+            <p>Trạm học tập này là tâm huyết chị dành riêng cho các thành viên nhà mình. Nơi đây lưu trữ toàn bộ tinh hoa: Lý thuyết, Đề thi thật, và Đề mô phỏng (Song ngữ Trung - Việt) của phân môn Xã hội & Tự nhiên.</p>
+            <p>Để đảm bảo web không bị quá tải và quan trọng nhất là <span class="highlight-text">giữ vững lợi thế cạnh tranh</span> của đội nhà, các em tuyệt đối <strong>BÍ MẬT</strong> và không share link ra ngoài nhé! 😉</p>
+            <p style="font-style: italic; font-size: 13.5px; color: #64748b; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #cbd5e1;">
+                * P/s: Vì chị cũng tự mày mò học tiếng Trung nên nếu trong tài liệu có hạt "sạn" hay lỗi gõ phím nào, các em cứ mạnh dạn báo lại để chị update kịp thời nha!
+            </p>
+        </div>
+        
+        <!-- Nút bấm chọn phân môn -->
+        <div class="btn-wrapper">
+            <a href="xa-hoi.html" class="btn btn-xahoi">
+                <i class="fa-solid fa-earth-asia"></i> 
+                <span>Tiếng Trung Xã Hội</span>
+            </a>
+            
+            <a href="tu-nhien.html" class="btn btn-tunhien">
+                <i class="fa-solid fa-atom"></i> 
+                <span>Tiếng Trung Tự Nhiên</span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
