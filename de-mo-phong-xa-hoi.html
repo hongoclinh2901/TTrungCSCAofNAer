@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề Mô Phỏng Tiếng Trung Xã Hội | Kho Học Liệu</title>
+
+    <script>
+        if(localStorage.getItem('csca-study-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        if(localStorage.getItem('csca-sidebar-collapsed') === 'true') document.documentElement.classList.add('sidebar-collapsed');
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root { --primary: #d81b60; --bg-body: #fff5f8; --bg-sidebar: #ffffff; --text-main: #202124; --text-muted: #5f6368; --border-color: #f8cdd6; --hover-bg: #ffeef2; }
+        [data-theme="dark"] { --bg-body: #1a1114; --bg-sidebar: #24161a; --text-main: #e8eaed; --text-muted: #9aa0a6; --border-color: #3e272d; --hover-bg: #351c24; --primary: #f48fb1; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; transition: 0.3s; }
+
+        .sidebar { width: 280px; background-color: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; transition: margin-left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        html.sidebar-collapsed .sidebar { margin-left: -280px; }
+        .logo-area { padding: 0 20px 20px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        .logo-area a { text-decoration: none; color: var(--text-main); font-family: 'Lora', serif; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .logo-area a:hover { color: var(--primary); }
+
+        .subject-switcher { display: flex; margin: 0 20px 20px 20px; background: var(--hover-bg); border-radius: 8px; padding: 4px; border: 1px solid var(--border-color); }
+        .switch-btn { flex: 1; text-align: center; padding: 8px 0; font-size: 13px; font-weight: 600; color: var(--text-muted); text-decoration: none; border-radius: 6px; transition: 0.2s; }
+        .switch-btn.active { background: var(--bg-sidebar); color: var(--primary); box-shadow: 0 1px 3px rgba(216, 27, 96, 0.15); }
+        .switch-btn:not(.active):hover { color: var(--text-main); }
+
+        .nav-menu { flex: 1; display: flex; flex-direction: column; gap: 4px; padding: 0 10px; }
+        .nav-item { text-decoration: none; padding: 12px 20px; border-radius: 8px; font-size: 14.5px; font-weight: 500; color: var(--text-main); display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+        .nav-item i { width: 20px; text-align: center; color: var(--text-muted); }
+        .nav-item:hover { background-color: var(--hover-bg); }
+        .nav-item.active { background-color: rgba(216, 27, 96, 0.12); color: var(--primary); font-weight: 600; }
+        .nav-item.active i { color: var(--primary); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); margin-top: auto; }
+        .theme-toggle-btn { width: 100%; padding: 10px; border: 1px solid var(--border-color); background: var(--bg-body); color: var(--text-main); border-radius: 8px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .theme-toggle-btn:hover { background: var(--hover-bg); color: var(--primary); border-color: var(--primary);}
+
+        .main-content { flex: 1; overflow-y: auto; padding: 30px 60px 50px; scroll-behavior: smooth; line-height: 1.8;}
+        .top-bar { margin-bottom: 20px; display: flex; align-items: center; }
+        .menu-toggle-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 8px; border-radius: 6px; transition: 0.2s; }
+        .menu-toggle-btn:hover { color: var(--primary); background: var(--hover-bg); }
+
+        .content-header { margin-bottom: 30px; border-bottom: 2px solid var(--primary); padding-bottom: 15px; display: inline-block;}
+        .content-header h1 { font-size: 26px; color: var(--text-main); margin-bottom: 5px; font-family: 'Lora', serif;}
+        .content-header p { font-size: 14px; color: var(--text-muted); font-style: italic;}
+
+        .file-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .file-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border: 1px solid var(--border-color); border-radius: 8px; transition: 0.2s; background: var(--bg-sidebar); }
+        .file-item:hover { border-color: var(--primary); background: var(--hover-bg); }
+        .file-info { display: flex; align-items: center; gap: 15px; font-weight: 500; }
+        .file-info i { color: var(--primary); font-size: 22px; } 
+        .file-download { color: white; text-decoration: none; font-weight: 600; font-size: 14px; padding: 6px 14px; border-radius: 6px; background: var(--primary); transition: 0.2s;}
+        .file-download:hover { filter: brightness(1.1); }
+
+        @media(max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border-color); padding: 15px 20px; flex-shrink: 0; margin-left: 0 !important;}
+            .logo-area { border: none; padding: 0; margin-bottom: 15px; }
+            .subject-switcher { margin: 0 0 15px 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 0; border-bottom: none; }
+            .nav-item { padding: 8px 15px; }
+            .sidebar-footer, .top-bar { display: none; }
+            .main-content { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo-area"><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Trạm Ôn Tập CSCA</a></div>
+        <div class="subject-switcher">
+            <a href="xa-hoi.html" class="switch-btn active">TTXH</a>
+            <a href="tu-nhien.html" class="switch-btn">TTTN</a>
+        </div>
+        <nav class="nav-menu">
+            <a href="xa-hoi.html" class="nav-item"><i class="fa-solid fa-book-journal-whills"></i> Đề cương</a>
+            <a href="giao-trinh-xa-hoi.html" class="nav-item"><i class="fa-solid fa-book"></i> File giáo trình</a>
+            <a href="de-thi-that-xa-hoi.html" class="nav-item"><i class="fa-solid fa-file-signature"></i> Đề thi thật</a>
+            <!-- Active mục Đề mô phỏng -->
+            <a href="de-mo-phong-xa-hoi.html" class="nav-item active"><i class="fa-solid fa-dumbbell"></i> Đề mô phỏng</a>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="theme-toggle-btn" id="themeToggle"><i class="fa-solid fa-moon"></i> <span>Chế độ tối</span></button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="top-bar"><button class="menu-toggle-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars-staggered"></i></button></div>
+        <div class="content-header">
+            <h1>Đề Mô Phỏng (Mock Test)</h1>
+            <p>Bài thi thực hành chống bẫy từ vựng do Mentor Ngọc Ánh tự biên soạn.</p>
+        </div>
+
+        <ul class="file-list">
+            <li class="file-item">
+                <div class="file-info"><i class="fa-solid fa-link"></i><span>Đề mô phỏng 01 - Ôn tập Chương 1 & 2 (Có chấm điểm)</span></div>
+                <a href="#" class="file-download">Làm bài ngay</a>
+            </li>
+        </ul>
+    </main>
+
+    <script>
+        function toggleSidebar() { const htmlElement = document.documentElement; htmlElement.classList.toggle('sidebar-collapsed'); localStorage.setItem('csca-sidebar-collapsed', htmlElement.classList.contains('sidebar-collapsed')); }
+        const themeToggle = document.getElementById('themeToggle'); const icon = themeToggle.querySelector('i'); const text = themeToggle.querySelector('span'); const htmlElement = document.documentElement;
+        function updateThemeUI(isDark) { icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon'; text.textContent = isDark ? 'Chế độ sáng' : 'Chế độ tối'; }
+        if(htmlElement.getAttribute('data-theme') === 'dark') updateThemeUI(true);
+        themeToggle.addEventListener('click', () => {
+            if (htmlElement.getAttribute('data-theme') === 'dark') { htmlElement.removeAttribute('data-theme'); localStorage.setItem('csca-study-theme', 'light'); updateThemeUI(false); } 
+            else { htmlElement.setAttribute('data-theme', 'dark'); localStorage.setItem('csca-study-theme', 'dark'); updateThemeUI(true); }
+        });
+    </script>
+</body>
+</html>
