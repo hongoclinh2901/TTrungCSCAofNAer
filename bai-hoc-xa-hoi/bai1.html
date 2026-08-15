@@ -2,11 +2,15 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bài 1: 汉语的特点 | Trạm Ôn Tập CSCA</title>
+    <!-- Thư viện hỗ trợ Kéo Thả trên màn hình cảm ứng -->
+    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
     <script>
         if(localStorage.getItem('csca-study-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-        if(localStorage.getItem('csca-sidebar-collapsed') === 'true') document.documentElement.classList.add('sidebar-collapsed');
+        if(localStorage.getItem('csca-sidebar-collapsed') === 'true' || window.innerWidth <= 768) {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -62,6 +66,39 @@
         .drag-word:active { cursor: grabbing; transform: scale(0.95); }
         .drop-zone { display: inline-flex; justify-content: center; align-items: center; width: 70px; height: 34px; border: 1px dashed #aaa; border-radius: 4px; vertical-align: middle; background: #fafafa; margin: 0 4px; transition: 0.2s; }
         .drop-zone.drag-over { border-color: var(--primary); background: #ffeef2; border-width: 2px; }
+        /* ========================================= */
+        /* CSS TỐI ƯU CHO ĐIỆN THOẠI MÀN HÌNH NHỎ */
+        /* ========================================= */
+        /* ========================================= */
+        /* CSS TỐI ƯU CHO ĐIỆN THOẠI (MENU NGANG TRÊN CÙNG) */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Đưa menu lên trên cùng và thiết lập vuốt ngang */
+            body { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 15px 20px; flex-shrink: 0; margin-left: 0 !important; box-shadow: none; }
+            .logo-area { border: none; padding: 0; margin-bottom: 15px; }
+            .subject-switcher { margin: 0 0 15px 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 0; border-bottom: none; }
+            .nav-item { padding: 8px 15px; }
+            
+            /* 2. Ẩn nút Menu (3 gạch) và nút chuyển Darkmode ở thanh menu ngang */
+            .sidebar-footer, .top-bar { display: none; }
+            
+            /* 3. Tối ưu khung nội dung bài học */
+            .main-content { padding: 25px 15px; overflow-y: auto; }
+            .lesson-card { padding: 20px 15px; border-radius: 12px; }
+            
+            /* 4. Tối ưu cho Bảng, Form và Kéo Thả */
+            table.vocab-table, table.custom-table { display: block; overflow-x: auto; white-space: nowrap; }
+            .flex-mobile-col { flex-direction: column !important; gap: 15px !important; }
+            input[type="text"] { width: 100% !important; margin: 5px 0 !important; box-sizing: border-box; }
+            .info-box { padding: 15px; }
+            .reading-box { padding: 15px; }
+            .reading-box p { text-indent: 1em; }
+            h1 { font-size: 22px; }
+            .drag-word { touch-action: none; margin: 5px; }
+            .grid-mobile-1 { grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
 <body>
