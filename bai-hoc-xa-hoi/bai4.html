@@ -2,11 +2,15 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bài 4: 汉字的造字方法 | Trạm Ôn Tập CSCA</title>
+    <!-- Thư viện hỗ trợ Kéo Thả trên màn hình cảm ứng -->
+    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
     <script>
         if(localStorage.getItem('csca-study-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-        if(localStorage.getItem('csca-sidebar-collapsed') === 'true') document.documentElement.classList.add('sidebar-collapsed');
+        if(localStorage.getItem('csca-sidebar-collapsed') === 'true' || window.innerWidth <= 768) {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -34,19 +38,50 @@
         .menu-toggle-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 8px; border-radius: 6px; }
         .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 20px; font-size: 14.5px; }
         .lesson-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px; }
-        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; }
-        .lesson-sub { color: var(--text-muted); font-size: 14.5px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; }
-        table.vocab-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        table.vocab-table th, table.vocab-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
-        table.vocab-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
+        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; text-align: center; }
+        h2 { font-size: 20px; color: white; background: var(--primary); display: inline-block; padding: 6px 16px; border-radius: 20px; margin: 30px 0 20px 0; }
+        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        
+        table.vocab-table, table.custom-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        table.vocab-table th, table.vocab-table td, table.custom-table th, table.custom-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
+        table.vocab-table th, table.custom-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
         .hanzi { font-size: 1.25em; font-weight: 500; color: var(--primary); }
-        ruby { ruby-align: center; margin-right: 4px; font-size: 1.35em; line-height: 2.8; }
-        rt { color: var(--text-muted); font-size: 0.5em; font-family: sans-serif; }
+        
+        .info-box { background: var(--hover-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .info-box p { margin-bottom: 10px; }
+        
+        ul.exercise-list { list-style: none; padding-left: 0; }
+        ul.exercise-list li { margin-bottom: 15px; }
+        
         .reading-box { background: var(--bg-body); padding: 25px; border-radius: 12px; border-left: 4px solid var(--primary); margin: 20px 0; border: 1px solid var(--border-color); }
+        .reading-box p { text-indent: 2em; margin-bottom: 15px; }
+        
         .next-lesson-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; }
         .next-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--primary); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.2s; }
         .next-btn:hover { filter: brightness(1.1); }
+
+        .drag-word { background: white; border: 1px solid var(--primary); color: var(--primary); padding: 4px 14px; border-radius: 20px; cursor: grab; font-weight: 600; display: inline-block; user-select: none; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .drag-word:active { cursor: grabbing; transform: scale(0.95); }
+        .drop-zone { display: inline-flex; justify-content: center; align-items: center; min-width: 70px; height: 34px; border: 1px dashed #aaa; border-radius: 4px; vertical-align: middle; background: #fafafa; margin: 0 4px; transition: 0.2s; padding: 0 5px; }
+        .drop-zone.drag-over { border-color: var(--primary); background: #ffeef2; border-width: 2px; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 15px 20px; flex-shrink: 0; margin-left: 0 !important; box-shadow: none; }
+            .logo-area { border: none; padding: 0; margin-bottom: 15px; }
+            .subject-switcher { margin: 0 0 15px 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 0; border-bottom: none; }
+            .nav-item { padding: 8px 15px; }
+            .sidebar-footer, .top-bar { display: none; }
+            .main-content { padding: 25px 15px; overflow-y: auto; }
+            .lesson-card { padding: 20px 15px; border-radius: 12px; }
+            table.vocab-table, table.custom-table { display: block; overflow-x: auto; white-space: nowrap; }
+            input[type="text"] { width: 100% !important; margin: 5px 0 !important; box-sizing: border-box; }
+            .info-box, .reading-box { padding: 15px; }
+            .reading-box p { text-indent: 1em; }
+            h1 { font-size: 22px; }
+            .drag-word { touch-action: none; margin: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -76,61 +111,1864 @@
             <a href="../giao-trinh-xa-hoi.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách bài học</a>
 
             <div class="lesson-card">
-                <h1>Đơn vị 4: 汉字的造字方法 (Phương pháp cấu tạo chữ Hán)</h1>
-                <p class="lesson-sub">Tìm hiểu về các phương pháp hình thành và cấu trúc tượng hình, hội ý, hình thanh trong chữ Hán[cite: 2].</p>
+                <h1>第四单元: 汉字的造字方法</h1>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Unit 4: Methods of Creating Chinese Characters<br>(Đơn vị 4: Phương pháp cấu tạo chữ Hán)</p>
 
-                <h3>1. Từ Vựng Trọng Tâm (生词)</h3>
+                <!-- 学习目标 -->
+                <div class="info-box">
+                    <h3 style="margin-top: 0; border: none; padding: 0;"><i class="fa-solid fa-bullseye"></i> 学习目标 Learning Objectives (Mục tiêu bài học)</h3>
+                    
+                    <p><strong>1. 了解专业知识：汉字的造字方法</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Hiểu kiến thức chuyên ngành: Các phương pháp cấu tạo chữ Hán)</span></p>
+                    
+                    <p><strong>2. 掌握专业术语：甲骨文、笔画、象形、指事、偏旁、会意、形声</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Nắm vững thuật ngữ chuyên môn: Giáp cốt văn, nét bút, tượng hình, chỉ sự, bộ thủ (thiên bàng), hội ý, hình thanh)</span></p>
+                    
+                    <p><strong>3. 使用书面词语与格式：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Sử dụng từ ngữ và cấu trúc văn viết:)</span><br>
+                    • 表示 <span style="color: var(--text-muted); font-size: 14px;">(Biểu thị)</span><br>
+                    • 象征 <span style="color: var(--text-muted); font-size: 14px;">(Tượng trưng)</span><br>
+                    • 来 <span style="color: var(--text-muted); font-size: 14px;">(Để / nhằm)</span><br>
+                    • 尤其 <span style="color: var(--text-muted); font-size: 14px;">(Đặc biệt là)</span><br>
+                    • 由 <span style="color: var(--text-muted); font-size: 14px;">(Do / từ)</span>
+                    </p>
+                    
+                    <p><strong>4. 进行功能表达：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Thực hành diễn đạt chức năng:)</span><br>
+                    • 比喻：像……一样 / 好像 / 仿佛<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(So sánh/Ví von: Giống như... / Dường như / Cứ như)</span><br>
+                    • 解释：……是……的意思 / 意思是 / 就是 / 表示 / 实际上 / 其实 / 也就是说 / 指的是 / 不是……，而是…… / 我们这里所说的……<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Giải thích: ...có nghĩa là... / ý là / chính là / biểu thị / thực tế là / kỳ thực / nói cách khác / chỉ việc / không phải là... mà là... / cái mà chúng ta nói ở đây là...)</span></p>
+                </div>
+
+                <!-- 1-2 学时 -->
+                <h2>1—2 学时 Class Hours 1—2 (Tiết học 1—2)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 你最喜欢的汉字是哪个？为什么？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Chữ Hán bạn thích nhất là chữ nào? Tại sao?)</span>
+                        <input type="text" placeholder="Nhập câu trả lời của bạn..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 8px 0; margin-top: 5px;">
+                    </li>
+                    <li>
+                        <strong>2. 下列古文字是现代汉语中的哪个汉字？请画线连接。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Các chữ cổ dưới đây là chữ Hán nào trong tiếng Hán hiện đại? Hãy nối lại với nhau. - <em>Viết chữ hiện đại tương ứng vào ô trống</em>)</span>
+                        <div style="display: flex; gap: 20px; align-items: center; justify-content: space-around; background: var(--bg-body); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 15px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 30px; margin-bottom: 10px;">🌞</div>
+                                <input type="text" data-answer="日" placeholder="Chữ Hán" style="width: 60px; text-align: center; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 30px; margin-bottom: 10px;">🌙</div>
+                                <input type="text" data-answer="月" placeholder="Chữ Hán" style="width: 60px; text-align: center; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 30px; margin-bottom: 10px;">🌧️</div>
+                                <input type="text" data-answer="雨" placeholder="Chữ Hán" style="width: 60px; text-align: center; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 30px; margin-bottom: 10px;">🐏</div>
+                                <input type="text" data-answer="羊" placeholder="Chữ Hán" style="width: 60px; text-align: center; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 30px; margin-bottom: 10px;">🐟</div>
+                                <input type="text" data-answer="鱼" placeholder="Chữ Hán" style="width: 60px; text-align: center; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 4-1 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-1.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
                 <table class="vocab-table">
                     <thead>
                         <tr>
-                            <th width="25%">Chữ Hán</th>
-                            <th width="30%">Pinyin</th>
-                            <th width="15%">Từ loại</th>
-                            <th width="30%">Ý nghĩa (Tiếng Việt)</th>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="hanzi">汉字</td>
-                            <td>hànzì</td>
-                            <td>Danh từ</td>
-                            <td>Chữ Hán</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">造字</td>
-                            <td>zàizì</td>
-                            <td>Động từ</td>
-                            <td>Cấu tạo chữ</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">方法</td>
-                            <td>fāngfǎ</td>
-                            <td>Danh từ</td>
-                            <td>Phương pháp</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">结构</td>
-                            <td>jiégòu</td>
-                            <td>Danh từ</td>
-                            <td>Cấu trúc</td>
-                        </tr>
+                        <tr><td>1</td><td class="hanzi">充满</td><td>chōngmǎn</td><td>动</td><td>tràn đầy, chan chứa</td></tr>
+                        <tr><td>2</td><td class="hanzi">生机</td><td>shēngjī</td><td>名</td><td>sức sống</td></tr>
+                        <tr><td>3</td><td class="hanzi">幼苗</td><td>yòumiáo</td><td>名</td><td>mầm non, cây non</td></tr>
+                        <tr><td>4</td><td class="hanzi">温暖</td><td>wēnnuǎn</td><td>形</td><td>ấm áp</td></tr>
+                        <tr><td>5</td><td class="hanzi">草木</td><td>cǎomù</td><td></td><td>cỏ cây, thảo mộc</td></tr>
+                        <tr><td>6</td><td class="hanzi">茂盛</td><td>màoshèng</td><td>形</td><td>tươi tốt, rậm rạp</td></tr>
+                        <tr><td>7</td><td class="hanzi">除夕</td><td>chúxī</td><td>名</td><td>đêm giao thừa</td></tr>
+                        <tr><td>8</td><td class="hanzi">形状</td><td>xíngzhuàng</td><td>名</td><td>hình dạng, hình thù</td></tr>
+                        <tr><td>9</td><td class="hanzi">除去</td><td>chúqù</td><td>动</td><td>loại bỏ, trừ đi</td></tr>
+                        <tr><td>10</td><td class="hanzi">留恋</td><td>liúliàn</td><td>动</td><td>lưu luyến, bịn rịn</td></tr>
+                        <tr><td>11</td><td class="hanzi">夜晚</td><td>yèwǎn</td><td>名</td><td>ban đêm</td></tr>
+                        <tr><td>12</td><td class="hanzi">迎接</td><td>yíngjiē</td><td>动</td><td>chào đón, nghênh tiếp</td></tr>
+                        <tr><td>13</td><td class="hanzi">壶</td><td>hú</td><td>名</td><td>ấm, bình (ấm trà, bình rượu)</td></tr>
+                        <tr><td>14</td><td class="hanzi">象征</td><td>xiàngzhēng</td><td>动</td><td>tượng trưng</td></tr>
+                        <tr><td>15</td><td class="hanzi">好运</td><td>hǎoyùn</td><td>名</td><td>may mắn, vận may</td></tr>
                     </tbody>
                 </table>
 
-                <h3>2. Luyện Đọc Hiểu Văn Bản (课文)</h3>
-                <div class="reading-box">
-                    <p style="margin-bottom: 15px; font-weight: bold; color: var(--primary);">课文 1: 汉字与章节</p>
-                    <ruby>汉<rt>hàn</rt></ruby><ruby>字<rt>zì</rt></ruby>是
-                    <ruby>世<rt>shì</rt></ruby><ruby>界<rt>jiè</rt></ruby>上
-                    <ruby>最<rt>zuì</rt></ruby><ruby>古<rt>gǔ</rt></ruby>
-                    <ruby>老<rt>lǎo</rt></ruby>的
-                    <ruby>文<rt>wén</rt></ruby><ruby>字<rt>zì</rt></ruby>之
-                    <ruby>一<rt>yī</rt></ruby>[cite: 2]。
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 4-2 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-2.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">甲骨文</td><td>jiǎgǔwén</td><td>名</td><td>Giáp cốt văn (chữ khắc trên mai rùa, xương thú)</td></tr>
+                        <tr><td>2</td><td class="hanzi">古文</td><td>gǔwén</td><td>名</td><td>Cổ văn (chữ Hán cổ)</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 朗读并查找：朗读生词表中的生词，并在课文中画出这些生词。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and search: Read aloud the new words in the vocabulary list and circle these words in the text. / Đọc to và tìm kiếm: Đọc to các từ mới trong bảng từ vựng, sau đó khoanh tròn những từ này trong phần bài đọc.)</span>
+                        </h4>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Matching -->
+                    <div id="exercise-4-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 生词连线：写拼音，连英文。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Matching: Write down the pinyin of the new words and match them with the English explanations. / Nối từ: Viết Pinyin và điền chữ cái A-G tương ứng với nghĩa tiếng Anh vào ô trống.)</span>
+                        </h4>
+                        
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-weight: 500; min-width: 250px;">
+                                <li>1. 幼苗 &nbsp;&nbsp; <input type="text" data-pinyin="yòumiáo" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="b" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>2. 温暖 &nbsp;&nbsp; <input type="text" data-pinyin="wēnnuǎn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="d" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>3. 充满 &nbsp;&nbsp; <input type="text" data-pinyin="chōngmǎn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="c" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>4. 形状 &nbsp;&nbsp; <input type="text" data-pinyin="xíngzhuàng" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="a" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>5. 夜晚 &nbsp;&nbsp; <input type="text" data-pinyin="yèwǎn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="f" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>6. 象征 &nbsp;&nbsp; <input type="text" data-pinyin="xiàngzhēng" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="g" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>7. 好运 &nbsp;&nbsp; <input type="text" data-pinyin="hǎoyùn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="e" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                            </ul>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; color: var(--text-muted);">
+                                <li>A. shape (hình dạng)</li>
+                                <li>B. seedling (cây non, mầm non)</li>
+                                <li>C. to be full of (tràn đầy)</li>
+                                <li>D. warm (ấm áp)</li>
+                                <li>E. good luck (may mắn)</li>
+                                <li>F. night (ban đêm)</li>
+                                <li>G. to symbolize (tượng trưng)</li>
+                            </ul>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExercise('exercise-4-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-4-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-4-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span><strong>1 - B</strong> (yòumiáo)</span>
+                                <span><strong>2 - D</strong> (wēnnuǎn)</span>
+                                <span><strong>3 - C</strong> (chōngmǎn)</span>
+                                <span><strong>4 - A</strong> (xíngzhuàng)</span>
+                                <span><strong>5 - F</strong> (yèwǎn)</span>
+                                <span><strong>6 - G</strong> (xiàngzhēng)</span>
+                                <span><strong>7 - E</strong> (hǎoyùn)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Vocabulary expansion -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 词语扩展：读一读下面的扩展形式，再写出两个。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Vocabulary development: Read the expanded forms of the words and write two more. / Mở rộng từ vựng: Đọc các dạng mở rộng của từ dưới đây, sau đó tự viết thêm hai từ nữa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>幼 -</strong> (ấu) — 幼苗 (mầm non), 幼儿 (trẻ thơ), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（2）<strong>夜 - / - 夜</strong> (dạ) — 夜晚 (ban đêm), 黑夜 (đêm tối), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（3）<strong>充满</strong> (tràn đầy) — 充满生机 (tràn đầy sức sống), 充满活力 (tràn đầy sức sống/hoạt lực), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（4）<strong>迎接</strong> (chào đón) — 迎接新年 (đón năm mới), 迎接客人 (đón khách), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（5）<strong>温暖</strong> (ấm áp) — 温暖的家 (tổ ấm/ngôi nhà ấm áp), 很温暖 (rất ấm áp), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                        </div>
+
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án Bài 3</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）幼 - — <strong>幼小</strong> (nhỏ bé), <strong>幼年</strong> (thời thơ ấu)<br>
+                                （2）夜 - / - 夜 — <strong>半夜</strong> (nửa đêm), <strong>熬夜</strong> (thức đêm)<br>
+                                （3）充满 — <strong>充满希望</strong> (tràn trề hy vọng), <strong>充满信心</strong> (tràn đầy tự tin)<br>
+                                （4）迎接 — <strong>迎接挑战</strong> (đón nhận thử thách), <strong>迎接未来</strong> (đón chào tương lai)<br>
+                                （5）温暖 — <strong>感到温暖</strong> (cảm thấy ấm áp), <strong>温暖的阳光</strong> (ánh nắng ấm áp)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Drag Drop -->
+                    <div id="exercise-4-4">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Blank filling: Read the new words given and put the right ones in the following sentences. / Điền từ vào chỗ trống: Kéo từ thích hợp ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-4-4" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w44_1" ondragstart="drag(event)">生机</span>
+                            <span class="drag-word" draggable="true" id="w44_2" ondragstart="drag(event)">茂盛</span>
+                            <span class="drag-word" draggable="true" id="w44_3" ondragstart="drag(event)">除夕</span>
+                            <span class="drag-word" draggable="true" id="w44_4" ondragstart="drag(event)">留恋</span>
+                            <span class="drag-word" draggable="true" id="w44_5" ondragstart="drag(event)">象征</span>
+                            <span class="drag-word" draggable="true" id="w44_6" ondragstart="drag(event)">好运</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）玫瑰（méigui, rose）花 <span class="drop-zone" data-answer="象征" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 着爱情。</p>
+                            <p>（2）春节的前一天叫 <span class="drop-zone" data-answer="除夕" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（3）这儿草木 <span class="drop-zone" data-answer="茂盛" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> ，风景优美。</p>
+                            <p>（4）他很 <span class="drop-zone" data-answer="留恋" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 过去的生活。</p>
+                            <p>（5）春天来了，到处都充满 <span class="drop-zone" data-answer="生机" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                        </div>
+
+                        <!-- Nút nộp bài 4 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('exercise-4-4')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-4-4-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-4-4-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）象征 (tượng trưng)</span>
+                                <span>（2）除夕 (đêm giao thừa)</span>
+                                <span>（3）茂盛 (tươi tốt)</span>
+                                <span>（4）留恋 (lưu luyến)</span>
+                                <span>（5）生机 (sức sống)</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 好运 (may mắn)</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <h2>课文 1 Text 1 (Bài đọc 1)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 听前任务 Pre-Listening Task (Nhiệm vụ trước khi nghe)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">听课文，记录一下课文中讲解了哪几个汉字，听后与同学讨论并互相补充。<br>(Nghe bài khóa, ghi chép lại trong bài giảng giải về những chữ Hán nào, sau khi nghe xong hãy thảo luận và bổ sung cho nhau cùng bạn học.)</p>
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table class="custom-table" style="background: white;">
+                        <thead>
+                            <tr>
+                                <th width="50%" style="text-align: center;">自己记录的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Ghi chép cá nhân)</span></th>
+                                <th width="50%" style="text-align: center;">同学补充的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Bạn học bổ sung)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><textarea style="width: 100%; height: 60px; border: none; outline: none; background: transparent; padding: 4px; resize: none;"></textarea></td>
+                                <td><textarea style="width: 100%; height: 60px; border: none; outline: none; background: transparent; padding: 4px; resize: none;"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-3.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">汉字与春节</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>说到中国的传统节日，大家可能第一个想到的就是春节，它是中国人最重要的节日，是春天的开始。这时，大自然中的万物睡了一个冬天，都慢慢地醒来了，大地又充满了生机。“春”字是怎么来的呢？让我们先来看一看“春”字的字形。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Nhắc đến lễ hội truyền thống của Trung Quốc, có lẽ điều đầu tiên mọi người nghĩ đến chính là Tết Âm lịch, đây là lễ hội quan trọng nhất của người Trung Quốc, là sự khởi đầu của mùa xuân. Lúc này, vạn vật trong tự nhiên sau một mùa đông say ngủ, đều từ từ thức tỉnh, mặt đất lại tràn đầy sức sống. Chữ "Xuân" (春) có nguồn gốc như thế nào? Hãy cùng xem qua hình thể của chữ "Xuân" trước.)</span></p>
+                    
+                    <p>“春”的甲骨文字形中，有草，有太阳，还有一个“屯”。“屯”，就像幼苗刚长出来的样子。春天，阳光很温暖，草木长得很茂盛，阳光、草木、幼苗一起展示了“春”的特点。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trong hình thể Giáp cốt văn của chữ "Xuân", có cỏ, có mặt trời, và còn có một chữ "Truân" (屯). "Truân", giống như dáng vẻ mầm non vừa mới nhú lên. Mùa xuân, ánh nắng rất ấm áp, cỏ cây mọc rất tươi tốt, ánh nắng, cỏ cây, mầm non cùng nhau thể hiện đặc điểm của "Xuân".)</span></p>
+                    
+                    <p>春节的前一天晚上叫除夕，“夕”的古文字形是月亮的形状，表示“晚上”，“除”是“除去”的意思，“除夕”表示“过了这个晚上就迎来了新年”。每年的最后一个晚上是一年中最值得留恋的夜晚，在这个夜晚，全家人要坐在一起吃年夜饭，聊天儿，迎接新年的到来。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Buổi tối ngay trước Tết gọi là Trừ Tịch (Giao thừa), hình thể cổ của chữ "Tịch" (夕) là hình dạng của mặt trăng, biểu thị "buổi tối", "Trừ" (除) mang ý nghĩa "loại bỏ", "Trừ Tịch" biểu thị "qua đêm nay sẽ đón chào năm mới". Buổi tối cuối cùng của mỗi năm là đêm đáng lưu luyến nhất trong năm, trong đêm này, cả gia đình sẽ ngồi cùng nhau ăn bữa cơm tất niên, trò chuyện, chào đón năm mới đến.)</span></p>
+
+                    <p>过春节的时候还有一个非常重要的活动——贴福字。“福”字的甲骨文字形像满满的一壶酒和一张桌子，这个字表示人们用美酒来求得幸福。后来，“福”就有了“幸福”的意思，象征着好运。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Khi đón Tết còn có một hoạt động vô cùng quan trọng - dán chữ Phúc. Hình thể Giáp cốt văn của chữ "Phúc" (福) giống như một bình rượu đầy và một chiếc bàn, chữ này biểu thị con người dùng rượu ngon để cầu xin hạnh phúc. Sau này, "Phúc" liền mang ý nghĩa "hạnh phúc", tượng trưng cho sự may mắn.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Trả lời câu hỏi -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 根据课文内容回答问题。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Answer the questions based on the text. / Trả lời các câu hỏi dựa trên nội dung bài khóa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）春节是什么季节的开始？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）甲骨文“春”字中的“屯”像什么？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）“夕”的古文字形像什么？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（4）“除夕”中的“除”是什么意思？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（5）“福”的甲骨文字形像什么？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                        
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý trả lời</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）春节是春天的开始。<br>
+                                （2）像幼苗刚长出来的样子。<br>
+                                （3）“夕”的古文字形像月亮的形状。<br>
+                                （4）“除”是“除去”的意思。<br>
+                                （5）像满满的一壶酒和一张桌子。
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: True / False -->
+                    <div id="comp-4-ex-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 根据课文内容判断正误。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Decide whether the following statements are right or wrong based on the text. / Đánh giá đúng sai dựa trên nội dung bài khóa.)</span>
+                        </h4>
+                        
+                        <div style="margin-bottom: 15px; padding-left: 10px; margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（1）中国人最重要的节日是春节。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（2）甲骨文“春”字由“草”和“太阳”两部分构成。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（3）除夕指的是春节前一天晚上。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（4）春节时人们都要喝美酒。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（5）“福”字象征着好运。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkSelects('comp-4-ex-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Chấm điểm</button>
+                            <span id="comp-4-ex-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+                        <div id="comp-4-ex-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            💡 <strong>Giải thích lỗi sai:</strong><br>
+                            （2）Sai. Chữ "Xuân" trong giáp cốt văn bao gồm "cỏ", "mặt trời" và còn có cả phần "truân" (屯).<br>
+                            （4）Sai. Bài viết chỉ đề cập đến việc hình thể cổ của chữ "Phúc" giống như bình rượu biểu thị việc dùng rượu cầu hạnh phúc, chứ không nói mọi người đều phải uống rượu ngon vào dịp Tết.
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Phân tích chữ -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 分析一下下列古文字形，它们包含了哪几部分？分别代表了什么意思？<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Analyze the ancient forms of the following characters. How many parts are there in each character? What does each part stand for? / Phân tích hình thể các chữ cổ dưới đây, chúng bao gồm những phần nào? Từng phần đại diện cho ý nghĩa gì?)</span>
+                        </h4>
+                        
+                        <table class="custom-table" style="background: white; margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th width="20%" style="text-align: center;">古文字形<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Chữ cổ)</span></th>
+                                    <th width="20%" style="text-align: center;">汉字<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Chữ Hán)</span></th>
+                                    <th width="60%" style="text-align: center;">分析<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Phân tích của bạn)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center; font-size: 24px;">🛒</td>
+                                    <td style="text-align: center; font-weight: bold; color: var(--primary); font-size: 18px;">车</td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-size: 24px;">🦌</td>
+                                    <td style="text-align: center; font-weight: bold; color: var(--primary); font-size: 18px;">鹿</td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-size: 24px;">🏹</td>
+                                    <td style="text-align: center; font-weight: bold; color: var(--primary); font-size: 18px;">射</td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. “夕”的古文字形是月亮的形状，表示“晚上”</strong></p>
+                    <p style="color: var(--text-muted);">“表示” (Biểu thị/Có nghĩa là), 动词，指事物本身显出某种意义或者依靠某种事物显出某种意义。例如：<br>
+                    (Là động từ, chỉ bản thân sự vật hiển thị một ý nghĩa nào đó hoặc dựa vào một sự vật nào đó để hiển thị một ý nghĩa nào đó. Ví dụ:)</p>
+                    
+                    <p>① 有的汉字不但可以<strong>表示</strong>读音，还可以<strong>表示</strong>意义。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Có những chữ Hán không chỉ có thể biểu thị cách đọc, mà còn có thể biểu thị ý nghĩa.)</span></p>
+                    <p>② 马路上，红灯<strong>表示</strong>停止，绿灯<strong>表示</strong>放行。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Trên đường, đèn đỏ biểu thị dừng lại, đèn xanh biểu thị cho đi.)</span></p>
+                    <p>③ “福”字的甲骨文字形像满满的一壶酒和一张桌子，这个字<strong>表示</strong>人们用美酒来求得幸福。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Hình thể Giáp cốt văn của chữ "Phúc" giống như một bình rượu đầy và một chiếc bàn, chữ này biểu thị con người dùng rượu ngon để cầu xin hạnh phúc.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：用“表示”改写句子。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14px;">(Rewrite the sentences using "表示". / Viết lại câu sử dụng từ "表示".)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2;">
+                            <p>（1）海上红色的灯光告诉我们那儿有礁石(jiāoshí, reef)。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（2）有时中国人说“以后再说吧”，他其实是在拒绝。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（3）发烧可以告诉我们身体出现问题了。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（4）当我们看到花开了，草绿了，天气暖和了，我们就知道春天来了。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        </div>
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）海上红色的灯光<strong>表示</strong>那儿有礁石。<br>
+                                （2）有时中国人说“以后再说吧”，<strong>表示</strong>拒绝。<br>
+                                （3）发烧<strong>表示</strong>身体出现问题了。<br>
+                                （4）花开、草绿、天气暖和<strong>表示</strong>春天来了。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 后来，“福”就有了“幸福”的意思，象征着好运</strong></p>
+                    <p style="color: var(--text-muted);">“象征” (Tượng trưng), 动词，指用具体的事物表现某种特殊意义，常常与“着”一起用。例如：<br>
+                    (Là động từ, chỉ việc dùng sự vật cụ thể để biểu hiện một ý nghĩa đặc thù nào đó, thường dùng chung với từ "着". Ví dụ:)</p>
+                    
+                    <p>① 鸽子<strong>象征</strong>和平。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Chim bồ câu tượng trưng cho hòa bình.)</span></p>
+                    <p>② 在中国，红色<strong>象征着</strong>喜庆。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Ở Trung Quốc, màu đỏ tượng trưng cho sự vui mừng/tin vui.)</span></p>
+                    <p>③ 人们把“福”贴在门上，<strong>象征着</strong>福到了。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Mọi người dán chữ "Phúc" trên cửa, tượng trưng cho phúc khí đã đến.)</span></p>
+
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：同样的事物在不同的国家有不同的象征意义，说说下列事物在你们国家象征着什么。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14px;">(The same thing in different countries indicates different meanings. Explain what the following things symbolize in your country. / Luyện tập: Những sự vật giống nhau ở những quốc gia khác nhau có ý nghĩa tượng trưng khác nhau. Hãy nói xem các sự vật dưới đây tượng trưng cho điều gì ở quốc gia của bạn.)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2.2;">
+                            <p>（1）太阳象征着 <input type="text" style="width: 150px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> ，月亮象征着 <input type="text" style="width: 150px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> 。</p>
+                            <p>（2）花儿象征 <input type="text" style="width: 250px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> 。</p>
+                            <p>（3） <input type="text" style="width: 120px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> 象征男人， <input type="text" style="width: 120px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> 象征女人。</p>
+                            <p>（4）白色象征着 <input type="text" style="width: 250px; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"> 。</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- ========================================== -->
+                <!-- 3-4 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">3—4 学时 Class Hours 3—4 (Tiết học 3—4)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 汉字跟你们国家的文字有什么不同？简单说一说。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Chữ Hán và chữ viết của quốc gia bạn có gì khác biệt? Hãy nói ngắn gọn.)</span>
+                        <input type="text" placeholder="Nhập câu trả lời của bạn..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 8px 0; margin-top: 5px;">
+                    </li>
+                    <li>
+                        <strong>2. 你有什么学习、记忆汉字的好方法？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Bạn có phương pháp hay nào để học tập và ghi nhớ chữ Hán không?)</span>
+                        <input type="text" placeholder="Nhập câu trả lời của bạn..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 8px 0; margin-top: 5px;">
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 4-4 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-4.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">记录</td><td>jìlù</td><td>动</td><td>ghi chép, ghi lại</td></tr>
+                        <tr><td>2</td><td class="hanzi">符号</td><td>fúhào</td><td>名</td><td>ký hiệu</td></tr>
+                        <tr><td>3</td><td class="hanzi">系统</td><td>xìtǒng</td><td>名/形</td><td>hệ thống; có hệ thống</td></tr>
+                        <tr><td>4</td><td class="hanzi">演变</td><td>yǎnbiàn</td><td>动</td><td>diễn biến, tiến hóa</td></tr>
+                        <tr><td>5</td><td class="hanzi">描画</td><td>miáohuà</td><td>动</td><td>miêu tả, vẽ lại</td></tr>
+                        <tr><td>6</td><td class="hanzi">事物</td><td>shìwù</td><td>名</td><td>sự vật, sự việc</td></tr>
+                        <tr><td>7</td><td class="hanzi">具体</td><td>jùtǐ</td><td>形</td><td>cụ thể</td></tr>
+                        <tr><td>8</td><td class="hanzi">刃</td><td>rèn</td><td>名</td><td>lưỡi (dao, kiếm...)</td></tr>
+                        <tr><td>9</td><td class="hanzi">刀锋</td><td>dāofēng</td><td>名</td><td>mũi dao, mũi nhọn</td></tr>
+                        <tr><td>10</td><td class="hanzi">标记</td><td>biāojì</td><td>动</td><td>đánh dấu</td></tr>
+                        <tr><td>11</td><td class="hanzi">类</td><td>lèi</td><td>量</td><td>loại</td></tr>
+                        <tr><td>12</td><td class="hanzi">类型</td><td>lèixíng</td><td>名</td><td>loại hình, kiểu</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 4-5 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-5.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">表意文字</td><td>biǎoyì wénzì</td><td></td><td>chữ biểu ý</td></tr>
+                        <tr><td>2</td><td class="hanzi">表音文字</td><td>biǎoyīn wénzì</td><td></td><td>chữ biểu âm</td></tr>
+                        <tr><td>3</td><td class="hanzi">字母</td><td>zìmǔ</td><td>名</td><td>chữ cái</td></tr>
+                        <tr><td>4</td><td class="hanzi">笔画</td><td>bǐhuà</td><td>名</td><td>nét bút (trong chữ Hán)</td></tr>
+                        <tr><td>5</td><td class="hanzi">象形</td><td>xiàngxíng</td><td>名</td><td>tượng hình</td></tr>
+                        <tr><td>6</td><td class="hanzi">指事</td><td>zhǐshì</td><td>名</td><td>chỉ sự</td></tr>
+                        <tr><td>7</td><td class="hanzi">独体字</td><td>dútǐzì</td><td></td><td>chữ độc thể</td></tr>
+                        <tr><td>8</td><td class="hanzi">偏旁</td><td>piānpáng</td><td>名</td><td>bộ thủ, thiên bàng</td></tr>
+                        <tr><td>9</td><td class="hanzi">部件</td><td>bùjiàn</td><td>名</td><td>bộ phận (của chữ)</td></tr>
+                        <tr><td>10</td><td class="hanzi">合体字</td><td>hétǐzì</td><td></td><td>chữ hợp thể</td></tr>
+                        <tr><td>11</td><td class="hanzi">会意</td><td>huìyì</td><td>名</td><td>hội ý</td></tr>
+                        <tr><td>12</td><td class="hanzi">形声</td><td>xíngshēng</td><td>名</td><td>hình thanh</td></tr>
+                        <tr><td>13</td><td class="hanzi">形旁</td><td>xíngpáng</td><td>名</td><td>hình bàng (phần biểu ý)</td></tr>
+                        <tr><td>14</td><td class="hanzi">声旁</td><td>shēngpáng</td><td>名</td><td>thanh bàng (phần biểu âm)</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Đọc ví dụ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 读例句，学生词：朗读下面词语的用例，思考这些词语的用法。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Đọc ví dụ, học từ mới: Đọc to các ví dụ dưới đây, suy nghĩ về cách sử dụng của những từ này.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 1.8; background: var(--bg-body); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 0;">（1）记录 (Ghi chép)</p>
+                            <p>① 这本书记录了那个时代的历史。</p>
+                            <p>② 我要把这次旅行中有意思的事情记录下来。</p>
+                            <p>③ 文字是记录语言的书写符号系统。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（2）标记 (Đánh dấu)</p>
+                            <p>① 我在地图上标记了旅游路线。</p>
+                            <p>② 老师在我的报告上标记出了需要修改的地方。</p>
+                            <p>③ 上课的时候，我们可以一边听课文，一边在课本上做标记。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（3）系统 (Hệ thống)</p>
+                            <p>① 文字是记录语言的书写符号系统。</p>
+                            <p>② 这套新的系统我还没有完全掌握。</p>
+                            <p>③ 我打算系统研究一下中国古代的丝绸之路。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（4）演变 (Diễn biến, tiến hóa)</p>
+                            <p>① 世界上的一切事物都是在不断演变的。</p>
+                            <p>② 最基本的汉字是从图画演变来的。</p>
+                            <p>③ 每个国家的产生和发展都经历了复杂的历史演变。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（5）描画 (Miêu tả, vẽ)</p>
+                            <p>① 他在纸上描画出了妈妈的样子。</p>
+                            <p>② 这部作品描画了年轻人的浪漫爱情。</p>
+                            <p>③ 象形字是用直接描画事物形状的方法造出来的汉字。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（6）事物 (Sự vật)</p>
+                            <p>① 每天都有新事物出现，因此，我们应该不断学习。</p>
+                            <p>② 我们应该鼓励孩子热爱生活和追求美好事物。</p>
+                            <p>③ 人们往往对新鲜事物充满好奇。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（7）具体 (Cụ thể)</p>
+                            <p>① 请你把地址写得具体一点儿。</p>
+                            <p>② 我们的老板不负责具体工作。</p>
+                            <p>③ 现在我只能告诉你大概的情况，具体内容咱们见面再谈。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（8）类 (Loại)</p>
+                            <p>① 他把东西分成几类进行包装。</p>
+                            <p>② 我喜欢篮球、足球这一类的运动。</p>
+                            <p>③ 请把同类的商品放在一起。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Mở rộng từ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 词语扩展：读一读下面的扩展形式，再写出两个。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Mở rộng từ vựng: Đọc các dạng mở rộng của từ dưới đây, sau đó tự viết thêm hai từ nữa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>- 记 / 记 -</strong> (ký) — 标记 (đánh dấu), 记录 (ghi chép), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（2）<strong>- 变 / 变 -</strong> (biến) — 演变 (diễn biến), 变化 (biến hóa), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（3）<strong>事 - / - 事</strong> (sự) — 事物 (sự vật), 往事 (chuyện cũ), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（4）<strong>系统</strong> (hệ thống) — 符号系统 (hệ thống ký hiệu), 组织系统 (hệ thống tổ chức), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（5）<strong>具体</strong> (cụ thể) — 具体内容 (nội dung cụ thể), 具体情况 (tình huống cụ thể), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                        </div>
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）- 记 / 记 - — <strong>记者</strong> (phóng viên), <strong>记忆</strong> (ký ức)<br>
+                                （2）- 变 / 变 - — <strong>改变</strong> (thay đổi), <strong>变得</strong> (trở nên)<br>
+                                （3）事 - / - 事 — <strong>事情</strong> (sự tình), <strong>故事</strong> (câu chuyện)<br>
+                                （4）系统 — <strong>电脑系统</strong> (hệ thống máy tính), <strong>教育系统</strong> (hệ thống giáo dục)<br>
+                                （5）具体 — <strong>具体时间</strong> (thời gian cụ thể), <strong>具体计划</strong> (kế hoạch cụ thể)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Kéo thả điền từ (Common Words) -->
+                    <div id="t34-b4-ex-3" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Điền từ vào chỗ trống: Kéo từ vựng ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-b4-3" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="wb43_1" ondragstart="drag(event)">记录</span>
+                            <span class="drag-word" draggable="true" id="wb43_2" ondragstart="drag(event)">演变</span>
+                            <span class="drag-word" draggable="true" id="wb43_3" ondragstart="drag(event)">描画</span>
+                            <span class="drag-word" draggable="true" id="wb43_4" ondragstart="drag(event)">具体</span>
+                            <span class="drag-word" draggable="true" id="wb43_5" ondragstart="drag(event)">标记</span>
+                            <span class="drag-word" draggable="true" id="wb43_6" ondragstart="drag(event)">类型</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）这张画 <span class="drop-zone" data-answer="描画" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 了他们当时浪漫的场面。</p>
+                            <p>（2）我们这次旅行一路要去哪几个地方，你最好先在地图上 <span class="drop-zone" data-answer="标记" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 出来。</p>
+                            <p>（3）A：你们两个人为什么分手了？<br>
+                               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B：他不是我喜欢的 <span class="drop-zone" data-answer="类型" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（4）写日记就是为了把每天发生的事情 <span class="drop-zone" data-answer="记录" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 下来。</p>
+                            <p>（5）请告诉我你的 <span class="drop-zone" data-answer="具体" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 地址，以便我给你寄包裹。</p>
+                        </div>
+
+                        <!-- Nút nộp bài 3 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t34-b4-ex-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-b4-ex-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="t34-b4-ex-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）描画 (miêu tả)</span>
+                                <span>（2）标记 (đánh dấu)</span>
+                                <span>（3）类型 (kiểu/loại hình)</span>
+                                <span>（4）记录 (ghi chép)</span>
+                                <span>（5）具体 (cụ thể)</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 演变 (diễn biến)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Kéo thả điền từ (Professional Terms) -->
+                    <div id="t34-b4-ex-4">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 选词填空：选择合适的专业术语填空。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Choose the right terms to fill in the blanks. / Chọn thuật ngữ chuyên ngành thích hợp để điền vào chỗ trống.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-b4-4" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="wb44_1" ondragstart="drag(event)">表意文字</span>
+                            <span class="drag-word" draggable="true" id="wb44_2" ondragstart="drag(event)">表音文字</span>
+                            <span class="drag-word" draggable="true" id="wb44_3" ondragstart="drag(event)">象形</span>
+                            <span class="drag-word" draggable="true" id="wb44_4" ondragstart="drag(event)">字母</span>
+                            <span class="drag-word" draggable="true" id="wb44_5" ondragstart="drag(event)">指事</span>
+                            <span class="drag-word" draggable="true" id="wb44_6" ondragstart="drag(event)">偏旁</span>
+                            <span class="drag-word" draggable="true" id="wb44_7" ondragstart="drag(event)">形声</span>
+                            <span class="drag-word" draggable="true" id="wb44_8" ondragstart="drag(event)">形旁</span>
+                            <span class="drag-word" draggable="true" id="wb44_9" ondragstart="drag(event)">声旁</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）“妈”是一个 <span class="drop-zone" data-answer="形声" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 字，“女”是 <span class="drop-zone" data-answer="形旁" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> ，“马”是 <span class="drop-zone" data-answer="声旁" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 。</p>
+                            <p>（2）汉字是 <span class="drop-zone" data-answer="表意文字" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 100px;"></span> ，英文是 <span class="drop-zone" data-answer="表音文字" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 100px;"></span> 。</p>
+                            <p>（3）“刃”是一个 <span class="drop-zone" data-answer="指事" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 字。</p>
+                            <p>（4）“love”这个单词中，“l、o、v、e”都是 <span class="drop-zone" data-answer="字母" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 。</p>
+                            <p>（5）“山”是一个 <span class="drop-zone" data-answer="象形" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 字，它也可以作为 <span class="drop-zone" data-answer="偏旁" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 。</p>
+                        </div>
+
+                        <!-- Nút nộp bài 4 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t34-b4-ex-4')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-b4-ex-4-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="t34-b4-ex-4-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 10px;">
+                                <span>（1）形声 (hình thanh), 形旁 (hình bàng), 声旁 (thanh bàng)</span>
+                                <span>（2）表意文字 (chữ biểu ý), 表音文字 (chữ biểu âm)</span>
+                                <span>（3）指事 (chỉ sự)</span>
+                                <span>（4）字母 (chữ cái)</span>
+                                <span>（5）象形 (tượng hình), 偏旁 (bộ thủ/thiên bàng)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>课文 2 Text 2 (Bài đọc 2)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 读前任务 Pre-Reading Task (Nhiệm vụ trước khi đọc)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">课文中主要介绍了汉字的哪几种造字方法？<br><span style="font-size: 14px;">(Bài khóa chủ yếu giới thiệu những phương pháp cấu tạo chữ Hán nào?)</span></p>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-4-6.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">汉字的造字方法</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>文字是记录语言的书写符号系统。汉字是表意文字，跟表音文字有很大的区别。表音文字是用数量不多的符号，也就是字母来记录语音。而汉字是用不同笔画构成的表意符号来记录汉语。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Chữ viết là hệ thống ký hiệu viết dùng để ghi chép ngôn ngữ. Chữ Hán là chữ biểu ý, có sự khác biệt rất lớn so với chữ biểu âm. Chữ biểu âm là dùng một số lượng ký hiệu không nhiều, cũng chính là chữ cái, để ghi lại ngữ âm. Còn chữ Hán là dùng các ký hiệu biểu ý được cấu thành từ các nét bút khác nhau để ghi chép tiếng Hán.)</span></p>
+                    
+                    <p>人们常常会觉得，汉字，尤其是古代汉字，就像是画一样。实际上，最基本的汉字就是从图画演变来的，比如“人、刀、山、日”等等。这些字直接描画事物的具体形状，这种造字方法叫作“象形”。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Mọi người thường cảm thấy, chữ Hán, đặc biệt là chữ Hán cổ đại, giống hệt như những bức tranh. Trên thực tế, những chữ Hán cơ bản nhất chính là tiến hóa từ các bức vẽ mà ra, ví dụ như "Nhân (người), Đao (dao), Sơn (núi), Nhật (mặt trời)" v.v. Những chữ này trực tiếp miêu tả hình dạng cụ thể của sự vật, phương pháp tạo chữ này được gọi là "Tượng hình".)</span></p>
+                    
+                    <p>造出了象形字，再造其他的字就容易了。比如“刃”，要表示刀锋，只要在“刀”字上加一个点，标记出位置就可以了。这种造字方法叫作“指事”。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Đã tạo ra được chữ tượng hình rồi, thì việc tạo ra các chữ khác sẽ dễ dàng hơn. Ví dụ chữ "Nhận" (lưỡi dao), muốn biểu thị phần mũi dao, chỉ cần thêm một dấu chấm trên chữ "Đao" (dao), đánh dấu vị trí ra là được rồi. Phương pháp tạo chữ này gọi là "Chỉ sự".)</span></p>
+
+                    <p>象形字和指事字都是独体字，它们是汉字系统的基础，可以变成偏旁或部件，构成合体字。合体字也有两类，一类是会意字。这些字里的部件都表示与字有关的意义，把部件的意义合起来就是字义。比如将两个“木”字放在一起是“林”，表示许多树。另一类是形声字，由两个部件构成，一个部件表示字的意义，叫作形旁，另一个部件表示字的读音，叫作声旁。比如“妈”字，“女”表示这个字的意义——“女性”，“马”表示这个字的读音。形声字是合体字的主要类型。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Chữ tượng hình và chữ chỉ sự đều là chữ độc thể (chữ có một phần nguyên khối), chúng là nền tảng của hệ thống chữ Hán, có thể biến thành các bộ thủ hoặc bộ phận, cấu thành nên chữ hợp thể. Chữ hợp thể cũng có hai loại, một loại là chữ Hội ý. Các bộ phận trong những chữ này đều biểu thị ý nghĩa có liên quan đến chữ đó, gộp ý nghĩa của các bộ phận lại với nhau chính là nghĩa của chữ. Ví dụ như đặt hai chữ "Mộc" (cây) ở cạnh nhau là chữ "Lâm" (rừng), biểu thị rất nhiều cây. Một loại khác là chữ Hình thanh, do hai bộ phận cấu tạo thành, một bộ phận biểu thị ý nghĩa của chữ, gọi là hình bàng, một bộ phận khác biểu thị âm đọc của chữ, gọi là thanh bàng. Ví dụ chữ "Ma" (mẹ), chữ "Nữ" (nữ giới) biểu thị ý nghĩa của chữ này — "phụ nữ", chữ "Mã" (ngựa) biểu thị âm đọc của chữ này. Chữ hình thanh là loại hình chủ yếu của chữ hợp thể.)</span></p>
+
+                    <p>象形字和指事字是独体字，它们可以变成部件，构成会意字、形声字这样的合体字。成千上万个汉字就是用象形、指事、会意、形声这四种方法造出来的。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Chữ tượng hình và chữ chỉ sự là chữ độc thể, chúng có thể biến thành các bộ phận, cấu thành những chữ hợp thể như chữ hội ý, chữ hình thanh. Hàng ngàn hàng vạn chữ Hán chính là được tạo ra bằng bốn phương pháp: tượng hình, chỉ sự, hội ý, hình thanh này.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa 2)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Điền từ Đoạn 1 -->
+                    <div id="t34-b4-comp-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 边读边填：读课文 2 第一段，完形填空。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and fill in the blanks: Read Paragraph 1 of Text 2 and then fill in the blanks. / Vừa đọc vừa điền: Đọc đoạn 1 bài 2 và gõ từ thích hợp vào chỗ trống.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.4; padding-left: 10px; margin-bottom: 20px; margin-top: 15px;">
+                            <p>
+                                文字是记录语言的 <input type="text" data-answer="书写符号" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px; text-align: center;"> 系统。汉字是表意文字，跟 <input type="text" data-answer="表音文字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px; text-align: center;"> 有很大的区别。表音文字是用数量不多的 <input type="text" data-answer="符号" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 来记录 <input type="text" data-answer="语音" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 。而汉字是用不同 <input type="text" data-answer="笔画" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 构成的表意符号来记录汉语。
+                            </p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <button onclick="checkExercise('t34-b4-comp-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-b4-comp-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="t34-b4-comp-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án chi tiết:</h5>
+                            <p style="margin-top: 0;">文字是记录语言的 <strong style="color: var(--primary);">书写符号</strong> 系统。汉字是表意文字，跟 <strong style="color: var(--primary);">表音文字</strong> 有很大的区别。表音文字是用数量不多的 <strong style="color: var(--primary);">符号</strong> 来记录 <strong style="color: var(--primary);">语音</strong> 。而汉字是用不同 <strong style="color: var(--primary);">笔画</strong> 构成的表意符号来记录汉语。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Framework Retell -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 框架复述：熟读课文 2 第二、三、四段，按照提示词进行复述。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Retell the framework: Read Paragraphs 2, 3 and 4 of Text 2 with proficiency and retell them based on the hints given. / Tóm tắt theo khung: Đọc thuộc các đoạn 2, 3, 4 và thuật lại dựa theo gợi ý.)</span>
+                        </h4>
+                        
+                        <table class="custom-table" style="background: white; margin-top: 15px;">
+                            <tbody>
+                                <tr>
+                                    <td width="15%" style="text-align: center; font-weight: bold; background: #f8f9fa;">第二段<br>(Đoạn 2)</td>
+                                    <td style="line-height: 2;">最基本的汉字就是从……来的，比如，……。这些字直接……，这种造字方法叫作……</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold; background: #f8f9fa;">第三段<br>(Đoạn 3)</td>
+                                    <td style="line-height: 2;">造出了象形字，……就容易了。比如“刃”，要表示……，只要……就……。这种造字方法叫作……</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold; background: #f8f9fa;">第四段<br>(Đoạn 4)</td>
+                                    <td style="line-height: 2;">……和……都是独体字，它们是……的基础，可以变成……或……，构成……。合体字有……，一类是……。这些字里的部件都表示……，……就是字义，比如……。另一类是……，由……构成，一个部件表示……，另一个部件表示……。比如……字，……表示……，……表示……。形声字是……的主要类型。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Điền từ Đoạn 5 -->
+                    <div id="t34-b4-comp-3" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 边读边填：读课文 2 第五段，完形填空。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and fill in the blanks: Read Paragraph 5 of Text 2 and then fill in the blanks. / Vừa đọc vừa điền: Đọc đoạn 5 bài 2 và gõ từ thích hợp vào chỗ trống.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.4; padding-left: 10px; margin-bottom: 20px; margin-top: 15px;">
+                            <p>
+                                独体字包括 <input type="text" data-answer="象形字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 和 <input type="text" data-answer="指事字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 。独体字可以变成 <input type="text" data-answer="部件" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> ，构成 <input type="text" data-answer="合体字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 。<input type="text" data-answer="会意字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 和 <input type="text" data-answer="形声字" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 是合体字。汉字是用 <input type="text" data-answer="象形" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 、<input type="text" data-answer="指事" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 、<input type="text" data-answer="会意" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 、<input type="text" data-answer="形声" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 四种方法造出来的。
+                            </p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <button onclick="checkExercise('t34-b4-comp-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-b4-comp-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="t34-b4-comp-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án chi tiết:</h5>
+                            <p style="margin-top: 0;">独体字包括 <strong style="color: var(--primary);">象形字</strong> 和 <strong style="color: var(--primary);">指事字</strong>。独体字可以变成 <strong style="color: var(--primary);">部件</strong>，构成 <strong style="color: var(--primary);">合体字</strong>。<strong style="color: var(--primary);">会意字</strong> 和 <strong style="color: var(--primary);">形声字</strong> 是合体字。汉字是用 <strong style="color: var(--primary);">象形</strong>、<strong style="color: var(--primary);">指事</strong>、<strong style="color: var(--primary);">会意</strong>、<strong style="color: var(--primary);">形声</strong> 四种方法造出来的。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <!-- Grammar 1: 来 -->
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. 表音文字是用数量不多的符号，也就是字母来记录语音</strong></p>
+                    <p style="color: var(--text-muted);">“来” (Để / Nhằm mục đích), 动词，可以用在动词结构（或介词结构）与动词（或动词结构）之间，表示前者是方法、方向或态度，后者是目的。例如：<br>
+                    (Là động từ, có thể dùng giữa cụm động từ/giới từ và cụm động từ, biểu thị vế trước là phương pháp/phương hướng/thái độ, vế sau là mục đích. Dịch: "để, nhằm". Ví dụ:)</p>
+                    
+                    <p>① 我喜欢拿英文电影<strong>来</strong>练习英语听力。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Tôi thích lấy phim tiếng Anh ra để luyện nghe tiếng Anh.)</span></p>
+                    <p>② 他摘了一片叶子<strong>来</strong>当雨伞。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Anh ấy hái một chiếc lá để làm ô che mưa.)</span></p>
+                    <p>③ 你能用什么理由<strong>来</strong>说服他呢？<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Bạn có thể dùng lý do gì để thuyết phục anh ấy đây?)</span></p>
+                </div>
+
+                <!-- Grammar 2: 尤其 -->
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 人们常常会觉得，汉字，尤其是古代汉字，就像是画一样</strong></p>
+                    <p style="color: var(--text-muted);">“尤其” (Đặc biệt là / Nhất là), 副词，表示在全体中或与其他事物比较时特别突出。一般用在句子的后一部分。例如：<br>
+                    (Là phó từ, biểu thị sự nổi bật đặc biệt trong một tập thể hoặc khi so sánh với sự vật khác. Thường dùng ở phần sau của câu. Ví dụ:)</p>
+                    
+                    <p>① 汉字，<strong>尤其是</strong>一些象形字，就像是画一样。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Chữ Hán, đặc biệt là một số chữ tượng hình, giống hệt như một bức tranh.)</span></p>
+                    <p>② 我喜欢国画，<strong>尤其</strong>喜欢山水画。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Tôi thích quốc họa, đặc biệt thích tranh sơn thủy.)</span></p>
+                    <p>③ 运动对健康有好处，<strong>尤其是在</strong>工作紧张时，更需要运动。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Vận động có lợi cho sức khỏe, đặc biệt là khi công việc căng thẳng, càng cần vận động hơn.)</span></p>
+                </div>
+
+                <!-- Grammar 3: 由 -->
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>3. 另一类是形声字，由两个部件构成</strong></p>
+                    <p style="color: var(--text-muted);">“由” (Do / Bởi / Từ), 介词，表示方式、原因或来源，常用的组合方式为 “由 + 名词/名词词组 + 动词/动词词组”。例如：<br>
+                    (Là giới từ, biểu thị phương thức, nguyên nhân hoặc nguồn gốc. Cách kết hợp thường dùng: "由 + Danh từ/Cụm danh từ + Động từ/Cụm động từ". Ví dụ:)</p>
+                    
+                    <p>① 形声字<strong>由</strong>形旁和声旁构成。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Chữ hình thanh do hình bàng và thanh bàng cấu tạo thành.)</span></p>
+                    <p>② 他的心脏病是<strong>由</strong>感冒引起的。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Bệnh tim của ông ấy là do cảm cúm gây ra.)</span></p>
+                    <p>③ 我们班<strong>由</strong>七个国家的学生组成。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Lớp chúng tôi do học sinh của bảy quốc gia tạo thành.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <!-- Luyện tập 1: 尤其 -->
+                        <div style="margin-bottom: 25px;">
+                            <p><strong>1. 用“尤其”完成句子。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Complete the sentences using "尤其". / Hoàn thành câu sử dụng "尤其".)</span></p>
+                            
+                            <div style="padding-left: 10px; line-height: 2.2;">
+                                <p>（1）他喜欢唱歌， <input type="text" style="width: 70%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"> 。</p>
+                                <p>（2）我们班的同学都很努力， <input type="text" style="width: 60%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"> 。</p>
+                                <p>（3）我想去世界各地旅行， <input type="text" style="width: 60%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"> 。</p>
+                                <p>（4）我们家的人都喜欢运动， <input type="text" style="width: 60%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"> 。</p>
+                            </div>
+                            <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                                <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 1</summary>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                    （1）他喜欢唱歌，<strong>尤其是中国歌</strong>。<br>
+                                    （2）我们班的同学都很努力，<strong>尤其是大卫</strong>。<br>
+                                    （3）我想去世界各地旅行，<strong>尤其想去欧洲</strong>。<br>
+                                    （4）我们家的人都喜欢运动，<strong>尤其是我爸爸</strong>。
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- Luyện tập 2: 由 & 来 -->
+                        <div>
+                            <p><strong>2. 用所给词语或格式改写句子。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Rewrite the sentences using the words or structures given. / Viết lại câu sử dụng từ hoặc cấu trúc đã cho.)</span></p>
+                            
+                            <div style="padding-left: 10px; line-height: 2.2;">
+                                <p>（1）学校的校长是大家选出来的。 <span style="color: var(--primary); float: right;">（由……选）</span><br>
+                                👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                                
+                                <p>（2）我们的课程包括口语、听力、阅读、写作四个部分。 <span style="color: var(--primary); float: right;">（由……构成）</span><br>
+                                👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                                
+                                <p>（3）他酒后开车，发生了交通事故。 <span style="color: var(--primary); float: right;">（由……引起）</span><br>
+                                👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                                
+                                <p>（4）为了提醒自己别忘了，他把重要的事情都写在了本子上。 <span style="color: var(--primary); float: right;">（来）</span><br>
+                                👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+
+                                <p>（5）为了奖励 (jiǎnglì, to award) 同学们，老师准备了很多小礼物。 <span style="color: var(--primary); float: right;">（来）</span><br>
+                                👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            </div>
+                            
+                            <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                                <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 2</summary>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                    （1）学校的校长是<strong>由大家选出来的</strong>。<br>
+                                    （2）我们的课程<strong>由口语、听力、阅读、写作四个部分构成</strong>。<br>
+                                    （3）交通事故是<strong>由他酒后开车引起的</strong>。<br>
+                                    （4）他把重要的事情都写在了本子上，<strong>来提醒自己别忘了</strong>。<br>
+                                    （5）老师准备了很多小礼物，<strong>来奖励同学们</strong>。
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Các Script chấm điểm -->
+                <script>
+                    function checkExercise(exId) {
+                        const container = document.getElementById(exId);
+                        const inputsPinyin = container.querySelectorAll('input[data-pinyin]');
+                        const inputsLetter = container.querySelectorAll('input[data-answer]');
+                        let allCorrect = true;
+                        
+                        inputsPinyin.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-pinyin').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        inputsLetter.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã làm đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ chưa đúng, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function checkSelects(exId) {
+                        const container = document.getElementById(exId);
+                        const selects = container.querySelectorAll('select[data-answer]');
+                        let allCorrect = true;
+                        
+                        selects.forEach(select => {
+                            const userAnswer = select.value;
+                            const correctAnswer = select.getAttribute('data-answer');
+                            
+                            if (userAnswer === correctAnswer) {
+                                select.style.borderColor = '#4caf50';
+                                select.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                select.style.borderColor = '#f44336';
+                                select.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Chính xác! Bạn đã chọn đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có đáp án chưa đúng, hãy xem lại nhé.</span>';
+                            }
+                        }
+                        if (answersDiv && !allCorrect) {
+                            answersDiv.style.display = 'block';
+                        }
+                    }
+
+                    function allowDrop(ev) { ev.preventDefault(); }
+                    function dragEnter(ev) {
+                        ev.preventDefault();
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.add('drag-over');
+                    }
+                    function dragLeave(ev) {
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.remove('drag-over');
+                    }
+                    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+                    function drop(ev) {
+                        ev.preventDefault();
+                        var data = ev.dataTransfer.getData("text");
+                        var draggedEl = document.getElementById(data);
+                        var targetEl = ev.target;
+
+                        if (targetEl.classList.contains('drag-word')) targetEl = targetEl.parentElement;
+
+                        if (targetEl.classList.contains('drop-zone')) {
+                            targetEl.classList.remove('drag-over');
+                            if (targetEl.children.length > 0) {
+                                let bankId = targetEl.closest('.lesson-card').querySelector('[id^="word-bank"]').id;
+                                let bank = document.getElementById(bankId); 
+                                bank.appendChild(targetEl.children[0]);
+                            }
+                            targetEl.appendChild(draggedEl);
+                        } else if (targetEl.id && targetEl.id.startsWith('word-bank')) {
+                            targetEl.appendChild(draggedEl);
+                        }
+                    }
+
+                    function checkExerciseDragDrop(exId) {
+                        const container = document.getElementById(exId);
+                        const zones = container.querySelectorAll('.drop-zone');
+                        let allCorrect = true;
+                        
+                        zones.forEach(zone => {
+                            const correctAnswer = zone.getAttribute('data-answer');
+                            let userAnswer = "";
+                            if (zone.children.length > 0) {
+                                userAnswer = zone.children[0].innerText.trim();
+                            }
+                            if (userAnswer === correctAnswer) {
+                                zone.style.borderColor = '#4caf50';
+                                zone.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                zone.style.borderColor = '#f44336';
+                                zone.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã kéo đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ sai, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function toggleTranslation() {
+                        const translations = document.querySelectorAll('.vn-translation');
+                        translations.forEach(el => {
+                            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                        });
+                    }
+                </script>
+                <!-- ========================================== -->
+                <!-- 5-6 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">5—6 学时 Class Hours 5—6 (Tiết học 5—6)</h2>
+
+                <h3><i class="fa-solid fa-puzzle-piece"></i> 综合运用 Integrated Use (Vận dụng tổng hợp)</h3>
+                
+                <h4 style="color: var(--primary); font-size: 16px; margin: 20px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    专业术语运用 Use of Professional Terms (Vận dụng thuật ngữ chuyên ngành)
+                </h4>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Kéo thả điền từ chuyên ngành -->
+                    <div id="t56-b4-ex-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 选词填空：读一读给出的专业术语，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Blank filling: Read the professional terms given and put the right ones in the following sentences. / Điền từ: Kéo thuật ngữ chuyên ngành ở khung bên dưới và thả vào chỗ trống thích hợp.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-t56-b4" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="wb56_1" ondragstart="drag(event)">甲骨文</span>
+                            <span class="drag-word" draggable="true" id="wb56_2" ondragstart="drag(event)">笔画</span>
+                            <span class="drag-word" draggable="true" id="wb56_3" ondragstart="drag(event)">象形</span>
+                            <span class="drag-word" draggable="true" id="wb56_4" ondragstart="drag(event)">偏旁</span>
+                            <span class="drag-word" draggable="true" id="wb56_5" ondragstart="drag(event)">合体</span>
+                            <span class="drag-word" draggable="true" id="wb56_6" ondragstart="drag(event)">会意</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）现在的汉字是从 <span class="drop-zone" data-answer="甲骨文" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 演变来的。</p>
+                            <p>（2）形声字是 <span class="drop-zone" data-answer="合体" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 60px;"></span> 字中的一类。</p>
+                            <p>（3）“一”“丨”“丿”都是汉字的 <span class="drop-zone" data-answer="笔画" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 60px;"></span> 。</p>
+                            <p>（4）“人、山、日”都是 <span class="drop-zone" data-answer="象形" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 60px;"></span> 字。</p>
+                            <p>（5）“讠”“氵”“扌”都是汉字的 <span class="drop-zone" data-answer="偏旁" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 60px;"></span> 。</p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t56-b4-ex-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t56-b4-ex-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t56-b4-ex-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）甲骨文</span>
+                                <span>（2）合体</span>
+                                <span>（3）笔画</span>
+                                <span>（4）象形</span>
+                                <span>（5）偏旁</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 会意 (hội ý)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Tra cứu khái niệm -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 概念速查：通过工具书或网络查一查下面这些术语的解释并写下来。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Look up the terms: Use a dictionary or website to find out the definitions of the following terms, and then write them down. / Tra cứu khái niệm: Tra từ điển hoặc mạng internet để viết ra giải thích của các thuật ngữ dưới đây.)</span>
+                        </h4>
+                        <div style="line-height: 2.2; padding-left: 10px; margin-top: 15px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）横 (Nét ngang):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）竖 (Nét sổ/dọc):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）撇 (Nét phẩy):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（4）点 (Nét chấm):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（5）折 (Nét gập):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    语篇与功能 Discourse and Function (Diễn ngôn và Chức năng)
+                </h4>
+
+                <!-- Info Box: 常用功能表达 -->
+                <div class="info-box" style="background: transparent;">
+                    <p style="font-weight: bold; font-size: 16px;">常用功能表达 (Cách diễn đạt chức năng thường dùng)</p>
+                    
+                    <p><strong>1. 比喻 (So sánh, ví von)：像……一样 / 好像 / 仿佛</strong></p>
+                    <p>（1）天上的白云一会儿<strong>像</strong>一只小狗，一会儿<strong>像</strong>一朵花。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Mây trắng trên trời chốc thì giống như một con cún con, chốc lại giống như một bông hoa.)</span></p>
+                    <p>（2）人们常常会觉得，汉字，尤其是古代汉字，就<strong>像是</strong>画<strong>一样</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Mọi người thường cảm thấy, chữ Hán, đặc biệt là chữ Hán cổ đại, giống hệt như một bức tranh.)</span></p>
+                    <p>（3）这种花看起来<strong>好像</strong>星星<strong>一样</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Loài hoa này thoạt nhìn giống y như những vì sao.)</span></p>
+
+                    <p style="margin-top: 20px;"><strong>2. 解释 (Giải thích)：……是……的意思 / 意思是 / 就是 / 表示 / 实际上 / 其实 / 也就是说 / 指的是 / 不是……，而是…… / 我们这里所说的……</strong></p>
+                    <p>（1）“除”<strong>是</strong>“除去”<strong>的意思</strong>，“除夕”<strong>表示</strong>“过了这个晚上就迎来了新年”。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">("Trừ" có nghĩa là "loại bỏ", "Trừ Tịch" biểu thị "qua đêm nay sẽ đón chào năm mới".)</span></p>
+                    <p>（2）“女”是“妈”的形旁，<strong>也就是说</strong>“妈”的意义与“女”有关。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">("Nữ" là hình bàng của chữ "Ma" (mẹ), nói cách khác, ý nghĩa của chữ "Ma" có liên quan đến "Nữ".)</span></p>
+                    <p>（3）两个“木”字放在一起是“林”，<strong>表示</strong>许多树。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Hai chữ "Mộc" (cây) đặt cạnh nhau là chữ "Lâm", biểu thị rất nhiều cây.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <p><strong>1. 用本单元所学功能表达词语写句子。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Write the sentences using the words indicating functions learned in this unit. / Viết câu sử dụng các từ ngữ biểu đạt chức năng đã học trong bài.)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2.2;">
+                            <p>（1）比喻：像……一样<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">用比喻的方法描写一个人的外貌，比如：眼睛、头发、脸、皮肤，等等。(Dùng phương pháp so sánh miêu tả ngoại hình một người, ví dụ: mắt, tóc, mặt, da...)</span><br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（2）比喻：好像<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">用比喻的方法描写你最喜欢的地方的景色，比如：天空、树木、海水，等等。(Dùng phương pháp so sánh miêu tả cảnh sắc nơi bạn thích nhất, ví dụ: bầu trời, cây cối, nước biển...)</span><br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（3）解释：就是<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">打的 = 坐出租车 (Gọi xe = Đi taxi)</span><br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+
+                            <p>（4）解释：……是……的意思<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">萌 (méng) = 可爱 (Manh = Dễ thương)<br>顾名思义 = 看到名称，就联想到它的意义 (Cố danh tư nghĩa = Nhìn tên là nghĩ ngay đến ý nghĩa của nó)</span><br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                        </div>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px; margin-bottom: 25px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 1</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）她的眼睛明亮得<strong>像</strong>星星<strong>一样</strong>。<br>
+                                （2）那里的海水很蓝，<strong>好像</strong>一块巨大的蓝宝石。<br>
+                                （3）“打的”<strong>就是</strong>坐出租车。<br>
+                                （4）“萌”<strong>是</strong>可爱<strong>的意思</strong>。/ “顾名思义”<strong>是</strong>看到名称，就联想到它的意义<strong>的意思</strong>。
+                            </div>
+                        </details>
+
+                        <!-- Bài 2: Semantic Matching Multiple Choice -->
+                        <div id="t56-b4-mcq-1">
+                            <p><strong>2. 语义匹配：选择一个正确答案完成句子。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14.5px;">(Semantic matching: Choose a right answer to complete each sentence. / Lựa chọn từ phù hợp với ngữ nghĩa để hoàn thành câu)</span></p>
+                            <div style="padding-left: 10px; line-height: 2;">
+                                <div style="margin-bottom: 15px;">
+                                    （1）今年夏天，雨水很充足，草木 __________。<br>
+                                    A 长得很舒服 &nbsp;&nbsp;&nbsp; B 玩儿得很开心 <br>
+                                    C 长得很茂盛 &nbsp;&nbsp;&nbsp; D 觉得很温柔<br>
+                                    <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （2）青春是每个人一生中最 __________ 的一段时间。<br>
+                                    A 取得成绩 &nbsp;&nbsp;&nbsp; B 值得留恋 <br>
+                                    C 价值昂贵 &nbsp;&nbsp;&nbsp; D 难得遇见<br>
+                                    <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （3）这种新款手机跟老款相比， __________。<br>
+                                    A 有很多的乐趣 &nbsp;&nbsp;&nbsp; B 有很高的标准 <br>
+                                    C 有很长的历史 &nbsp;&nbsp;&nbsp; D 有很大的区别<br>
+                                    <select data-answer="d" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （4）很多最基本的汉字是 __________ 的，有很大的象形特点。<br>
+                                    A 从图画演变来 &nbsp;&nbsp;&nbsp; B 从兴趣发展来 <br>
+                                    C 从小养成 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D 自然创造出来的<br>
+                                    <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （5）这里聚集着 __________ 只鸟儿，真是“鸟儿的天堂”。<br>
+                                    A 四面八方 &nbsp;&nbsp;&nbsp; B 五颜六色 <br>
+                                    C 成千上万 &nbsp;&nbsp;&nbsp; D 七上八下<br>
+                                    <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Nút chấm điểm Trắc nghiệm -->
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <button onclick="checkSelects('t56-b4-mcq-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                                <span id="t56-b4-mcq-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                            </div>
+                            <div id="t56-b4-mcq-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                                💡 <strong>Đáp án đúng:</strong> (1) C | (2) B | (3) D | (4) A | (5) C
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    交际与写作 Communication and Writing (Giao tiếp và Viết)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 小组讨论 (Thảo luận nhóm)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">用下面的句式与你的同学就汉字的造字法进行讨论。<br>(Group discussion: Discuss the methods of character formation with your classmates using the following sentence patterns. / Sử dụng các mẫu câu dưới đây để thảo luận với bạn học về các phương pháp cấu tạo chữ Hán.)</span></p>
+                    
+                    <div style="background: var(--bg-body); padding: 15px; border-radius: 8px; margin: 15px 0; line-height: 1.8;">
+                        <p>• <strong>开始话题 (Bắt đầu chủ đề)：</strong>你知道吗？…… / 你学过吗？……</p>
+                        <p>• <strong>引入话题 (Dẫn dắt chủ đề)：</strong>说起（说到、提起）……</p>
+                        <p>• <strong>改变话题 (Thay đổi chủ đề)：</strong>说到……，我想起来了……</p>
+                        <p>• <strong>退出交谈 (Rút khỏi cuộc trò chuyện/kết thúc ý mình)：</strong>我先说这些，你们接着谈吧。</p>
+                    </div>
+
+                    <p><strong>2. 写一写 (Viết)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">使用“比喻”这一功能的表达词语，写一处你喜欢的名胜古迹，要求不少于 200 字。<br>(Writing: Write a composition of at least 200 characters to describe a scenic spot or historic site you like, using metaphoric words. / Sử dụng các từ ngữ biểu đạt chức năng "so sánh/ví von", viết về một danh lam thắng cảnh mà bạn thích. Yêu cầu không dưới 200 chữ.)</span></p>
+                    <textarea placeholder="Nhập bài viết của bạn vào đây..." style="width: 100%; height: 150px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    活学活用 Learn and Use with Flexibility (Học đi đôi với hành)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 读一读下面这篇文章，读后完成下面的表格。<br>
+                    <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read the following passage and then complete the table. / Đọc đoạn văn sau rồi hoàn thành bảng bên dưới.)</span></strong></p>
+                    <div class="reading-box" style="margin-top: 15px; margin-bottom: 20px;">
+                        <p>甲骨文的“牛”像一个牛头。过去人们主要用牛耕地。所以，中国人很喜欢牛，认为牛勤劳能干。甲骨文的“虎”，头向上，尾巴向下，身上还有花纹。中国人觉得，老虎的头上写着一个大大的“王”字，所以虎是动物中的“王”。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Chữ "Ngưu" (trâu) trong Giáp cốt văn giống hệt một cái đầu trâu. Trước kia mọi người chủ yếu dùng trâu để cày ruộng. Vì vậy, người Trung Quốc rất thích trâu, cho rằng trâu cần cù, giỏi giang. Chữ "Hổ" trong Giáp cốt văn, đầu hướng lên trên, đuôi hướng xuống dưới, trên mình còn có vằn vện. Người Trung Quốc cảm thấy, trên đầu con hổ có viết một chữ "Vương" (王) rất to, nên hổ là "vua" của các loài động vật.)</span></p>
+
+                        <p>“木”表示树木，原来写成“𣎳”。树木的根怎么表示呢？只需要在“木”下面加一横，标出来就可以了，这就是“本”（𣎴）。现在，我们还常说“根本”。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">("Mộc" biểu thị cây cối, ban đầu được viết thành "𣎳". Rễ của cây cối thì biểu thị như thế nào? Chỉ cần thêm một nét ngang ở dưới chữ "Mộc", đánh dấu ra là được rồi, đó chính là chữ "Bản" (gốc rễ). Bây giờ, chúng ta vẫn thường nói "Căn bản" (cội nguồn/gốc rễ).)</span></p>
+
+                        <p>“休”，“亻”就是“人”，把“人”和“树木”拼到一起，表示一个人靠着树木休息，就表现了“休息”的情景。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">("Hưu" (nghỉ ngơi), bộ "亻" chính là "Nhân" (người), ghép "Nhân" và "Thụ mộc" (cây cối) lại với nhau, biểu thị một người tựa vào cây cối để nghỉ ngơi, như vậy liền thể hiện ra khung cảnh "nghỉ ngơi".)</span></p>
+
+                        <p>有些字的偏旁可能让我们感到奇怪，比如“财”“账”“货”等，它们都表示与钱有关的意思，可为什么它们的偏旁是“贝”呢？其实，“贝”就是“贝壳”，古时候中国人把贝壳当钱用，所以跟钱有关的字就用“贝”做偏旁了。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Bộ thủ của một số chữ có thể khiến chúng ta cảm thấy kỳ lạ, ví dụ như "Tài", "Trướng", "Hóa"... chúng đều biểu thị ý nghĩa liên quan đến tiền bạc, nhưng tại sao bộ thủ của chúng lại là bộ "Bối" (贝)? Thực ra, "Bối" chính là "vỏ sò", thời cổ đại người Trung Quốc dùng vỏ sò làm tiền, vì vậy những chữ liên quan đến tiền bạc liền dùng "Bối" làm bộ thủ.)</span></p>
+
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                        <div style="clear: both;"></div>
+                    </div>
+
+                    <table class="custom-table" style="background: white; text-align: center; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th width="30%" style="text-align: center;">古文 (Cổ văn)</th>
+                                <th width="30%" style="text-align: center;">今文 (Kim văn)</th>
+                                <th width="40%" style="text-align: center;">造字方法 (Phương pháp tạo chữ)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 24px;">🐄</td>
+                                <td><input type="text" data-answer="牛" placeholder="Chữ Hán" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td><input type="text" data-answer="象形" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 24px;">🐅</td>
+                                <td><input type="text" data-answer="虎" placeholder="Chữ Hán" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td><input type="text" data-answer="象形" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 20px;">𣎳</td>
+                                <td><input type="text" data-answer="木" placeholder="Chữ Hán" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td><input type="text" data-answer="象形" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 20px;">𣎴</td>
+                                <td><input type="text" data-answer="本" placeholder="Chữ Hán" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td><input type="text" data-answer="指事" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 20px;">休 (cổ)</td>
+                                <td style="font-weight: bold;">休</td>
+                                <td><input type="text" data-answer="会意" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--text-muted);">---</td>
+                                <td style="font-weight: bold;">财、账、货</td>
+                                <td><input type="text" data-answer="形声" placeholder="Phương pháp" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Nút chấm điểm Bảng -->
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 15px; margin-top: 10px;">
+                        <span id="t56-b4-table-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                        <button onclick="checkTable('t56-b4-table-feedback', this)" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm Bảng</button>
+                    </div>
+
+                    <p style="margin-top: 30px;"><strong>2. 社会调查 Social survey (Khảo sát xã hội)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">课文 2 讲了汉字的四种造字法，除了文中所出现的汉字以外，你还知道别的例子吗？采访 3 个同学，看看他们还知道哪些例子，然后把所有的例子归纳整理成如下表格，调查时尽量使用本课学过的交际方法。<br>(Bài khóa 2 đã nói về 4 phương pháp cấu tạo chữ Hán, ngoài các chữ Hán xuất hiện trong bài ra, bạn còn biết những ví dụ khác không? Hãy phỏng vấn 3 bạn học, xem họ còn biết những ví dụ nào, sau đó tổng hợp tất cả các ví dụ lại thành bảng dưới đây, khi điều tra hãy cố gắng sử dụng các phương pháp giao tiếp đã học trong bài.)</span></p>
+                    
+                    <table class="custom-table" style="background: white; margin-top: 15px; text-align: center;">
+                        <thead>
+                            <tr>
+                                <th width="20%"></th>
+                                <th width="20%" style="text-align: center;">象形字 (Tượng hình)</th>
+                                <th width="20%" style="text-align: center;">指事字 (Chỉ sự)</th>
+                                <th width="20%" style="text-align: center;">会意字 (Hội ý)</th>
+                                <th width="20%" style="text-align: center;">形声字 (Hình thanh)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: bold;">我知识的<br><span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">(Tôi biết)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold;">同学知道的<br><span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">(Bạn học biết)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    扩展阅读 Extended Reading (Đọc mở rộng)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <h1 style="font-size: 22px; text-align: center; margin-bottom: 20px; color: var(--primary);">不可缺少的标点符号</h1>
+                    <p style="text-align: center; color: var(--text-muted); margin-top: -15px; margin-bottom: 30px;">Indispensable punctuation marks (Dấu câu không thể thiếu)</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <!-- Bài đọc -->
+                        <div class="reading-box" style="flex: 1; min-width: 60%; margin: 0;">
+                            <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right; margin-bottom: 10px;">
+                                <i class="fa-solid fa-language"></i> Trung - Việt
+                            </button>
+                            <div style="clear: both;"></div>
+
+                            <p>标点符号是辅助文字记录语言的符号，是用来表示停顿、语气或词语的性质的。它和文字符号共同构成了现代汉语书面语言的两大组成部分。有些人认为标点符号是可有可无的，其实，标点符号能起到与文字一样的作用，甚至可以起到文字所不及的表达作用。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Dấu câu là ký hiệu phụ trợ cho chữ viết để ghi lại ngôn ngữ, được dùng để biểu thị sự ngắt nghỉ, ngữ khí hoặc tính chất của từ ngữ. Cùng với ký hiệu chữ viết, chúng tạo thành hai bộ phận cấu thành lớn của ngôn ngữ viết tiếng Hán hiện đại. Có người cho rằng dấu câu có cũng được mà không có cũng chẳng sao, nhưng thực ra, dấu câu có thể phát huy tác dụng giống hệt như chữ viết, thậm chí có thể phát huy tác dụng biểu đạt mà chữ viết không làm được.)</span></p>
+                            
+                            <p>现代汉语中常用的标点符号有17种，分点号和标号两大类。点号主要表示语句的各种停顿，句末点号也表示语气。标号的作用主要是用来标明词语或句子的性质和作用。例如：“鲁迅的《故乡》”不同于“鲁迅的故乡”，他们的区别就在于其中的书名号《》。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trong tiếng Hán hiện đại, các dấu câu thường dùng có 17 loại, chia thành hai loại lớn là dấu chấm câu (điểm hiệu) và dấu ký hiệu (tiêu hiệu). Dấu chấm câu chủ yếu biểu thị các kiểu ngắt nghỉ của câu, dấu ở cuối câu cũng biểu thị ngữ khí. Tác dụng của dấu ký hiệu chủ yếu dùng để làm rõ tính chất và tác dụng của từ ngữ hoặc câu. Ví dụ: "《Cố Hương》của Lỗ Tấn" khác với "Cố hương của Lỗ Tấn", sự khác biệt của chúng chính là nằm ở dấu ngoặc kép tên sách 《》 ở trong đó.)</span></p>
+
+                            <p style="font-weight: bold; text-align: center;">常用的17种标点符号列表如下：<br><span style="font-weight: normal; font-size: 14px; color: var(--text-muted);">(Danh sách 17 loại dấu câu thường dùng như sau:)</span></p>
+                            
+                            <!-- Bảng 7 loại dấu chấm câu -->
+                            <table class="custom-table" style="background: white; text-align: center; font-size: 14px; margin-bottom: 10px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" style="text-align: center;">7 种点号的名称和形状 (Tên và hình dạng của 7 loại dấu ngắt câu)</th>
+                                    </tr>
+                                    <tr style="background: #fdf2f8;">
+                                        <th rowspan="2" style="text-align: center; width: 10%;">名称</th>
+                                        <th colspan="3" style="text-align: center;">句末点号 (Dấu ngắt cuối câu)</th>
+                                        <th colspan="4" style="text-align: center;">句内点号 (Dấu ngắt trong câu)</th>
+                                    </tr>
+                                    <tr style="background: #fdf2f8;">
+                                        <th style="text-align: center;">句号 (Chấm)</th>
+                                        <th style="text-align: center;">问号 (Hỏi)</th>
+                                        <th style="text-align: center;">叹号 (Than)</th>
+                                        <th style="text-align: center;">逗号 (Phẩy)</th>
+                                        <th style="text-align: center;">顿号 (Dấu phẩy tranh)</th>
+                                        <th style="text-align: center;">分号 (Chấm phẩy)</th>
+                                        <th style="text-align: center;">冒号 (Hai chấm)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="font-weight: bold;">形状</td>
+                                        <td style="font-size: 18px; font-weight: bold;">。</td>
+                                        <td style="font-size: 18px; font-weight: bold;">？</td>
+                                        <td style="font-size: 18px; font-weight: bold;">！</td>
+                                        <td style="font-size: 18px; font-weight: bold;">，</td>
+                                        <td style="font-size: 18px; font-weight: bold;">、</td>
+                                        <td style="font-size: 18px; font-weight: bold;">；</td>
+                                        <td style="font-size: 18px; font-weight: bold;">：</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Bảng 10 loại dấu ký hiệu -->
+                            <table class="custom-table" style="background: white; text-align: center; font-size: 14px;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" style="text-align: center;">10 种标号及其形状 (Tên và hình dạng của 10 loại dấu ký hiệu)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="background: #fdf2f8; font-weight: bold;">
+                                        <td style="width: 20%;">名称</td>
+                                        <td style="width: 20%;">破折号 (Gạch ngang)</td>
+                                        <td style="width: 20%;">括号 (Ngoặc đơn)</td>
+                                        <td style="width: 20%;">省略号 (Chấm lửng)</td>
+                                        <td style="width: 20%;">书名号 (Ngoặc tên sách)</td>
+                                        <td style="width: 20%;">引号 (Ngoặc kép)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">形状</td>
+                                        <td style="font-size: 16px; font-weight: bold;">——</td>
+                                        <td style="font-size: 16px; font-weight: bold;">（ ）</td>
+                                        <td style="font-size: 16px; font-weight: bold;">……</td>
+                                        <td style="font-size: 16px; font-weight: bold;">《 》</td>
+                                        <td style="font-size: 16px; font-weight: bold;">“ ”</td>
+                                    </tr>
+                                    <tr style="background: #fdf2f8; font-weight: bold;">
+                                        <td>名称</td>
+                                        <td>连接号 (Nối)</td>
+                                        <td>间隔号 (Ngăn cách)</td>
+                                        <td>着重号 (Nhấn mạnh)</td>
+                                        <td>专名号 (Tên riêng)</td>
+                                        <td>分隔号 (Phân cách)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="font-weight: bold;">形状</td>
+                                        <td style="font-size: 16px; font-weight: bold;">— <br><span style="font-size: 12px; font-weight: normal;">或</span> ~</td>
+                                        <td style="font-size: 16px; font-weight: bold;">·</td>
+                                        <td style="font-size: 16px; font-weight: bold;">.</td>
+                                        <td style="font-size: 16px; font-weight: bold;">___</td>
+                                        <td style="font-size: 16px; font-weight: bold;">/</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <p>古书一般是没有标点的，读书人首先要学会断句。怎么断句？用句读分析。句读分析也也就是对句子的结构单位及其关系的分析，即句子的结构形式和语义关系的分析。句读分析的结果，古人运用圈（句号）和点（读号）表示出来。习惯上也就把“圈”“点”称为句读。断句不同，文意就不同；断句错误，就可能会引起误会。我们来看个小故事：<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Sách cổ nói chung là không có dấu câu, người đọc sách đầu tiên phải học cách ngắt câu. Ngắt câu như thế nào? Dùng phân tích câu chấm. Phân tích câu chấm cũng chính là phân tích đơn vị cấu trúc của câu và mối quan hệ của chúng, tức là phân tích hình thức cấu trúc và quan hệ ngữ nghĩa của câu. Kết quả của phân tích câu chấm, người xưa dùng vòng tròn (dấu chấm câu) và dấu chấm nhỏ (dấu phẩy ngắt) để biểu thị ra. Theo thói quen người ta cũng gọi "vòng tròn", "dấu chấm" là câu chấm. Ngắt câu khác nhau, ý nghĩa văn bản sẽ khác nhau; ngắt câu sai, thì có thể sẽ gây ra hiểu lầm. Chúng ta hãy cùng xem một câu chuyện nhỏ:)</span></p>
+
+                            <p>有位书生到亲戚家做客，突然外面下起雨来，这时快到晚上了，他打算住下来。但这位亲戚却不乐意，于是在纸上写了一句话：“下雨天留客天留人不留”。他想说的意思是：“下雨，天留客，天留，人不留。”书生看了，在这句话上加了几个标点：“下雨天，留客天，留人不？留！”亲戚一看，这句话的意思跟自己想的完全相反。但也无话可说，只好让书生住下来了。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Có một chàng thư sinh đến nhà họ hàng làm khách, đột nhiên bên ngoài đổ mưa, lúc này trời sắp tối rồi, anh ta định ở lại qua đêm. Nhưng người họ hàng này lại không vui, thế là bèn viết một câu lên giấy: "Trời mưa giữ khách trời giữ người không giữ" (Hạ vũ thiên lưu khách thiên lưu nhân bất lưu). Ý của ông ta muốn nói là: "Trời mưa, trời giữ khách, trời giữ, người không giữ." Thư sinh xem xong, bèn thêm mấy dấu câu vào câu nói này: "Trời mưa, ngày giữ khách, giữ người không? Giữ!". Người họ hàng vừa nhìn, ý nghĩa của câu này hoàn toàn trái ngược với suy nghĩ của mình. Nhưng cũng không còn lời nào để nói, đành phải cho thư sinh ở lại.)</span></p>
+
+                            <p>其实，这句话除了书生和亲戚的这两种标点办法外，还有两种标法，可分别使它变成疑问、问答两种句式，我们来加上标点试一试。疑问句：“下雨天，留客天，留人不留？” 问答句：“下雨天，留客天，留人？不留！”可见，标点符号有非常重要的作用。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Thực ra, câu này ngoài hai cách đánh dấu câu của chàng thư sinh và người họ hàng ra, còn có hai cách đánh dấu khác, có thể lần lượt làm cho nó biến thành hai kiểu câu: câu nghi vấn và câu hỏi đáp. Chúng ta hãy thêm dấu câu vào để thử xem sao. Câu nghi vấn: "Ngày trời mưa, ngày giữ khách, giữ người hay không giữ?". Câu hỏi đáp: "Ngày trời mưa, ngày giữ khách, giữ người? Không giữ!". Có thể thấy, dấu câu có tác dụng vô cùng quan trọng.)</span></p>
+                        </div>
+
+                        <!-- Chú thích từ vựng -->
+                        <div style="flex: 1; min-width: 250px; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h5 style="color: var(--primary); margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-book"></i> 生词 Vocab</h5>
+                            <div style="height: 550px; overflow-y: auto; padding-right: 10px;">
+                                <ul style="list-style: none; padding: 0; line-height: 2.2; font-size: 14.5px;">
+                                    <li>1. <strong>*标点符号</strong> biāodiǎn fúhào <span style="color: var(--text-muted);">(dấu câu)</span></li>
+                                    <li>2. <strong>辅助</strong> fǔzhù <span style="color: var(--text-muted);">(phụ trợ)</span></li>
+                                    <li>3. <strong>停顿</strong> tíngdùn <span style="color: var(--text-muted);">(ngắt nghỉ)</span></li>
+                                    <li>4. <strong>*语气</strong> yǔqì <span style="color: var(--text-muted);">(ngữ khí)</span></li>
+                                    <li>5. <strong>性质</strong> xìngzhì <span style="color: var(--text-muted);">(tính chất)</span></li>
+                                    <li>6. <strong>书面</strong> shūmiàn <span style="color: var(--text-muted);">(văn viết)</span></li>
+                                    <li>7. <strong>组成</strong> zǔchéng <span style="color: var(--text-muted);">(cấu thành)</span></li>
+                                    <li>8. <strong>*点号</strong> diǎnhào <span style="color: var(--text-muted);">(dấu chấm/ngắt câu)</span></li>
+                                    <li>9. <strong>*标号</strong> biāohào <span style="color: var(--text-muted);">(dấu ký hiệu/tiêu hiệu)</span></li>
+                                    <li>10. <strong>*书名号</strong> shūmínghào <span style="color: var(--text-muted);">(ngoặc tên sách)</span></li>
+                                    <li>11. <strong>列</strong> liè <span style="color: var(--text-muted);">(liệt kê)</span></li>
+                                    <li>12. <strong>如下</strong> rúxià <span style="color: var(--text-muted);">(như sau)</span></li>
+                                    <li>13. <strong>名称</strong> míngchēng <span style="color: var(--text-muted);">(tên gọi)</span></li>
+                                    <li>14. <strong>*句号</strong> jùhào <span style="color: var(--text-muted);">(dấu chấm)</span></li>
+                                    <li>15. <strong>*问号</strong> wènhào <span style="color: var(--text-muted);">(dấu hỏi chấm)</span></li>
+                                    <li>16. <strong>*叹号</strong> tànhào <span style="color: var(--text-muted);">(dấu chấm than)</span></li>
+                                    <li>17. <strong>*逗号</strong> dòuhào <span style="color: var(--text-muted);">(dấu phẩy)</span></li>
+                                    <li>18. <strong>*顿号</strong> dùnhào <span style="color: var(--text-muted);">(dấu phẩy tranh/dấu ngắt)</span></li>
+                                    <li>19. <strong>*分号</strong> fēnhào <span style="color: var(--text-muted);">(dấu chấm phẩy)</span></li>
+                                    <li>20. <strong>*冒号</strong> màohào <span style="color: var(--text-muted);">(dấu hai chấm)</span></li>
+                                    <li>21. <strong>*破折号</strong> pòzhéhào <span style="color: var(--text-muted);">(dấu gạch ngang)</span></li>
+                                    <li>22. <strong>*括号</strong> kuòhào <span style="color: var(--text-muted);">(dấu ngoặc đơn)</span></li>
+                                    <li>23. <strong>*省略号</strong> shěnglüèhào <span style="color: var(--text-muted);">(dấu chấm lửng)</span></li>
+                                    <li>24. <strong>*引号</strong> yǐnhào <span style="color: var(--text-muted);">(dấu ngoặc kép)</span></li>
+                                    <li>25. <strong>*连接号</strong> liánjiēhào <span style="color: var(--text-muted);">(dấu nối)</span></li>
+                                    <li>26. <strong>*间隔号</strong> jiàngéhào <span style="color: var(--text-muted);">(dấu ngăn cách)</span></li>
+                                    <li>27. <strong>*着重号</strong> zhuózhònghào <span style="color: var(--text-muted);">(dấu nhấn mạnh)</span></li>
+                                    <li>28. <strong>*专名号</strong> zhuānmínghào <span style="color: var(--text-muted);">(dấu tên riêng)</span></li>
+                                    <li>29. <strong>*分隔号</strong> fēngéhào <span style="color: var(--text-muted);">(dấu phân cách)</span></li>
+                                    <li>30. <strong>断句</strong> duànjù <span style="color: var(--text-muted);">(ngắt câu)</span></li>
+                                    <li>31. <strong>*句读</strong> jùdòu <span style="color: var(--text-muted);">(câu chấm/ngắt câu cổ)</span></li>
+                                    <li>32. <strong>分析</strong> fēnxī <span style="color: var(--text-muted);">(phân tích)</span></li>
+                                    <li>33. <strong>单位</strong> dānwèi <span style="color: var(--text-muted);">(đơn vị)</span></li>
+                                    <li>34. <strong>即</strong> jí <span style="color: var(--text-muted);">(tức là)</span></li>
+                                    <li>35. <strong>圈</strong> quān <span style="color: var(--text-muted);">(vòng tròn)</span></li>
+                                    <li>36. <strong>书生</strong> shūshēng <span style="color: var(--text-muted);">(thư sinh)</span></li>
+                                    <li>37. <strong>乐意</strong> lèyì <span style="color: var(--text-muted);">(vui lòng, bằng lòng)</span></li>
+                                    <li>38. <strong>分别</strong> fēnbié <span style="color: var(--text-muted);">(lần lượt)</span></li>
+                                    <li>39. <strong>*疑问句</strong> yíwènjù <span style="color: var(--text-muted);">(câu nghi vấn)</span></li>
+                                    <li>40. <strong>可见</strong> kějiàn <span style="color: var(--text-muted);">(có thể thấy)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">1. 看看下列句子中应该用什么标点符号。<br><span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Fill in the blanks with the right punctuation marks. / Hãy điền các dấu câu thích hợp vào chỗ trống.)</span></p>
+                    <div style="line-height: 2.2; padding-left: 10px;">
+                        <p style="margin-bottom: 5px;">（1）你明天来吗 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></p>
+                        <p style="margin-bottom: 5px;">（2）妈妈说 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 到了北京给我打个电话 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></p>
+                        <p style="margin-bottom: 5px;">（3）这里的风景真美啊 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"></p>
+                        <p style="margin-bottom: 5px;">（4）我非常喜欢看 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 我的一生 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 这本书。</p>
+                        <p style="margin-bottom: 5px;">（5）我喜欢吃的水果有苹果 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 葡萄 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 香蕉 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 梨，等等。</p>
+                        <p style="margin-bottom: 5px;">（6）对西方学生来说 <input type="text" style="width: 30px; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; text-align: center;"> 汉字太难了。</p>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">2. 读一篇短文，试着找一找文章中的“冒号、引号、顿号、破折号、括号、省略号”，想一想它们的使用功能，并把例句记录下来。<br>
+                    <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read a short essay and find the colons, quotation marks, slight-pause marks, dashes, brackets and ellipses in it. Think about their functions and note down the example sentences. / Hãy đọc một đoạn văn ngắn và thử tìm các dấu "Hai chấm, Ngoặc kép, Phẩy tranh, Gạch ngang, Ngoặc đơn, Chấm lửng" trong đó, suy nghĩ về chức năng sử dụng của chúng và ghi chép lại các câu ví dụ.)</span></p>
+                    <textarea placeholder="Ghi chú bài làm của bạn vào đây..." style="width: 100%; height: 120px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <!-- Hàm chấm điểm cho Bảng Bài 1 của 活学活用 -->
+                <script>
+                    function checkTable(feedbackId, btn) {
+                        const table = btn.closest('.lesson-card').querySelector('table.custom-table');
+                        const inputs = table.querySelectorAll('input[data-answer]');
+                        let allCorrect = true;
+                        
+                        inputs.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                            
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(feedbackId);
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Điền đúng hết rồi!</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có ô chưa đúng, bạn thử lại nhé.</span>';
+                            }
+                        }
+                    }
+                </script>
+
+    
+
+                <!-- Các Script chấm điểm -->
+                <script>
+                    function checkExercise(exId) {
+                        const container = document.getElementById(exId);
+                        const inputsPinyin = container.querySelectorAll('input[data-pinyin]');
+                        const inputsLetter = container.querySelectorAll('input[data-answer]');
+                        let allCorrect = true;
+                        
+                        inputsPinyin.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-pinyin').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        inputsLetter.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã làm đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ chưa đúng, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function checkSelects(exId) {
+                        const container = document.getElementById(exId);
+                        const selects = container.querySelectorAll('select[data-answer]');
+                        let allCorrect = true;
+                        
+                        selects.forEach(select => {
+                            const userAnswer = select.value;
+                            const correctAnswer = select.getAttribute('data-answer');
+                            
+                            if (userAnswer === correctAnswer) {
+                                select.style.borderColor = '#4caf50';
+                                select.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                select.style.borderColor = '#f44336';
+                                select.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Chính xác! Bạn đã chọn đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có đáp án chưa đúng, hãy xem lại nhé.</span>';
+                            }
+                        }
+                        if (answersDiv && !allCorrect) {
+                            answersDiv.style.display = 'block';
+                        }
+                    }
+
+                    function allowDrop(ev) { ev.preventDefault(); }
+                    function dragEnter(ev) {
+                        ev.preventDefault();
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.add('drag-over');
+                    }
+                    function dragLeave(ev) {
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.remove('drag-over');
+                    }
+                    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+                    function drop(ev) {
+                        ev.preventDefault();
+                        var data = ev.dataTransfer.getData("text");
+                        var draggedEl = document.getElementById(data);
+                        var targetEl = ev.target;
+
+                        if (targetEl.classList.contains('drag-word')) targetEl = targetEl.parentElement;
+
+                        if (targetEl.classList.contains('drop-zone')) {
+                            targetEl.classList.remove('drag-over');
+                            if (targetEl.children.length > 0) {
+                                let bankId = targetEl.closest('.lesson-card').querySelector('[id^="word-bank"]').id;
+                                let bank = document.getElementById(bankId); 
+                                bank.appendChild(targetEl.children[0]);
+                            }
+                            targetEl.appendChild(draggedEl);
+                        } else if (targetEl.id && targetEl.id.startsWith('word-bank')) {
+                            targetEl.appendChild(draggedEl);
+                        }
+                    }
+
+                    function checkExerciseDragDrop(exId) {
+                        const container = document.getElementById(exId);
+                        const zones = container.querySelectorAll('.drop-zone');
+                        let allCorrect = true;
+                        
+                        zones.forEach(zone => {
+                            const correctAnswer = zone.getAttribute('data-answer');
+                            let userAnswer = "";
+                            if (zone.children.length > 0) {
+                                userAnswer = zone.children[0].innerText.trim();
+                            }
+                            if (userAnswer === correctAnswer) {
+                                zone.style.borderColor = '#4caf50';
+                                zone.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                zone.style.borderColor = '#f44336';
+                                zone.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã kéo đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ sai, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function toggleTranslation() {
+                        const translations = document.querySelectorAll('.vn-translation');
+                        translations.forEach(el => {
+                            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                        });
+                    }
+                </script>
+                <!-- Nút chuyển sang bài tiếp theo -->
                 <div class="next-lesson-footer">
                     <a href="bai5.html" class="next-btn">
-                        <span>Bài tiếp theo: Đơn vị 5 - Kỳ thi Gaokao</span> <i class="fa-solid fa-arrow-right"></i>
+                        <span>Bài tiếp theo: Đơn vị 5 - 高考 (Kỳ thi Gaokao)</span> <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
             </div>
