@@ -2,11 +2,15 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bài 3: 老年人权益保障法 | Trạm Ôn Tập CSCA</title>
+    <!-- Thư viện hỗ trợ Kéo Thả trên màn hình cảm ứng -->
+    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
     <script>
         if(localStorage.getItem('csca-study-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-        if(localStorage.getItem('csca-sidebar-collapsed') === 'true') document.documentElement.classList.add('sidebar-collapsed');
+        if(localStorage.getItem('csca-sidebar-collapsed') === 'true' || window.innerWidth <= 768) {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -34,19 +38,50 @@
         .menu-toggle-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 8px; border-radius: 6px; }
         .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 20px; font-size: 14.5px; }
         .lesson-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px; }
-        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; }
-        .lesson-sub { color: var(--text-muted); font-size: 14.5px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; }
-        table.vocab-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        table.vocab-table th, table.vocab-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
-        table.vocab-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
+        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; text-align: center; }
+        h2 { font-size: 20px; color: white; background: var(--primary); display: inline-block; padding: 6px 16px; border-radius: 20px; margin: 30px 0 20px 0; }
+        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        
+        table.vocab-table, table.custom-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        table.vocab-table th, table.vocab-table td, table.custom-table th, table.custom-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
+        table.vocab-table th, table.custom-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
         .hanzi { font-size: 1.25em; font-weight: 500; color: var(--primary); }
-        ruby { ruby-align: center; margin-right: 4px; font-size: 1.35em; line-height: 2.8; }
-        rt { color: var(--text-muted); font-size: 0.5em; font-family: sans-serif; }
+        
+        .info-box { background: var(--hover-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .info-box p { margin-bottom: 10px; }
+        
+        ul.exercise-list { list-style: none; padding-left: 0; }
+        ul.exercise-list li { margin-bottom: 15px; }
+        
         .reading-box { background: var(--bg-body); padding: 25px; border-radius: 12px; border-left: 4px solid var(--primary); margin: 20px 0; border: 1px solid var(--border-color); }
+        .reading-box p { text-indent: 2em; margin-bottom: 15px; }
+        
         .next-lesson-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; }
         .next-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--primary); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.2s; }
         .next-btn:hover { filter: brightness(1.1); }
+
+        .drag-word { background: white; border: 1px solid var(--primary); color: var(--primary); padding: 4px 14px; border-radius: 20px; cursor: grab; font-weight: 600; display: inline-block; user-select: none; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .drag-word:active { cursor: grabbing; transform: scale(0.95); }
+        .drop-zone { display: inline-flex; justify-content: center; align-items: center; min-width: 70px; height: 34px; border: 1px dashed #aaa; border-radius: 4px; vertical-align: middle; background: #fafafa; margin: 0 4px; transition: 0.2s; padding: 0 5px; }
+        .drop-zone.drag-over { border-color: var(--primary); background: #ffeef2; border-width: 2px; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 15px 20px; flex-shrink: 0; margin-left: 0 !important; box-shadow: none; }
+            .logo-area { border: none; padding: 0; margin-bottom: 15px; }
+            .subject-switcher { margin: 0 0 15px 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 0; border-bottom: none; }
+            .nav-item { padding: 8px 15px; }
+            .sidebar-footer, .top-bar { display: none; }
+            .main-content { padding: 25px 15px; overflow-y: auto; }
+            .lesson-card { padding: 20px 15px; border-radius: 12px; }
+            table.vocab-table, table.custom-table { display: block; overflow-x: auto; white-space: nowrap; }
+            input[type="text"] { width: 100% !important; margin: 5px 0 !important; box-sizing: border-box; }
+            .info-box, .reading-box { padding: 15px; }
+            .reading-box p { text-indent: 1em; }
+            h1 { font-size: 22px; }
+            .drag-word { touch-action: none; margin: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -76,52 +111,1579 @@
             <a href="../giao-trinh-xa-hoi.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách bài học</a>
 
             <div class="lesson-card">
-                <h1>Đơn vị 3: 新《中华人民共和国老年人权益保障法》</h1>
-                <p class="lesson-sub">Nghiên cứu các điều khoản pháp lý quan trọng liên quan đến quyền lợi và nghĩa vụ bảo vệ người cao tuổi.</p>
+                <h1>第三单元: 新《中华人民共和国老年人权益保障法》</h1>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Unit 3: Amended Law of the People's Republic of China on the Protection of the Rights and Interests of the Elderly<br>(Đơn vị 3: Luật Bảo vệ Quyền lợi Người cao tuổi nước CHDCND Trung Hoa (sửa đổi))</p>
 
-                <h3>1. Từ Vựng Trọng Tâm (生词)</h3>
+                <!-- 学习目标 -->
+                <div class="info-box">
+                    <h3 style="margin-top: 0; border: none; padding: 0;"><i class="fa-solid fa-bullseye"></i> 学习目标 Learning Objectives (Mục tiêu bài học)</h3>
+                    
+                    <p><strong>1. 了解专业知识：新《中华人民共和国老年人权益保障法》新增的主要内容</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Hiểu kiến thức chuyên ngành: Các nội dung bổ sung chính trong Luật Bảo vệ Quyền lợi Người cao tuổi sửa đổi)</span></p>
+                    
+                    <p><strong>2. 掌握专业术语：法庭、赡养、案件、被告、原告、起诉、判决、权益</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Nắm vững thuật ngữ chuyên môn: pháp đình, phụng dưỡng, vụ án, bị cáo, nguyên cáo, khởi tố, phán quyết, quyền lợi)</span></p>
+                    
+                    <p><strong>3. 使用书面词语与格式：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Sử dụng từ ngữ và cấu trúc văn viết:)</span><br>
+                    • 将 (处置 / 未然) <span style="color: var(--text-muted); font-size: 14px;">(Giới từ đem/lấy hoặc Phó từ sắp/sẽ)</span><br>
+                    • 在……下 <span style="color: var(--text-muted); font-size: 14px;">(Dưới sự...)</span><br>
+                    • 不得 <span style="color: var(--text-muted); font-size: 14px;">(Không được phép)</span><br>
+                    • 以及 <span style="color: var(--text-muted); font-size: 14px;">(Và, cùng với)</span>
+                    </p>
+                    
+                    <p><strong>4. 进行功能表达：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Thực hành diễn đạt chức năng:)</span><br>
+                    • 描述变化：本来（原来、原本）……，但是（可是、而、最终）…… / 没想到 / 谁想<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Miêu tả sự thay đổi: Vốn dĩ (ban đầu, nguyên bản)..., nhưng (nhưng mà, mà, cuối cùng)... / Không ngờ tới / Ai ngờ)</span><br>
+                    • 引述（1）：数据（材料、研究、调查……）显示<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Trích dẫn: Dữ liệu (tài liệu, nghiên cứu, khảo sát...) cho thấy)</span></p>
+                </div>
+
+                <!-- 1-2 学时 -->
+                <h2>1—2 学时 Class Hours 1—2 (Tiết học 1—2)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 你认为下面哪种行为不是违法的？ (Bạn cho rằng hành vi nào dưới đây không vi phạm pháp luật?)</strong><br>
+                        <div style="line-height: 2.2; margin-top: 10px; padding-left: 10px;">
+                            A 偷看别人（包括自己的爱人、孩子）的手机短信。<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Lén xem tin nhắn điện thoại của người khác - bao gồm cả vợ/chồng, con cái của mình.)</span><br>
+                            B 拍了一张美女的照片放在家里自己欣赏。<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Chụp một bức ảnh người đẹp và để ở nhà tự mình chiêm ngưỡng.)</span><br>
+                            C 买了两只非常漂亮的名贵蝴蝶标本 (biāoběn, specimen) 回家收藏。<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Mua vài tiêu bản bướm danh giá rất đẹp mang về nhà sưu tầm.)</span><br>
+                            D 很长时间不看望年老的父母，也不打电话问候。<br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Rất lâu không đến thăm cha mẹ già, cũng không gọi điện thoại hỏi thăm.)</span><br>
+                            <select style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px; width: 200px;">
+                                <option value="">- Chọn đáp án của bạn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>2. 以上行为如果违法，可能分别违反了什么法律？请完成下表。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Nếu các hành vi trên là vi phạm pháp luật, thì có thể đã vi phạm luật gì? Hãy hoàn thành bảng sau.)</span>
+                        <table class="custom-table" style="background: white; margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th width="50%" style="text-align: center;">行为 (Hành vi)</th>
+                                    <th width="50%" style="text-align: center;">违反法律 (Vi phạm bộ luật nào)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center;">偷看手机短信 <br><span style="color: var(--text-muted); font-size: 13px;">(Lén xem tin nhắn)</span></td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">偷拍美女照片自己欣赏 <br><span style="color: var(--text-muted); font-size: 13px;">(Lén chụp ảnh người đẹp tự ngắm)</span></td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">收藏蝴蝶标本 <br><span style="color: var(--text-muted); font-size: 13px;">(Sưu tầm tiêu bản bướm)</span></td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">长期不看望年老的父母 <br><span style="color: var(--text-muted); font-size: 13px;">(Lâu ngày không thăm cha mẹ già)</span></td>
+                                    <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 3-1 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-1.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
                 <table class="vocab-table">
                     <thead>
                         <tr>
-                            <th width="25%">Chữ Hán</th>
-                            <th width="30%">Pinyin</th>
-                            <th width="15%">Từ loại</th>
-                            <th width="30%">Ý nghĩa (Tiếng Việt)</th>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="hanzi">权益</td>
-                            <td>quányì</td>
-                            <td>Danh từ</td>
-                            <td>Quyền lợi</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">保障</td>
-                            <td>bǎozhàng</td>
-                            <td>Động từ</td>
-                            <td>Bảo đảm</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">老年人</td>
-                            <td>lǎoniánrén</td>
-                            <td>Danh từ</td>
-                            <td>Người cao tuổi</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">法律</td>
-                            <td>fǎlǜ</td>
-                            <td>Danh từ</td>
-                            <td>Pháp luật</td>
-                        </tr>
+                        <tr><td>1</td><td class="hanzi">愿望</td><td>yuànwàng</td><td>名</td><td>nguyện vọng, mong muốn</td></tr>
+                        <tr><td>2</td><td class="hanzi">市</td><td>shì</td><td>名</td><td>thành phố</td></tr>
+                        <tr><td>3</td><td class="hanzi">某</td><td>mǒu</td><td>代</td><td>nào đó (một số)</td></tr>
+                        <tr><td>4</td><td class="hanzi">兄弟</td><td>xiōngdì</td><td>名</td><td>anh em</td></tr>
+                        <tr><td>5</td><td class="hanzi">面红耳赤</td><td>miànhóng-ěrchì</td><td></td><td>đỏ mặt tía tai (vì tức giận/tranh cãi)</td></tr>
+                        <tr><td>6</td><td class="hanzi">一辈子</td><td>yíbèizi</td><td>名</td><td>cả đời, một đời</td></tr>
+                        <tr><td>7</td><td class="hanzi">将</td><td>jiāng</td><td>介</td><td>đem, lấy (giới từ tương đương 把)</td></tr>
+                        <tr><td>8</td><td class="hanzi">退休</td><td>tuìxiū</td><td>动</td><td>nghỉ hưu</td></tr>
+                        <tr><td>9</td><td class="hanzi">孝顺</td><td>xiàoshùn</td><td>动</td><td>hiếu thuận</td></tr>
+                        <tr><td>10</td><td class="hanzi">成家</td><td>chéngjiā</td><td>动</td><td>lập gia đình</td></tr>
+                        <tr><td>11</td><td class="hanzi">看望</td><td>kànwàng</td><td>动</td><td>thăm hỏi, đến thăm</td></tr>
+                        <tr><td>12</td><td class="hanzi">嫁</td><td>jià</td><td>动</td><td>gả, lấy chồng</td></tr>
+                        <tr><td>13</td><td class="hanzi">显示</td><td>xiǎnshì</td><td>动</td><td>hiển thị, cho thấy</td></tr>
+                        <tr><td>14</td><td class="hanzi">老伴儿</td><td>lǎobànr</td><td>名</td><td>bạn già (chỉ vợ/chồng)</td></tr>
+                        <tr><td>15</td><td class="hanzi">劝说</td><td>quànshuō</td><td>动</td><td>khuyên nhủ, thuyết phục</td></tr>
+                        <tr><td>16</td><td class="hanzi">去世</td><td>qùshì</td><td>动</td><td>qua đời</td></tr>
+                        <tr><td>17</td><td class="hanzi">寂寞</td><td>jìmò</td><td>形</td><td>cô đơn, trống trải</td></tr>
+                        <tr><td>18</td><td class="hanzi">广泛</td><td>guǎngfàn</td><td>形</td><td>rộng rãi, phổ biến</td></tr>
+                        <tr><td>19</td><td class="hanzi">争议</td><td>zhēngyì</td><td>动</td><td>tranh nghị, tranh cãi</td></tr>
                     </tbody>
                 </table>
 
-                <h3>2. Luyện Đọc Hiểu Văn Bản (课文)</h3>
-                <div class="reading-box">
-                    <p style="margin-bottom: 15px; font-weight: bold; color: var(--primary);">课文 1: 父亲的愿望</p>
-                    <ruby>保<rt>bǎo</rt></ruby><ruby>护<rt>hù</rt></ruby><ruby>老<rt>lǎo</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>人<rt>rén</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>合<rt>hé</rt></ruby><ruby>法<rt>fǎ</rt></ruby><ruby>权<rt>quán</rt></ruby><ruby>益<rt>yì</rt></ruby>[cite: 2]，<ruby>是<rt>shì</rt></ruby><ruby>全<rt>quán</rt></ruby><ruby>社<rt>shè</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>责<rt>zé</rt></ruby><ruby>任<rt>rèn</rt></ruby>。
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 3-2 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-2.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
                 </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">法院</td><td>fǎyuàn</td><td>名</td><td>tòa án</td></tr>
+                        <tr><td>2</td><td class="hanzi">法庭</td><td>fǎtíng</td><td>名</td><td>pháp đình, tòa án</td></tr>
+                        <tr><td>3</td><td class="hanzi">赡养</td><td>shànyǎng</td><td>动</td><td>phụng dưỡng (cha mẹ, người già)</td></tr>
+                        <tr><td>4</td><td class="hanzi">案件</td><td>ànjiàn</td><td>名</td><td>vụ án</td></tr>
+                        <tr><td>5</td><td class="hanzi">被告</td><td>bèigào</td><td>名</td><td>bị cáo</td></tr>
+                        <tr><td>6</td><td class="hanzi">原告</td><td>yuángào</td><td>名</td><td>nguyên cáo</td></tr>
+                        <tr><td>7</td><td class="hanzi">起诉</td><td>qǐsù</td><td>动</td><td>khởi tố, kiện</td></tr>
+                        <tr><td>8</td><td class="hanzi">撤诉</td><td>chèsù</td><td>动</td><td>rút đơn kiện</td></tr>
+                        <tr><td>9</td><td class="hanzi">案子</td><td>ànzi</td><td>名</td><td>vụ án (khẩu ngữ)</td></tr>
+                        <tr><td>10</td><td class="hanzi">判决</td><td>pànjué</td><td>动</td><td>phán quyết, tuyên án</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 朗读并查找：朗读生词表中的生词，并在课文中画出这些生词。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and search: Read aloud the new words in the vocabulary list and circle these words in the text. / Đọc to và tìm kiếm: Đọc to các từ mới trong bảng từ vựng, sau đó khoanh tròn những từ này trong phần bài đọc.)</span>
+                        </h4>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Matching -->
+                    <div id="exercise-3-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 生词连线：写拼音，连英文。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Matching: Write down the pinyin of the new words and match them with the English explanations. / Nối từ: Viết Pinyin và điền chữ cái A-G tương ứng với nghĩa tiếng Anh vào ô trống.)</span>
+                        </h4>
+                        
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-weight: 500; min-width: 250px;">
+                                <li>1. 广泛 &nbsp;&nbsp; <input type="text" data-pinyin="guǎngfàn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="g" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>2. 劝说 &nbsp;&nbsp; <input type="text" data-pinyin="quànshuō" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="f" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>3. 寂寞 &nbsp;&nbsp; <input type="text" data-pinyin="jìmò" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="b" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>4. 争议 &nbsp;&nbsp; <input type="text" data-pinyin="zhēngyì" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="c" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>5. 愿望 &nbsp;&nbsp; <input type="text" data-pinyin="yuànwàng" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="d" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>6. 孝顺 &nbsp;&nbsp; <input type="text" data-pinyin="xiàoshùn" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="a" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>7. 退休 &nbsp;&nbsp; <input type="text" data-pinyin="tuìxiū" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="e" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                            </ul>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; color: var(--text-muted);">
+                                <li>A. to show filial piety (hiếu thuận)</li>
+                                <li>B. lonely (cô đơn)</li>
+                                <li>C. to dispute, to argue (tranh cãi)</li>
+                                <li>D. wish (nguyện vọng)</li>
+                                <li>E. to retire (nghỉ hưu)</li>
+                                <li>F. to try to persuade (khuyên nhủ)</li>
+                                <li>G. extensive (rộng rãi, phổ biến)</li>
+                            </ul>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExercise('exercise-3-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-3-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-3-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span><strong>1 - G</strong> (guǎngfàn)</span>
+                                <span><strong>2 - F</strong> (quànshuō)</span>
+                                <span><strong>3 - B</strong> (jìmò)</span>
+                                <span><strong>4 - C</strong> (zhēngyì)</span>
+                                <span><strong>5 - D</strong> (yuànwàng)</span>
+                                <span><strong>6 - A</strong> (xiàoshùn)</span>
+                                <span><strong>7 - E</strong> (tuìxiū)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Vocabulary expansion -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 词语扩展：读一读下面的扩展形式，再写出两个。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Vocabulary development: Read the expanded forms of the words and write two more. / Mở rộng từ vựng: Đọc các dạng mở rộng của từ dưới đây, sau đó tự viết thêm hai từ nữa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>- 告 / 告 -</strong> (cáo) — 被告 (bị cáo), 告知 (thông báo), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（2）<strong>诉 - / - 诉</strong> (tố) — 诉求 (yêu cầu/khiếu nại), 起诉 (khởi tố), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（3）<strong>- 费</strong> (phí) — 赡养费 (phí phụng dưỡng), 住院费 (viện phí), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（4）<strong>寂寞</strong> (cô đơn) — 感到寂寞 (cảm thấy cô đơn), 生活寂寞 (cuộc sống cô đơn), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（5）<strong>看望</strong> (thăm hỏi) — 看望老人 (thăm người già), 看望父母 (thăm cha mẹ), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                        </div>
+
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án Bài 3</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）- 告 / 告 - — <strong>原告</strong> (nguyên cáo), <strong>告诉</strong> (nói cho biết)<br>
+                                （2）诉 - / - 诉 — <strong>诉讼</strong> (tố tụng), <strong>告诉</strong> (nói cho biết)<br>
+                                （3）- 费 — <strong>生活费</strong> (sinh hoạt phí), <strong>学费</strong> (học phí)<br>
+                                （4）寂寞 — <strong>非常寂寞</strong> (rất cô đơn), <strong>寂寞的夜</strong> (đêm vắng cô đơn)<br>
+                                （5）看望 — <strong>看望朋友</strong> (thăm bạn bè), <strong>看望病人</strong> (thăm người bệnh)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Drag Drop -->
+                    <div id="exercise-3-3">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Blank filling: Read the new words given and put the right ones in the following sentences. / Điền từ vào chỗ trống: Kéo từ thích hợp ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-3-3" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w33_1" ondragstart="drag(event)">退休</span>
+                            <span class="drag-word" draggable="true" id="w33_2" ondragstart="drag(event)">看望</span>
+                            <span class="drag-word" draggable="true" id="w33_3" ondragstart="drag(event)">愿望</span>
+                            <span class="drag-word" draggable="true" id="w33_4" ondragstart="drag(event)">劝说</span>
+                            <span class="drag-word" draggable="true" id="w33_5" ondragstart="drag(event)">成家</span>
+                            <span class="drag-word" draggable="true" id="w33_6" ondragstart="drag(event)">显示</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）父母开始不同意他来中国留学，经过大家的 <span class="drop-zone" data-answer="劝说" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> ，最后还是同意了。</p>
+                            <p>（2）统计结果 <span class="drop-zone" data-answer="显示" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> ，中国目前的网民已经将近7亿。</p>
+                            <p>（3）父母最大的 <span class="drop-zone" data-answer="愿望" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 就是儿女生活平安幸福。</p>
+                            <p>（4）即使你有了自己的家，也别忘了经常 <span class="drop-zone" data-answer="看望" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 父母。</p>
+                            <p>（5）小王今年三十多岁了，还没 <span class="drop-zone" data-answer="成家" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> ，父母都很着急。</p>
+                        </div>
+
+                        <!-- Nút nộp bài 4 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('exercise-3-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-3-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-3-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）劝说 (khuyên nhủ)</span>
+                                <span>（2）显示 (cho thấy)</span>
+                                <span>（3）愿望 (nguyện vọng)</span>
+                                <span>（4）看望 (thăm hỏi)</span>
+                                <span>（5）成家 (lập gia đình)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>课文 1 Text 1 (Bài đọc 1)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 听前任务 Pre-Listening Task (Nhiệm vụ trước khi nghe)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">听课文，在下表中填写关键词，并与同学讨论。<br>(Nghe bài khóa, điền từ khóa vào bảng dưới đây và thảo luận với bạn học.)</p>
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table class="custom-table" style="background: white;">
+                        <thead>
+                            <tr>
+                                <th width="30%" style="text-align: center;"></th>
+                                <th width="35%" style="text-align: center;">自己记录的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Ghi chép cá nhân)</span></th>
+                                <th width="35%" style="text-align: center;">同学补充的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Bạn học bổ sung)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">儿女的做法<br><span style="color: var(--text-muted); font-size: 13px;">(Cách làm của con cái)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">老人的愿望<br><span style="color: var(--text-muted); font-size: 13px;">(Nguyện vọng của người già)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-3.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">父亲的愿望</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>2011年的一天，北京市某法院的法庭上，6名兄弟姐妹为赡养老人的问题吵得面红耳赤。他们是这个案件的被告，原告是他们83岁的老父亲。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Một ngày năm 2011, trên phiên tòa của một tòa án nọ ở thành phố Bắc Kinh, 6 anh chị em cãi nhau đỏ mặt tía tai vì vấn đề phụng dưỡng người già. Họ là bị cáo của vụ án này, nguyên cáo là người cha già 83 tuổi của họ.)</span></p>
+                    
+                    <p>本来是一家人，父亲和子女，怎么成了原告和被告呢？原来，老人当了一辈子工人，好不容易将子女养大。想着退休以后，子女孝顺，自己有退休工资，生活不会有问题。可是没想到，两次生病住院，花了不少钱，子女们却谁也不愿意替老人付住院费，这让老人很难过。现在，儿女都已成家，平时很少来看望。虽然大儿子住得很近，但也很少见面。只有远嫁外地的大女儿，每月按时寄来赡养费。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Vốn dĩ là người một nhà, cha và con cái, sao lại trở thành nguyên cáo và bị cáo cơ chứ? Hóa ra, cụ ông làm công nhân cả đời, thật không dễ dàng gì mới đem các con nuôi khôn lớn. Cứ nghĩ sau khi nghỉ hưu, con cái hiếu thuận, bản thân lại có lương hưu, cuộc sống sẽ không có vấn đề gì. Nhưng không ngờ tới, hai lần ốm phải nhập viện đã tiêu tốn không ít tiền, các con lại không ai sẵn sàng trả viện phí thay cho cụ, điều này khiến cụ rất buồn. Hiện tại, con cái đều đã lập gia đình, bình thường rất ít khi đến thăm. Mặc dù con trai cả sống rất gần, nhưng cũng rất hiếm khi gặp mặt. Chỉ có cô con gái lớn lấy chồng xa ở ngoại tỉnh là hàng tháng gửi tiền phụng dưỡng đúng hạn.)</span></p>
+                    
+                    <p>材料显示，一年前，老人和老伴儿就曾因赡养问题，向法庭起诉了两个儿子，后来在儿女的劝说下，老人撤诉了。老伴儿去世以后，老人更觉得寂寞，没有办法，只好请了一位律师帮他起诉。老人的要求很简单：大女儿每月付给老人400元生活费；其他五个孩子每周至少看望老人一次，另外，每人每月再付给老人200元生活费。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Tài liệu cho thấy, một năm trước, cụ ông và bà nhà từng vì vấn đề phụng dưỡng mà khởi kiện hai người con trai ra tòa, sau đó dưới sự khuyên nhủ của con cái, cụ đã rút đơn kiện. Sau khi bà cụ qua đời, cụ ông càng cảm thấy cô đơn, không còn cách nào khác đành nhờ một vị luật sư giúp cụ khởi kiện. Yêu cầu của cụ ông rất đơn giản: con gái lớn mỗi tháng trả cho cụ 400 tệ phí sinh hoạt; 5 người con khác mỗi tuần ít nhất đến thăm cụ một lần, ngoài ra, mỗi người mỗi tháng trả thêm cho cụ 200 tệ phí sinh hoạt.)</span></p>
+                    
+                    <p>案子结束了，6名子女都表示将尊重法庭的判决，但是父亲将儿女告上法庭，这到底是家庭问题还是法律问题，在社会上引起了广泛争议。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Vụ án kết thúc, 6 người con đều bày tỏ sẽ tôn trọng phán quyết của tòa án, nhưng việc người cha kiện con cái ra tòa rốt cuộc là vấn đề gia đình hay là vấn đề pháp luật, đã gây ra những tranh cãi rộng rãi trong xã hội.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Trắc nghiệm -->
+                    <div id="comp-3-ex-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 根据课文内容选择正确答案。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Choose the right answers based on the text. / Chọn đáp án đúng dựa vào nội dung bài đọc.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px; margin-top: 15px;">
+                            <div style="margin-bottom: 15px;">
+                                <strong>（1）老人最主要的愿望是（ ）</strong> <br>
+                                A 想早点儿退休 &nbsp;&nbsp;&nbsp; B 想跟儿子一起住 <br>
+                                C 想让子女多看望他 &nbsp;&nbsp;&nbsp; D 想住院<br>
+                                <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（2）大女儿的情况是（ ）</strong> <br>
+                                A 住得离父亲很近 &nbsp;&nbsp;&nbsp; B 嫁到很远的外地 <br>
+                                C 常常给父亲打电话 &nbsp;&nbsp;&nbsp; D 不给老人赡养费<br>
+                                <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（3）帮助老人向法庭起诉的是（ ）</strong> <br>
+                                A 律师 &nbsp;&nbsp;&nbsp; B 老人的老伴儿 <br>
+                                C 大儿子 &nbsp;&nbsp;&nbsp; D 大女儿<br>
+                                <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（4）这是老人第几次向法庭起诉自己的子女？（ ）</strong> <br>
+                                A 第二次 &nbsp;&nbsp;&nbsp; B 第三次 <br>
+                                C 第一次 &nbsp;&nbsp;&nbsp; D 不知道<br>
+                                <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（5）关于这个案件，下面哪种说法正确？（ ）</strong> <br>
+                                A 判决还没结束 &nbsp;&nbsp;&nbsp; B 子女不接受判决 <br>
+                                C 老人已经撤诉 &nbsp;&nbsp;&nbsp; D 引起了大家的争论<br>
+                                <select data-answer="d" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkSelects('comp-3-ex-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Chấm điểm</button>
+                            <span id="comp-3-ex-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+                        
+                        <div id="comp-3-ex-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            （1）C 想让子女多看望他 &nbsp;&nbsp;|&nbsp;&nbsp; （2）B 嫁到很远的外地 &nbsp;&nbsp;|&nbsp;&nbsp; （3）A 律师 &nbsp;&nbsp;|&nbsp;&nbsp; （4）A 第二次 &nbsp;&nbsp;|&nbsp;&nbsp; （5）D 引起了大家的争论
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: True / False -->
+                    <div id="comp-3-ex-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 根据课文内容判断正误。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Decide whether the following statements are right or wrong based on the text. / Đánh giá đúng sai dựa trên nội dung bài khóa: Chọn Đúng/Sai cho mỗi câu.)</span>
+                        </h4>
+                        
+                        <div style="margin-bottom: 15px; padding-left: 10px; margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（1）老人和老伴儿把子女养大很不容易。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（2）上一次生病住院，子女们都愿意付医疗费。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（3）老人上次撤诉，是因为老伴儿的劝说。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（4）父亲要求六个子女每周至少探望他一次。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（5）大女儿不同意法庭的判决。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkSelects('comp-3-ex-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Chấm điểm</button>
+                            <span id="comp-3-ex-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+                        <div id="comp-3-ex-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            💡 <strong>Giải thích lỗi sai:</strong><br>
+                            （2）Sai. "谁也不愿意" (Không ai sẵn sàng/tự nguyện trả).<br>
+                            （3）Sai. Rút đơn kiện là do "在儿女的劝说下" (Dưới sự khuyên nhủ của con cái).<br>
+                            （4）Sai. "其他五个孩子每周至少看望老人一次" (Yêu cầu 5 người con khác, trừ con gái lớn vì ở xa).<br>
+                            （5）Sai. "6名子女都表示将尊重法庭的判决" (6 người con đều tôn trọng phán quyết).
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Trả lời câu hỏi -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 根据课文回答问题。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Answer the questions based on the text. / Trả lời các câu hỏi dựa trên nội dung bài khóa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; padding-left: 10px; margin-top: 15px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）子女与老人之间以前的关系怎样？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）老人提出诉讼的主要原因有哪些？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）老人提出的诉讼要求是什么？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. 好不容易将子女养大</strong></p>
+                    <p style="color: var(--text-muted);">“将” 有两种用法：<br>(Từ "将" có hai cách sử dụng:)</p>
+                    
+                    <p><strong>一、介词，表示处置，相当于“把”，较正式。例如：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Cách 1: Là giới từ, biểu thị sự xử lý/sắp đặt, tương đương với "把" nhưng trang trọng hơn. Ví dụ:)</span></p>
+                    <p>① 我们应当<strong>将</strong>工作和休闲结合起来。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Chúng ta nên kết hợp công việc và nghỉ ngơi lại với nhau.)</span></p>
+                    <p>② 他<strong>将</strong>失业的事告诉了妻子，没敢让父母知道。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Anh ấy đã đem chuyện thất nghiệp nói cho vợ, không dám để bố mẹ biết.)</span></p>
+                    <p>③ 服务员<strong>将</strong>客人们迎进了包间，并及时送上茶水。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Phục vụ đã mời khách vào phòng bao, và kịp thời mang trà nước lên.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：把“将”放在句中合适的位置。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14px;">(Put "将" in the right position in each sentence. / Luyện tập: Đặt từ "将" vào vị trí thích hợp A, B, C hoặc D trong câu.)</span></p>
+                        
+                        <div id="grammar-1-ex-1" style="padding-left: 10px; line-height: 2;">
+                            <p>（1）A 这个沙发 B 房间 C 分成了两个部分，一部分 D 是卧室，一部分是工作间。<br>
+                            👉 Vị trí: <select data-answer="c" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></p>
+                            
+                            <p>（2）一只大象 A 鼻子 B 伸进了窗口，孩子们 C 吓得 D 哭了起来。<br>
+                            👉 Vị trí: <select data-answer="a" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></p>
+                            
+                            <p>（3）A 虎妈妈 B 常常 C 孩子带在身边，D 教它自己寻找食物。<br>
+                            👉 Vị trí: <select data-answer="c" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></p>
+                            
+                            <p>（4）他 A 没有犹豫，B 自己仅有的财产 C 卖掉，开始 D 环游世界。<br>
+                            👉 Vị trí: <select data-answer="b" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <button onclick="checkSelects('grammar-1-ex-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                            <span id="grammar-1-ex-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 25px;"><strong>二、副词，表示动作或情况会在不久后发生，意思相当于“快要”，可以跟“要”一起使用。例如：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Cách 2: Là phó từ, biểu thị động tác hoặc tình huống sẽ xảy ra trong thời gian ngắn sắp tới, ý nghĩa tương đương với "快要" /sắp sửa/, có thể dùng cùng với "要". Ví dụ:)</span></p>
+                    <p>① 这些鱼还不知道自己的生命<strong>将</strong>会遇到危险，仍然快活地游来游去。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Những con cá này còn chưa biết sinh mệnh của mình sắp sửa gặp nguy hiểm, vẫn bơi lội tung tăng vui vẻ.)</span></p>
+                    <p>② 大学毕业生要适应社会，必须尽快了解自己<strong>将</strong>扮演的角色。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Sinh viên tốt nghiệp đại học muốn thích ứng với xã hội, bắt buộc phải nhanh chóng tìm hiểu vai trò mà mình sắp đảm nhiệm.)</span></p>
+                    <p>③ 英雄离开了这个世界，可他<strong>将</strong>受到人们的尊敬和热爱。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Người anh hùng đã rời bỏ thế giới này, nhưng anh ấy sẽ nhận được sự tôn kính và yêu mến của mọi người.)</span></p>
+
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：将下列词语组成句子。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14px;">(Make sentences using the following words. / Luyện tập: Sắp xếp các từ thành câu hoàn chỉnh.)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2;">
+                            <p>（1）将 / 做好准备 / 今天白天 / 请 / 会有大雨<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（2）于近期 / 国家领导人 / 访问非洲 / 将<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（3）走上社会 / 将 / 离开学校 / 同学们<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（4）小商店 / 我家旁边的 / 将 / 一家大超市 / 据说 / 被建成<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+
+                            <p>（5）发生什么事情 / 我们 / 明天 / 无法知道 / 将<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        </div>
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）今天白天将会有大雨，请做好准备。<br>
+                                （2）国家领导人将于近期访问非洲。<br>
+                                （3）同学们将离开学校，走上社会。<br>
+                                （4）据说我家旁边的小商店将被建成一家大超市。<br>
+                                （5）我们无法知道明天将发生什么事情。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 后来在儿女的劝说下，老人撤诉了</strong></p>
+                    <p style="color: var(--text-muted);">“在……下”可表示某种条件或情况，后面是在这种条件或情况下产生的某种结果。常用的有“在+名词+下”和“在……的+动词+下”两种形式。例如：<br>
+                    (Cấu trúc "在……下" biểu thị một điều kiện hoặc tình huống nào đó, phía sau là kết quả phát sinh dưới điều kiện/tình huống đó. Thường dùng "在 + Danh từ + 下" hoặc "在……的 + Động từ + 下" /Dưới sự... của.../. Ví dụ:)</p>
+                    <p>① <strong>在</strong>很多情况<strong>下</strong>，老师和家长不一定是正确的。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Trong rất nhiều tình huống, giáo viên và phụ huynh chưa chắc đã đúng.)</span></p>
+                    <p>② 学生可以<strong>在</strong>教师的帮助<strong>下</strong>，自己完成学习任务。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Học sinh có thể dưới sự giúp đỡ của giáo viên để tự mình hoàn thành nhiệm vụ học tập.)</span></p>
+                    <p>③ <strong>在</strong>父亲的影响<strong>下</strong>，莫扎特从小就非常热爱音乐。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Dưới sự ảnh hưởng của người cha, Mozart từ nhỏ đã vô cùng đam mê âm nhạc.)</span></p>
+
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：用“在……下”改写句子。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14px;">(Rewrite the sentences using "在……下". / Luyện tập: Viết lại câu dùng cấu trúc "在……下".)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2.2;">
+                            <p>（1）有了总经理的领导，公司今年的发展速度很快。<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（2）通过大家的共同努力，这次比赛顺利结束。<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（3）由于父亲的影响，孩子的性格发生了很大变化。<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <p>（4）经过法官的调解，双方接受了庭外和解的建议。<br>
+                            <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        </div>
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）<strong>在总经理的领导下</strong>，公司今年的发展速度很快。<br>
+                                （2）<strong>在大家的共同努力下</strong>，这次比赛顺利结束。<br>
+                                （3）<strong>在父亲的影响下</strong>，孩子的性格发生了很大变化。<br>
+                                （4）<strong>在法官的调解下</strong>，双方接受了庭外和解的建议。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- 3-4 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">3—4 学时 Class Hours 3—4 (Tiết học 3—4)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 查词典，说说下面词语的意思。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Tra từ điển và nói ý nghĩa của các từ dưới đây.)</span>
+                        <div style="line-height: 2.2; margin-top: 10px; padding-left: 10px;">
+                            <p>（1）老龄化 <span style="color: var(--text-muted); font-size: 14px;">(Lão hóa dân số)</span></p>
+                            <p>（2）婚姻自由 <span style="color: var(--text-muted); font-size: 14px;">(Tự do hôn nhân)</span></p>
+                            <p>（3）权益保障 <span style="color: var(--text-muted); font-size: 14px;">(Bảo đảm quyền lợi)</span></p>
+                            <p>（4）司法部门 <span style="color: var(--text-muted); font-size: 14px;">(Cơ quan tư pháp)</span></p>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>2. 讨论：现在社会上孤寡老人很多，我们应该怎么照顾他们？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Thảo luận: Hiện nay trong xã hội có rất nhiều người già neo đơn, chúng ta nên chăm sóc họ như thế nào?)</span>
+                        <textarea placeholder="Nhập câu trả lời của bạn..." style="width: 100%; height: 80px; border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none;"></textarea>
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 3-4 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-4.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">保障</td><td>bǎozhàng</td><td>动/名</td><td>bảo đảm, bảo vệ</td></tr>
+                        <tr><td>2</td><td class="hanzi">实施</td><td>shíshī</td><td>动</td><td>thực thi, tiến hành</td></tr>
+                        <tr><td>3</td><td class="hanzi">服务</td><td>fúwù</td><td>动</td><td>phục vụ, dịch vụ</td></tr>
+                        <tr><td>4</td><td class="hanzi">强调</td><td>qiángdiào</td><td>动</td><td>nhấn mạnh</td></tr>
+                        <tr><td>5</td><td class="hanzi">家庭</td><td>jiātíng</td><td>名</td><td>gia đình</td></tr>
+                        <tr><td>6</td><td class="hanzi">成员</td><td>chéngyuán</td><td>名</td><td>thành viên</td></tr>
+                        <tr><td>7</td><td class="hanzi">忽视</td><td>hūshì</td><td>动</td><td>phớt lờ, coi nhẹ</td></tr>
+                        <tr><td>8</td><td class="hanzi">冷落</td><td>lěngluò</td><td>动</td><td>lạnh nhạt, thờ ơ</td></tr>
+                        <tr><td>9</td><td class="hanzi">强迫</td><td>qiǎngpò</td><td>动</td><td>ép buộc, cưỡng ép</td></tr>
+                        <tr><td>10</td><td class="hanzi">居住</td><td>jūzhù</td><td>动</td><td>cư trú, sinh sống</td></tr>
+                        <tr><td>11</td><td class="hanzi">婚姻</td><td>hūnyīn</td><td>名</td><td>hôn nhân</td></tr>
+                        <tr><td>12</td><td class="hanzi">自由</td><td>zìyóu</td><td>名/形</td><td>tự do</td></tr>
+                        <tr><td>13</td><td class="hanzi">干涉</td><td>gānshè</td><td>动</td><td>can thiệp</td></tr>
+                        <tr><td>14</td><td class="hanzi">离婚</td><td>líhūn</td><td>动</td><td>ly hôn</td></tr>
+                        <tr><td>15</td><td class="hanzi">再婚</td><td>zàihūn</td><td>动</td><td>tái hôn</td></tr>
+                        <tr><td>16</td><td class="hanzi">目前</td><td>mùqián</td><td>名</td><td>hiện tại, trước mắt</td></tr>
+                        <tr><td>17</td><td class="hanzi">机构</td><td>jīgòu</td><td>名</td><td>cơ cấu, tổ chức, cơ quan</td></tr>
+                        <tr><td>18</td><td class="hanzi">满足</td><td>mǎnzú</td><td>动</td><td>đáp ứng, thỏa mãn</td></tr>
+                        <tr><td>19</td><td class="hanzi">拥有</td><td>yōngyǒu</td><td>动</td><td>sở hữu, có được</td></tr>
+                        <tr><td>20</td><td class="hanzi">床位</td><td>chuángwèi</td><td>名</td><td>giường bệnh, chỗ ngủ</td></tr>
+                        <tr><td>21</td><td class="hanzi">就近</td><td>jiùjìn</td><td>副</td><td>ở gần, ngay gần</td></tr>
+                        <tr><td>22</td><td class="hanzi">设施</td><td>shèshī</td><td>名</td><td>cơ sở vật chất, thiết bị</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 3-5 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-5.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">权益</td><td>quányì</td><td>名</td><td>quyền lợi</td></tr>
+                        <tr><td>2</td><td class="hanzi">条款</td><td>tiáokuǎn</td><td>名</td><td>điều khoản</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Đọc ví dụ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 读例句，学生词：朗读下面词语的用例，思考这些词语的用法。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and learn: Read aloud the example sentences of the following words and think about the usage of these words. / Đọc ví dụ, học từ mới: Đọc to các ví dụ dưới đây, suy nghĩ về cách sử dụng của những từ này.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 1.8; background: var(--bg-body); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 0;">（1）实施 (Thực thi)</p>
+                            <p>① 学院的这些新规定将在下周一开始实施。</p>
+                            <p>② 有了学习计划以后，就要马上实施。</p>
+                            <p>③ 由于德国实施义务教育效果非常好，其他国家都开始向它学习。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（2）强调 (Nhấn mạnh)</p>
+                            <p>① 在开始学习汉语时，教师就要强调语音的重要性。</p>
+                            <p>② 在新的教育法中，特别强调了每个孩子都应该受到教育。</p>
+                            <p>③ 好的管理方式应当强调鼓励和表扬的积极作用。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（3）忽视 (Phớt lờ, coi nhẹ)</p>
+                            <p>① 传统的教育只重视孩子的知识学习，而忽视了他们的兴趣培养。</p>
+                            <p>② 家庭教育对孩子的成长起着不可忽视的作用。</p>
+                            <p>③ 就对人的身心发展的影响来说，自然环境是不可忽视的。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（4）就近 (Ở gần)</p>
+                            <p>① 按照规定，中小学生应当就近入学。</p>
+                            <p>② 我们应尽量选择离家近的银行，就近存取款。</p>
+                            <p>③ 病人要想得到及时的治疗，必须就近找一家医院。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（5）满足 (Đáp ứng, thỏa mãn)</p>
+                            <p>① 她感到父亲留下的图书已经无法满足自己的学习需要了。</p>
+                            <p>② 你有什么心愿，我会尽量满足你。</p>
+                            <p>③ 能够跟自己喜欢的人在一起，我已经很满足了。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（6）拥有 (Sở hữu)</p>
+                            <p>① 大多数老年人和子女拥有各自的房子，因而选择分开居住。</p>
+                            <p>② 这样的好机会不是每个人都能拥有的。</p>
+                            <p>③ 北京拥有2100多万人口，是一个国际化大都市。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（7）干涉 (Can thiệp)</p>
+                            <p>① 父母不应该干涉子女的婚姻生活。</p>
+                            <p>② 我们的原则是和平解决国际问题，不干涉别的国家的内政。</p>
+                            <p>③ 家长不能过多干涉孩子的学习和生活，不然的话，会让孩子跟家长的距离越来越远。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（8）自由 (Tự do)</p>
+                            <p>① 家长应当给孩子自由选择、自由发展的机会。</p>
+                            <p>② 能够用流利的汉语进行自由表达，是我最大的愿望。</p>
+                            <p>③ 我们在保护自己权益的时候，也应该尊重别人的自由。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Mở rộng từ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 词语扩展：读一读下面的扩展形式，再写出两个。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Vocabulary development: Read the expanded forms of the words and write two more. / Mở rộng từ vựng: Đọc các dạng mở rộng dưới đây, sau đó tự viết thêm hai từ nữa.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>- 视 / 视 -</strong> (thị) — 忽视 (coi nhẹ), 视力 (thị lực), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（2）<strong>- 假 / 假 -</strong> (giả/kỳ nghỉ) — 休假 (nghỉ phép), 假期 (kỳ nghỉ), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（3）<strong>- 化</strong> (hóa) — 老龄化 (lão hóa), 年轻化 (trẻ hóa), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（4）<strong>问候</strong> (hỏi thăm) — 问候老年人 (hỏi thăm ng già), 问候父母 (hỏi thăm cha mẹ), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（5）<strong>提出</strong> (đề xuất) — 提出申诉 (đề xuất khiếu nại), 提出要求 (đề xuất yêu cầu), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                        </div>
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）- 视 / 视 - — <strong>重视</strong> (coi trọng), <strong>电视</strong> (ti vi)<br>
+                                （2）- 假 / 假 - — <strong>放假</strong> (nghỉ lễ), <strong>请假</strong> (xin nghỉ phép)<br>
+                                （3）- 化 — <strong>现代化</strong> (hiện đại hóa), <strong>自动化</strong> (tự động hóa)<br>
+                                （4）问候 — <strong>问候老师</strong> (hỏi thăm giáo viên), <strong>问候朋友</strong> (hỏi thăm bạn bè)<br>
+                                （5）提出 — <strong>提出问题</strong> (đặt câu hỏi), <strong>提出意见</strong> (đưa ra ý kiến)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Kéo thả điền từ -->
+                    <div id="t34-voc-ex-3" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Blank filling: Read the new words given and put the right ones in the following sentences. / Điền từ vào chỗ trống: Kéo từ thích hợp ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-34-ex-3" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w34_1" ondragstart="drag(event)">目前</span>
+                            <span class="drag-word" draggable="true" id="w34_2" ondragstart="drag(event)">冷落</span>
+                            <span class="drag-word" draggable="true" id="w34_3" ondragstart="drag(event)">实施</span>
+                            <span class="drag-word" draggable="true" id="w34_4" ondragstart="drag(event)">拥有</span>
+                            <span class="drag-word" draggable="true" id="w34_5" ondragstart="drag(event)">忽视</span>
+                            <span class="drag-word" draggable="true" id="w34_6" ondragstart="drag(event)">保障</span>
+                        </div>
+                        
+                        <!-- Các câu hỏi chứa Drop Zone -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）这是一所 <span class="drop-zone" data-answer="拥有" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 2000多名学生的初级中学。</p>
+                            <p>（2）修订后的《中华人民共和国义务教育法》自2006年开始 <span class="drop-zone" data-answer="实施" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（3）他有一儿一女，但他们 <span class="drop-zone" data-answer="目前" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 都在国外工作，没有办法照顾他。</p>
+                            <p>（4）小王最近工作压力特别大，所以对家人有些 <span class="drop-zone" data-answer="冷落" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（5）社会稳定，才能 <span class="drop-zone" data-answer="保障" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 经济的不断发展。</p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t34-voc-ex-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-voc-ex-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t34-voc-ex-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）拥有 (sở hữu)</span>
+                                <span>（2）实施 (thực thi)</span>
+                                <span>（3）目前 (hiện tại)</span>
+                                <span>（4）冷落 (lạnh nhạt)</span>
+                                <span>（5）保障 (bảo đảm)</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 忽视 (bỏ qua, phớt lờ)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>课文 2 Text 2 (Bài đọc 2)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 读前任务 Pre-Reading Task (Nhiệm vụ trước khi đọc)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">新《中华人民共和国老年人权益保障法》中增加了哪些方面的规定？<br><span style="font-size: 14px;">(Tân "Luật bảo vệ quyền lợi người cao tuổi nước CHDCND Trung Hoa" đã bổ sung thêm những quy định ở phương diện nào?)</span></p>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-3-6.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">新《中华人民共和国老年人权益保障法》</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>2013年7月1日，中国开始实施新的《中华人民共和国老年人权益保障法》。新法中增加了老年人社会保障、社会服务的有关条款，同时也强调，家庭成员要关心老年人的生活，不得忽视、冷落老年人。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Ngày 1 tháng 7 năm 2013, Trung Quốc bắt đầu thực thi "Luật bảo vệ quyền lợi người cao tuổi nước CHDCND Trung Hoa" mới. Trong luật mới tăng thêm các điều khoản liên quan đến bảo đảm xã hội, dịch vụ xã hội cho người cao tuổi, đồng thời cũng nhấn mạnh, các thành viên gia đình phải quan tâm đến đời sống của người cao tuổi, không được phớt lờ, lạnh nhạt với người cao tuổi.)</span></p>
+                    
+                    <p>新法规定了老年人住房、婚姻保障等内容。比如，子女要安排好老年人住的地方，不能强迫老年人居住条件差的房子。老年人的婚姻自由受到法律保护，子女或者其他人都不能干涉老年人的离婚、再婚以及婚后的生活等。另外，新法还提出，与老年人分开居住的子女应经常看望或者问候老年人。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Luật mới quy định các nội dung như bảo đảm nhà ở, hôn nhân của người cao tuổi. Ví dụ, con cái phải sắp xếp chỗ ở tốt cho người già, không thể ép buộc người già ở những ngôi nhà có điều kiện kém. Tự do hôn nhân của người cao tuổi được pháp luật bảo vệ, con cái hoặc những người khác đều không thể can thiệp vào việc ly hôn, tái hôn cũng như cuộc sống sau khi tái hôn của người cao tuổi, v.v. Ngoài ra, luật mới còn đề xuất, con cái sống tách biệt với người cao tuổi nên thường xuyên đến thăm hoặc hỏi thăm người cao tuổi.)</span></p>
+                    
+                    <p>目前中国已经进入老龄化社会，但是为老年人服务的养老机构还满足不了需要，每千名老人大概只拥有30张床位。因此，国家将鼓励家庭成员与老年人共同生活或者就近居住，为老年人养老提供条件。同时还将加快各种社会保障、社会服务设施的建设。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Hiện tại Trung Quốc đã bước vào xã hội lão hóa, nhưng các cơ sở dưỡng lão phục vụ cho người cao tuổi vẫn chưa đáp ứng đủ nhu cầu, mỗi một ngàn người già đại khái chỉ sở hữu 30 giường bệnh. Do đó, quốc gia sẽ khuyến khích các thành viên gia đình chung sống hoặc sống gần người cao tuổi, cung cấp điều kiện để người cao tuổi dưỡng lão. Đồng thời cũng sẽ đẩy nhanh việc xây dựng các loại bảo đảm xã hội, cơ sở vật chất dịch vụ xã hội.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa 2)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Hỏi đáp P1 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 边读边画：读课文 2 第一段，画出下面问题的答案。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and mark: Read Paragraph 1 of Text 2 and mark the answer to the following question. / Vừa đọc vừa tìm: Đọc đoạn 1 bài 2 và trả lời câu hỏi sau.)</span>
+                        </h4>
+                        <div style="line-height: 2.2; padding-left: 10px; margin-top: 15px;">
+                            <p style="margin-bottom: 5px;"><strong>新的《中华人民共和国老年人权益保障法》增加了哪几个方面的有关条款？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Framework Retell -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 框架复述：熟读课文 2 第二段，按照提示词进行复述。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Retell the framework: Read Paragraph 2 of Text 2 with proficiency and retell it based on the hints given. / Tóm tắt theo khung: Đọc thuộc đoạn 2 của bài khóa 2 và thuật lại dựa theo từ gợi ý.)</span>
+                        </h4>
+                        <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; font-weight: bold; color: var(--primary); line-height: 2; margin-top: 15px;">
+                            新法规定了……等内容。比如，子女要……，不能……。老年人的婚姻自由受到……，子女或者其他人都不能……以及……。另外，新法还提出，……的子女应……或者……。
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Điền từ Đoạn 3 -->
+                    <div id="t34-comp-ex-3" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 边读边填：读课文 2 第三段，完形填空。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read and fill in the blanks: Read Paragraph 3 of Text 2 and then fill in the blanks. / Vừa đọc vừa điền: Đọc đoạn 3 của Bài 2 và gõ từ thích hợp vào chỗ trống.)</span>
+                        </h4>
+                        
+                        <div style="line-height: 2.4; padding-left: 10px; margin-bottom: 20px; margin-top: 15px;">
+                            <p>
+                                目前中国已经进入 <input type="text" data-answer="老龄化" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 社会，但是为老年人服务的 <input type="text" data-answer="养老" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 机构还满足不了 <input type="text" data-answer="需要" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> ，每千名老人大概只 <input type="text" data-answer="拥有" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 30张床位。因此，国家将鼓励家庭成员与老年人 <input type="text" data-answer="共同生活" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 或者 <input type="text" data-answer="就近居住" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> ，为老年人养老提供条件。同时还将加快各种社会 <input type="text" data-answer="保障" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 、社会 <input type="text" data-answer="服务" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 设施的建设。
+                            </p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <button onclick="checkExercise('t34-comp-ex-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-comp-ex-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t34-comp-ex-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án chi tiết:</h5>
+                            <p style="margin-top: 0;">目前中国已经进入 <strong style="color: var(--primary);">老龄化</strong> 社会，但是为老年人服务的 <strong style="color: var(--primary);">养老</strong> 机构还满足不了 <strong style="color: var(--primary);">需要</strong>，每千名老人大概只 <strong style="color: var(--primary);">拥有</strong> 30张床位。因此，国家将鼓励家庭成员与老年人 <strong style="color: var(--primary);">共同生活</strong> 或者 <strong style="color: var(--primary);">就近居住</strong>，为老年人养老提供条件。同时还将加快各种社会 <strong style="color: var(--primary);">保障</strong>、社会 <strong style="color: var(--primary);">服务</strong> 设施的建设。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Summarize -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 概括全文大意。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Summarize the general idea of the passage. / Khái quát ý chính toàn bài.)</span>
+                        </h4>
+                        <div style="line-height: 2.2; padding-left: 10px; margin-top: 15px;">
+                            <p style="margin-bottom: 5px;"><strong>第一段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>第二段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>第三段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. 不得忽视、冷落老年人</strong></p>
+                    <p style="color: var(--text-muted);">“不得” (Không được), 助词，表示“不能、不允许”或者“禁止”，后面一般加动词、动词短语或形容词。例如：<br>
+                    (Là trợ từ, biểu thị "không thể, không cho phép" hoặc "cấm chỉ", phía sau thường kết hợp với động từ, cụm động từ hoặc tính từ. Ví dụ:)</p>
+                    <p>① 六岁以上十四岁以下的儿童、少年都应到学校读书，任何人<strong>不得</strong>反对。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Trẻ em từ 6 đến dưới 14 tuổi đều phải đến trường đi học, bất cứ ai cũng không được phản đối.)</span></p>
+                    <p>② 教师要尊重学生，<strong>不得</strong>轻视或冷落学生。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Giáo viên phải tôn trọng học sinh, không được coi thường hoặc lạnh nhạt với học sinh.)</span></p>
+                    <p>③ 学校规定，摩托车<strong>不得</strong>进入校园。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Trường học quy định, xe máy không được đi vào khuôn viên trường.)</span></p>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 子女或者其他人都不能干涉老年人的离婚、再婚以及婚后的生活等</strong></p>
+                    <p style="color: var(--text-muted);">“以及” (Và, cùng với), 连词，连接并列的名词、动词、介词短语、小句。“以及”前面的部分往往是主要的。例如：<br>
+                    (Là liên từ, nối các danh từ, động từ, cụm giới từ, phân câu song song. Phần phía trước "以及" thường là phần chính/quan trọng hơn. Ví dụ:)</p>
+                    <p>① 在这门课上，我们要学习中国的法律，<strong>以及</strong>一些与法律相关的知识。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Trong môn học này, chúng ta sẽ học pháp luật Trung Quốc, cùng với một số kiến thức liên quan đến pháp luật.)</span></p>
+                    <p>② 这种课程的教材内容，都选择与本地区、本国<strong>以及</strong>世界各地社会生活相关的问题。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Nội dung giáo trình của khóa học này, đều chọn những vấn đề liên quan đến đời sống xã hội của khu vực, của quốc gia và các nơi trên thế giới.)</span></p>
+                    <p>③ 同学们最关心的是什么时候考试<strong>以及</strong>什么时候放假。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Điều học sinh quan tâm nhất là khi nào thi và khi nào nghỉ lễ.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <!-- Bài 1: Chọn từ đồng nghĩa -->
+                        <div id="t34-synonym-ex-1">
+                            <p><strong>1. 选择与画线词语意思相近的词。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Choose the synonyms of the underlined words. / Chọn từ đồng nghĩa với từ được gạch chân.)</span></p>
+                            <div style="padding-left: 10px; line-height: 2;">
+                                <div style="margin-bottom: 15px;">
+                                    （1）目前的法律更多地照顾到妇女<u>以及</u>儿童的利益。<br>
+                                    A 和 &nbsp;&nbsp;&nbsp; B 达到 &nbsp;&nbsp;&nbsp; C 及时 &nbsp;&nbsp;&nbsp; D 比得上<br>
+                                    <select data-answer="a" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （2）这次大会非常重要，任何人<u>不得</u>以任何理由请假。<br>
+                                    A 可以 &nbsp;&nbsp;&nbsp; B 应该 &nbsp;&nbsp;&nbsp; C 得不到 &nbsp;&nbsp;&nbsp; D 不允许<br>
+                                    <select data-answer="d" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （3）见到父母，他<u>因</u>过于激动而流下了眼泪。<br>
+                                    A 原因 &nbsp;&nbsp;&nbsp; B 虽然 &nbsp;&nbsp;&nbsp; C 因为 &nbsp;&nbsp;&nbsp; D 因此<br>
+                                    <select data-answer="c" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Nút chấm điểm Dropdown -->
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <button onclick="checkSelects('t34-synonym-ex-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                                <span id="t34-synonym-ex-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                            </div>
+                            <div id="t34-synonym-ex-1-answers" style="display: none; margin-top: 15px; padding: 10px; background: white; border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                                💡 <strong>Đáp án đúng:</strong> (1) A | (2) D | (3) C
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 25px;">
+                            <p><strong>2. 用所给词语改写句子。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14px;">(Rewrite the sentences using the words given. / Viết lại câu sử dụng từ đã cho.)</span></p>
+                            <p>（1）我们通常说的语言三要素包括语音、词汇和语法。 <span style="color: var(--primary); float: right;">（以及）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（2）我们需要调查的是这件事是谁做的，他为什么要这么做。 <span style="color: var(--primary); float: right;">（以及）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（3）孩子有恋爱的自由，谁也不能干涉。 <span style="color: var(--primary); float: right;">（不得）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（4）任何学校都不能在假期通过补课等方式收费。 <span style="color: var(--primary); float: right;">（不得）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                                <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 2</summary>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                    （1）我们通常说的语言三要素包括语音、词汇<strong>以及</strong>语法。<br>
+                                    （2）我们需要调查的是这件事是谁做的，<strong>以及</strong>他为什么要这么做。<br>
+                                    （3）孩子有恋爱的自由，谁也<strong>不得</strong>干涉。<br>
+                                    （4）任何学校都<strong>不得</strong>在假期通过补课等方式收费。
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- 5-6 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">5—6 学时 Class Hours 5—6 (Tiết học 5—6)</h2>
+
+                <h3><i class="fa-solid fa-puzzle-piece"></i> 综合运用 Integrated Use (Vận dụng tổng hợp)</h3>
+                
+                <h4 style="color: var(--primary); font-size: 16px; margin: 20px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    专业术语运用 Use of Professional Terms (Vận dụng thuật ngữ chuyên ngành)
+                </h4>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Kéo thả điền từ chuyên ngành -->
+                    <div id="t56-b3-ex-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 选词填空：读一读给出的专业术语，并选择合适的放在下列句子中。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Blank filling: Read the professional terms given and put the right ones in the following sentences. / Điền từ: Kéo thuật ngữ chuyên ngành ở khung bên dưới và thả vào chỗ trống thích hợp.)</span>
+                        </h4>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-t56-b3" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="wb3_1" ondragstart="drag(event)">赡养</span>
+                            <span class="drag-word" draggable="true" id="wb3_2" ondragstart="drag(event)">条款</span>
+                            <span class="drag-word" draggable="true" id="wb3_3" ondragstart="drag(event)">法庭</span>
+                            <span class="drag-word" draggable="true" id="wb3_4" ondragstart="drag(event)">判决</span>
+                            <span class="drag-word" draggable="true" id="wb3_5" ondragstart="drag(event)">起诉</span>
+                            <span class="drag-word" draggable="true" id="wb3_6" ondragstart="drag(event)">权益</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）这个案件下个月将在北京审理，我们都在等着最后的 <span class="drop-zone" data-answer="判决" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（2）在 <span class="drop-zone" data-answer="法庭" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 上你要保证你说的都是真实的。</p>
+                            <p>（3） <span class="drop-zone" data-answer="赡养" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 父母是成年子女必须承担的义务。</p>
+                            <p>（4）新的婚姻法规定了有关子女抚养问题的一些 <span class="drop-zone" data-answer="条款" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（5）用人单位如果不按照法律规定允许员工休假，员工可以向法院 <span class="drop-zone" data-answer="起诉" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t56-b3-ex-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t56-b3-ex-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t56-b3-ex-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）判决 (phán quyết)</span>
+                                <span>（2）法庭 (tòa án)</span>
+                                <span>（3）赡养 (phụng dưỡng)</span>
+                                <span>（4）条款 (điều khoản)</span>
+                                <span>（5）起诉 (khởi kiện)</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 权益 (quyền lợi)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Tra cứu khái niệm -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 概念速查：通过工具书或网络查一查下面这些术语的解释并写下来。<br>
+                            <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Look up the terms: Use a dictionary or website to find out the definitions of the following terms, and then write them down. / Tra cứu khái niệm: Tra từ điển hoặc mạng internet để viết ra giải thích của các thuật ngữ dưới đây.)</span>
+                        </h4>
+                        <div style="line-height: 2.2; padding-left: 10px; margin-top: 15px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）义务 (Nghĩa vụ):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）案例 (Án lệ / Trường hợp điển hình):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）虐待罪 (Tội ngược đãi):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（4）择日宣判 (Chọn ngày tuyên án):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（5）监护权 (Quyền giám hộ):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    语篇与功能 Discourse and Function (Diễn ngôn và Chức năng)
+                </h4>
+
+                <!-- Info Box: 描述变化 & 引述 -->
+                <div class="info-box" style="background: transparent;">
+                    <p style="font-weight: bold; font-size: 16px;">常用功能表达</p>
+                    
+                    <p><strong>1. 描述变化 (Miêu tả sự thay đổi)：本来（原来、原本）……，但是（可是、而、最终）…… / 没想到 / 谁想</strong></p>
+                    <p style="color: var(--text-muted); font-size: 14.5px;">(Mẫu câu biểu thị sự thay đổi so với dự định ban đầu: Vốn dĩ... nhưng / Không ngờ...)</p>
+                    <p>（1）她<strong>本来</strong>的理想是成为一名建筑师，<strong>可是</strong>由于各种各样的原因，<strong>最终</strong>走上了音乐的道路。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Lý tưởng vốn dĩ của cô ấy là trở thành kiến trúc sư, nhưng do nhiều nguyên nhân khác nhau, cuối cùng lại bước theo con đường âm nhạc.)</span></p>
+                    <p>（2）高中三年，她成绩一直非常好，<strong>没想到</strong>高考那天会突然生病。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Ba năm cấp ba, thành tích của cô ấy luôn rất tốt, không ngờ tới ngày thi đại học lại đột nhiên bị ốm.)</span></p>
+                    <p>（3）有些文学作品<strong>原本</strong>不太引人注意，但一经评论，<strong>便会</strong>引起人们极大的兴趣。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Có những tác phẩm văn học vốn dĩ không được chú ý lắm, nhưng một khi được bình luận, liền gợi lên hứng thú to lớn của mọi người.)</span></p>
+
+                    <p style="margin-top: 20px;"><strong>2. 引述（1） (Trích dẫn)：数据（材料、研究、调查……）显示</strong></p>
+                    <p style="color: var(--text-muted); font-size: 14.5px;">(Mẫu câu dùng để trích dẫn nguồn thông tin khách quan: Số liệu / Tài liệu / Khảo sát... cho thấy)</p>
+                    <p>（1）<strong>数据显示</strong>，人的记忆力随着年龄增加而逐渐衰退。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Dữ liệu cho thấy, trí nhớ của con người sẽ dần suy giảm theo sự gia tăng của tuổi tác.)</span></p>
+                    <p>（2）<strong>材料显示</strong>，受教育程度越高，犯罪的可能性也越小。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Tài liệu cho thấy, mức độ giáo dục càng cao, khả năng phạm tội càng nhỏ.)</span></p>
+                    <p>（3）<strong>调查显示</strong>，冬春交替的第一季度是居民因病休息最多的时期。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Khảo sát cho thấy, quý đầu tiên giao mùa đông xuân là thời kỳ người dân nghỉ ốm nhiều nhất.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <p><strong>1. 用本单元所学功能表达词语改写句子。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Rewrite the sentences using the words indicating functions learned in this unit. / Viết lại câu sử dụng các mẫu câu chức năng đã học)</span></p>
+                        
+                        <div style="padding-left: 10px; line-height: 2.2;">
+                            <p>（1）变化：原本……，可是……<br>
+                            这个暑假，我原来打算去旅行，后来因为要参加朋友的婚礼没去成。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（2）变化：本来……，最终……<br>
+                            比赛刚开始，我们队成绩不错，后来对方换了一位水平很高的队员，结果我们队输了。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（3）引述：……显示<br>
+                            有一项调查结果告诉我们，电脑游戏对培养儿童的创造力有比较好的效果。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+
+                            <p>（4）引述：……显示<br>
+                            我们在“世界无烟日”发布的材料中看到，目前世界上吸烟的人数已经达到了 11 亿。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                        </div>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px; margin-bottom: 25px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 1</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）这个暑假，我<strong>原本</strong>打算去旅行，<strong>可是</strong>因为要参加朋友的婚礼没去成。<br>
+                                （2）比赛刚开始，我们队成绩不错，<strong>本来</strong>可以赢，<strong>最终</strong>对方换了一位水平很高的队员，结果我们输了。<br>
+                                （3）<strong>调查结果显示</strong>，电脑游戏对培养儿童的创造力有比较好的效果。<br>
+                                （4）“世界无烟日”发布的<strong>材料显示</strong>，目前世界上吸烟的人数已经达到了11亿。
+                            </div>
+                        </details>
+
+                        <!-- Bài 2: Semantic Matching Multiple Choice -->
+                        <div id="t56-b3-mcq-1">
+                            <p><strong>2. 语义匹配：选择一个正确答案完成句子。</strong><br>
+                            <span style="color: var(--text-muted); font-size: 14.5px;">(Semantic matching: Choose a right answer to complete each sentence. / Lựa chọn từ phù hợp với ngữ nghĩa để hoàn thành câu)</span></p>
+                            <div style="padding-left: 10px; line-height: 2;">
+                                <div style="margin-bottom: 15px;">
+                                    （1）父母每天早出晚归，省吃俭用，好不容易 __________。<br>
+                                    A 身体越来越差 &nbsp;&nbsp;&nbsp; B 吵得面红耳赤 <br>
+                                    C 远嫁异国他乡 &nbsp;&nbsp;&nbsp; D 将子女们养大<br>
+                                    <select data-answer="d" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （2）看到子女们为父亲的养老问题互相推卸责任，老人感觉 __________。<br>
+                                    A 很寂寞 &nbsp;&nbsp;&nbsp; B 很难过 &nbsp;&nbsp;&nbsp; C 很担心 &nbsp;&nbsp;&nbsp; D 无所谓<br>
+                                    <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （3）案子结束了，原告和被告都表示 __________。<br>
+                                    A 付老人赡养费 &nbsp;&nbsp;&nbsp; B 要求法庭判决 <br>
+                                    C 尊重法庭判决 &nbsp;&nbsp;&nbsp; D 提请法庭判决<br>
+                                    <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （4）婚姻法规定，子女应当尊重父母的 __________，不得干涉父母的离婚、再婚以及婚后的生活。<br>
+                                    A 社会保障 &nbsp;&nbsp;&nbsp; B 婚姻权利 &nbsp;&nbsp;&nbsp; C 社会服务 &nbsp;&nbsp;&nbsp; D 养老机构<br>
+                                    <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （5）__________ 不仅是个人的家庭的现实问题，它还涉及政治、经济、文化、社会等领域。<br>
+                                    A 冷落老年人 &nbsp;&nbsp;&nbsp; B 人口老龄化 &nbsp;&nbsp;&nbsp; C 居住条件好 &nbsp;&nbsp;&nbsp; D 老人有保障<br>
+                                    <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Nút chấm điểm Trắc nghiệm -->
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <button onclick="checkSelects('t56-b3-mcq-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                                <span id="t56-b3-mcq-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                            </div>
+                            <div id="t56-b3-mcq-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                                💡 <strong>Đáp án đúng:</strong> (1) D | (2) B | (3) C | (4) B | (5) B
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    交际与写作 Communication and Writing (Giao tiếp và Viết)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 小组讨论 (Thảo luận nhóm)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">用下面的句式与你的同学就赡养老人及老年人权益保障的问题进行讨论。<br>(Group discussion: Use the sentence patterns below to discuss the issues of supporting the elderly and ensuring their rights and interests with your classmates. / Sử dụng các mẫu câu dưới đây để thảo luận với bạn học về vấn đề phụng dưỡng người già và bảo đảm quyền lợi người cao tuổi.)</span></p>
+                    
+                    <div style="background: var(--bg-body); padding: 15px; border-radius: 8px; margin: 15px 0; line-height: 1.8;">
+                        <p>• <strong>引出话题 (Dẫn dắt chủ đề)：</strong>你对……问题有什么看法？/ ……，你觉得呢？/ ……，你是怎样认为的？</p>
+                        <p>• <strong>表示赞同 (Bày tỏ tán thành)：</strong>我也有同感…… / 我同意……的看法 / 我觉得……的看法非常有道理</p>
+                        <p>• <strong>表示反对 (Bày tỏ phản đối)：</strong>我对……有些不同意见 / 我不这么认为 / ……的看法有一定的道理，但是……</p>
+                        <p>• <strong>结束话题 (Kết thúc chủ đề)：</strong>概括起来说…… / 一句话…… / 归根到底……</p>
+                    </div>
+
+                    <p><strong>2. 写一写 (Viết)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">使用“引述”这一功能的表达词语，介绍一条你们国家的重要法律，要求不少于 200 字。<br>(Writing: Write a composition of at least 200 characters to introduce an important law in your country, using words that indicate quotation. / Sử dụng các từ ngữ biểu đạt chức năng "trích dẫn", giới thiệu một bộ luật quan trọng của quốc gia bạn. Yêu cầu không dưới 200 chữ.)</span></p>
+                    <textarea placeholder="Nhập bài viết của bạn vào đây..." style="width: 100%; height: 150px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    活学活用 Learn and Use with Flexibility (Học đi đôi với hành)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 读下面这个小案例，然后回答问题。<br>
+                    <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read the following case and then answer the questions. / Đọc tình huống ngắn sau rồi trả lời câu hỏi.)</span></strong></p>
+                    <div class="reading-box" style="margin-top: 15px; margin-bottom: 20px;">
+                        <p>小王在北京一家外企工作，今年已经是第五年了。由于公司工作非常忙，而职员又很少，小王工作以后一次也没回过老家。甚至在两年前父亲去世时，公司也没同意他请假回家。他家里还有七十多岁的老母亲，一直盼着儿子能常回家看看。今年春节，小王打算休假。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Tiểu Vương làm việc tại một doanh nghiệp nước ngoài ở Bắc Kinh, năm nay đã là năm thứ năm rồi. Do công việc của công ty rất bận, mà nhân viên lại rất ít, nên từ khi làm việc Tiểu Vương chưa từng về quê lần nào. Thậm chí vào hai năm trước khi bố mất, công ty cũng không đồng ý cho cậu ấy xin nghỉ phép về nhà. Ở quê nhà cậu ấy còn một người mẹ già hơn 70 tuổi, luôn mong ngóng con trai có thể thường xuyên về thăm nhà. Tết năm nay, Tiểu Vương dự định nghỉ phép.)</span></p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                        <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="line-height: 2.2; padding-left: 10px;">
+                        <p>（1）根据新的《中华人民共和国老年人权益保障法》，本文中小王和公司违反了哪些条款？<br>
+                        条款 1: <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"><br>
+                        条款 2: <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p>（2）如果公司不同意小王休假，他可以怎么办？<br><input type="text" placeholder="Trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                    </div>
+                    <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                        <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án</summary>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                            （1）小王违反了“与老年人分开居住的子女应经常看望或者问候老年人”的条款；公司违反了“用人单位应当按照国家有关规定保障赡养人探亲休假的权利”的条款。<br>
+                            （2）他可以向法院起诉。
+                        </div>
+                    </details>
+
+                    <p style="margin-top: 25px;"><strong>2. 社会调查 Social survey (Khảo sát xã hội)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">请你采访3—5位中国朋友，调查一下他们对新《中华人民共和国老年人权益保障法》中有关条款的了解情况，以及他们对这些条款的看法。<br>(Hãy phỏng vấn 3-5 người bạn Trung Quốc, điều tra về mức độ hiểu biết của họ đối với các điều khoản liên quan trong "Luật bảo vệ quyền lợi người cao tuổi" mới, cũng như quan điểm của họ về những điều khoản này.)</span></p>
+                    <textarea placeholder="Ghi chú khảo sát của bạn..." style="width: 100%; height: 100px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    扩展阅读 Extended Reading (Đọc mở rộng)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <h1 style="font-size: 22px; text-align: center; margin-bottom: 20px; color: var(--primary);">“常回家看看”入法引起社会关注</h1>
+                    <p style="text-align: center; color: var(--text-muted); margin-top: -15px; margin-bottom: 30px;">"Visiting home often" becomes law causes social concern<br>(Việc "Thường xuyên về thăm nhà" đưa vào luật thu hút sự quan tâm của xã hội)</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <!-- Bài đọc -->
+                        <div class="reading-box" style="flex: 1; min-width: 60%; margin: 0;">
+                            <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right; margin-bottom: 10px;">
+                                <i class="fa-solid fa-language"></i> Trung - Việt
+                            </button>
+                            <div style="clear: both;"></div>
+
+                            <p>“常回家看看”被写入法律，引起了社会的广泛关注。有许多人叫好，但也有人提出疑问。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Việc "Thường xuyên về thăm nhà" được ghi vào luật pháp, đã thu hút sự quan tâm rộng rãi của xã hội. Có rất nhiều người hoan hô tán thưởng, nhưng cũng có người đặt ra nghi vấn.)</span></p>
+                            
+                            <p>支持此项立法的观点认为，用法律来强调“常回家看看”没有什么不可以的。在道德不被人重视的情况下，法律就有了重要的作用。“常回家看看”的立法意义不是处罚，而是强调“孝”的社会意义。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Quan điểm ủng hộ cho việc lập pháp này nhận định rằng, dùng pháp luật để nhấn mạnh việc "Thường xuyên về thăm nhà" không có gì là không thể. Trong hoàn cảnh đạo đức không được con người coi trọng, pháp luật liền phát huy tác dụng quan trọng. Ý nghĩa lập pháp của "Thường xuyên về thăm nhà" không phải là xử phạt, mà là nhấn mạnh ý nghĩa xã hội của chữ "Hiếu".)</span></p>
+
+                            <p>有关领导表示，“常回家看看”入法更多的是希望通过法律规定引起人们的重视，虽然是道德方面的内容，但写入法律值得肯定。“重要的是，今后人们会认识到，不常回家看望老人是违法的。”<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Lãnh đạo liên quan bày tỏ, "Thường xuyên về thăm nhà" đưa vào luật nghiêng nhiều hơn về hy vọng thông qua quy định pháp luật thu hút sự coi trọng của mọi người, mặc dù là nội dung thuộc về phương diện đạo đức, nhưng được ghi vào luật là điều đáng được ghi nhận. "Quan trọng là, từ nay về sau mọi người sẽ nhận thức được rằng, không thường xuyên về thăm người già là vi phạm pháp luật.")</span></p>
+
+                            <p>反对的观点认为，“常回家看看”是道德、私人事务，如果法律干涉太多，只会收到相反的效果，最后可能导致法律不被遵守。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Quan điểm phản đối thì cho rằng, "Thường xuyên về thăm nhà" là vấn đề đạo đức, sự vụ cá nhân, nếu pháp luật can thiệp quá nhiều, sẽ chỉ nhận lại hiệu quả trái ngược, cuối cùng có thể dẫn tới việc luật pháp không được tuân thủ.)</span></p>
+
+                            <p>在北京工作的重庆姑娘小王听到“常回家看看”写入法律的消息，提出了自己的疑问：对于想回家的人来说，即使法律不这样规定，也会想办法回家看望老人。如果不想回家，有了这样的法律也不容易实施。“其实，对很多离家在外的年轻人来说，是想回家而不能。”小王说。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Cô gái Trùng Khánh Tiểu Vương đang làm việc ở Bắc Kinh nghe được tin tức "Thường xuyên về thăm nhà" ghi vào luật, đã đưa ra thắc mắc của riêng mình: Đối với những người muốn về nhà mà nói, cho dù pháp luật không quy định như vậy, cũng sẽ nghĩ cách về thăm người già. Nếu không muốn về nhà, có bộ luật như vậy cũng không dễ thực thi. "Thực ra, đối với rất nhiều thanh niên sống xa nhà mà nói, là muốn về mà không thể", Tiểu Vương nói.)</span></p>
+
+                            <p>某位教授认为，赡养老人是子女的基本义务，也是中华民族的优秀传统，“常回家看看”应当提倡，但法律不应对家庭生活有太深的干涉。政府和社会应当发挥主要作用，并提倡全社会尊老敬老。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Một vị giáo sư nào đó nhận định, phụng dưỡng người già là nghĩa vụ cơ bản của con cái, cũng là truyền thống ưu tú của dân tộc Trung Hoa, "Thường xuyên về thăm nhà" đáng được đề xướng, nhưng pháp luật không nên can thiệp quá sâu vào cuộc sống gia đình. Chính phủ và xã hội nên phát huy vai trò chủ yếu, đồng thời đề xướng toàn xã hội tôn trọng và kính yêu người già.)</span></p>
+
+                            <p>某律师认为，作为一部法规，应该有一定的强制性。但从现实情况来看，经常看望的标准是什么？应当是什么样的频率？如有违反，应当如何制裁？这些方面在法律上并未进一步细化，也无法细化。如果家庭成员和老人关系并不和谐，即使回家看望了，老人可能也无法获得快乐。“常回家看看”主要还是要让更多人尊老爱老。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Một vị luật sư cho rằng, là một bộ pháp quy, cần phải có tính cưỡng chế nhất định. Nhưng xét từ tình hình thực tế, tiêu chuẩn của việc thường xuyên thăm viếng là gì? Nên với tần suất như thế nào? Nếu có vi phạm, nên chế tài ra sao? Những khía cạnh này trên pháp luật chưa được chi tiết hóa thêm, cũng không thể chi tiết hóa được. Nếu mối quan hệ giữa thành viên gia đình và người già không hề hòa hợp, ngay cả khi về thăm rồi, người già có thể cũng không cảm nhận được niềm vui. "Thường xuyên về thăm nhà" chủ yếu vẫn là muốn để nhiều người hơn tôn trọng và yêu thương người già.)</span></p>
+                        </div>
+
+                        <!-- Chú thích từ vựng -->
+                        <div style="flex: 1; min-width: 250px; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h5 style="color: var(--primary); margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-book"></i> 生词 Vocab</h5>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-size: 14.5px;">
+                                <li>1. <strong>关注</strong> guānzhù <span style="color: var(--text-muted);">(quan tâm, chú ý)</span></li>
+                                <li>2. <strong>项</strong> xiàng <span style="color: var(--text-muted);">(mục, điều - lượng từ)</span></li>
+                                <li>3. <strong>*立法</strong> lìfǎ <span style="color: var(--text-muted);">(lập pháp)</span></li>
+                                <li>4. <strong>观点</strong> guāndiǎn <span style="color: var(--text-muted);">(quan điểm)</span></li>
+                                <li>5. <strong>道德</strong> dàodé <span style="color: var(--text-muted);">(đạo đức)</span></li>
+                                <li>6. <strong>*处罚</strong> chǔfá <span style="color: var(--text-muted);">(xử phạt)</span></li>
+                                <li>7. <strong>孝</strong> xiào <span style="color: var(--text-muted);">(chữ hiếu)</span></li>
+                                <li>8. <strong>领导</strong> lǐngdǎo <span style="color: var(--text-muted);">(lãnh đạo)</span></li>
+                                <li>9. <strong>*入法</strong> rùfǎ <span style="color: var(--text-muted);">(đưa vào luật)</span></li>
+                                <li>10. <strong>*违法</strong> wéifǎ <span style="color: var(--text-muted);">(vi phạm pháp luật)</span></li>
+                                <li>11. <strong>私人</strong> sīrén <span style="color: var(--text-muted);">(tư nhân, cá nhân)</span></li>
+                                <li>12. <strong>事务</strong> shìwù <span style="color: var(--text-muted);">(sự vụ, công việc)</span></li>
+                                <li>13. <strong>导致</strong> dǎozhì <span style="color: var(--text-muted);">(dẫn đến)</span></li>
+                                <li>14. <strong>遵守</strong> zūnshǒu <span style="color: var(--text-muted);">(tuân thủ)</span></li>
+                                <li>15. <strong>基本</strong> jīběn <span style="color: var(--text-muted);">(cơ bản)</span></li>
+                                <li>16. <strong>传统</strong> chuántǒng <span style="color: var(--text-muted);">(truyền thống)</span></li>
+                                <li>17. <strong>提倡</strong> tíchàng <span style="color: var(--text-muted);">(đề xướng)</span></li>
+                                <li>18. <strong>政府</strong> zhèngfǔ <span style="color: var(--text-muted);">(chính phủ)</span></li>
+                                <li>19. <strong>发挥</strong> fāhuī <span style="color: var(--text-muted);">(phát huy)</span></li>
+                                <li>20. <strong>*法规</strong> fǎguī <span style="color: var(--text-muted);">(pháp quy)</span></li>
+                                <li>21. <strong>*强制</strong> qiángzhì <span style="color: var(--text-muted);">(cưỡng chế)</span></li>
+                                <li>22. <strong>现实</strong> xiànshí <span style="color: var(--text-muted);">(hiện thực)</span></li>
+                                <li>23. <strong>频率</strong> pínlǜ <span style="color: var(--text-muted);">(tần suất)</span></li>
+                                <li>24. <strong>违反</strong> wéifǎn <span style="color: var(--text-muted);">(vi phạm)</span></li>
+                                <li>25. <strong>如何</strong> rúhé <span style="color: var(--text-muted);">(như thế nào)</span></li>
+                                <li>26. <strong>*制裁</strong> zhìcái <span style="color: var(--text-muted);">(chế tài, trừng phạt)</span></li>
+                                <li>27. <strong>并</strong> bìng <span style="color: var(--text-muted);">(đồng thời, cũng /không hề)</span></li>
+                                <li>28. <strong>细化</strong> xìhuà <span style="color: var(--text-muted);">(chi tiết hóa)</span></li>
+                                <li>29. <strong>和谐</strong> héxié <span style="color: var(--text-muted);">(hài hòa)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">1. 读后回答问题。<br><span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Read the passage and then answer the questions. / Đọc bài văn và trả lời câu hỏi.)</span></p>
+                    <div style="line-height: 2.2; padding-left: 10px;">
+                        <p style="margin-bottom: 5px;">（1）“常回家看看”写入法律以后，社会上有什么样的看法？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p style="margin-bottom: 5px;">（2）支持立法的人认为这项立法的意义是什么？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p style="margin-bottom: 5px;">（3）反对立法的人的主要观点是什么？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">2. 读后根据提示词概括文中主要观点。<br>
+                    <span style="font-size: 14.5px; font-weight: normal; color: var(--text-muted);">(Summarize the main standpoints in the passage based on the hints given. / Dựa vào từ gợi ý để khái quát các quan điểm chính trong bài.)</span></p>
+                    
+                    <table class="custom-table" style="background: white; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th width="15%" style="text-align: center;">观点 (Quan điểm)</th>
+                                <th width="20%" style="text-align: center;">代表人物 (Nhân vật đại diện)</th>
+                                <th width="65%" style="text-align: center;">看法 (Cách nhìn/Nhận định)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="2" style="text-align: center; font-weight: 500;">支持<br>(Ủng hộ)</td>
+                                <td style="text-align: center;"><input type="text" placeholder="(VD: Ủng hộ lập pháp)" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td>没有什么不可以的；不是处罚；强调“孝”的社会意义。<br><span style="color: var(--text-muted); font-size: 13px;">(Không có gì là không thể; không phải là xử phạt; nhấn mạnh ý nghĩa xã hội của chữ "Hiếu".)</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">有关领导<br>(Lãnh đạo liên quan)</td>
+                                <td>引起重视；值得肯定<br><span style="color: var(--text-muted); font-size: 13px;">(Thu hút sự coi trọng; Đáng được ghi nhận)</span></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3" style="text-align: center; font-weight: 500;">反对<br>(Phản đối)</td>
+                                <td style="text-align: center;"><input type="text" placeholder="(VD: Quan điểm phản đối)" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px; text-align: center;"></td>
+                                <td>道德、私人事务；相反的效果；不被遵守<br><span style="color: var(--text-muted); font-size: 13px;">(Đạo đức, sự vụ cá nhân; Hiệu quả trái ngược; Không được tuân thủ)</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">小王<br>(Tiểu Vương)</td>
+                                <td>对于想回家的人来说；如果不想回家；不容易实施<br><span style="color: var(--text-muted); font-size: 13px;">(Đối với người muốn về nhà mà nói; Nếu không muốn về nhà; Không dễ thực thi)</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">某教授<br>(Một vị GS nào đó)</td>
+                                <td>基本义务；优秀传统；不应有太深的干涉；政府和社会发挥作用<br><span style="color: var(--text-muted); font-size: 13px;">(Nghĩa vụ cơ bản; Truyền thống ưu tú; Không nên can thiệp quá sâu; Chính phủ và xã hội phát huy vai trò)</span></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">(Ý kiến bổ sung)</td>
+                                <td style="text-align: center; font-weight: 500;">某律师<br>(Một luật sư nào đó)</td>
+                                <td>经常看望的标准、频率；无法细化；如果关系不和谐；尊老爱老<br><span style="color: var(--text-muted); font-size: 13px;">(Tiêu chuẩn, tần suất thăm viếng thường xuyên; Không thể chi tiết hóa; Nếu quan hệ không hòa hợp; Kính già yêu già)</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p style="margin-top: 30px; font-weight: bold;">3. 除了“常回家看看”这样的法律条款之外，你还了解中国哪些与你们国家不一样的法律条款？查找相关资料，试着分析一下制定这些法律条款的原因。</p>
+                    <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">(Besides "visiting home often", what other Chinese law clauses do you know that are different from those in your country? Do some research and analyze the reasons for these clauses. / Ngoài điều khoản "Thường xuyên về thăm nhà", bạn còn biết điều khoản pháp luật nào của Trung Quốc khác biệt so với quốc gia của bạn không? Hãy tra cứu tài liệu liên quan và thử phân tích nguyên nhân đưa ra những điều khoản này.)</p>
+                    <textarea placeholder="Ghi chú kết quả tra cứu của bạn vào đây..." style="width: 100%; height: 120px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <!-- Các Script chấm điểm -->
+                <script>
+                    function checkExercise(exId) {
+                        const container = document.getElementById(exId);
+                        const inputsPinyin = container.querySelectorAll('input[data-pinyin]');
+                        const inputsLetter = container.querySelectorAll('input[data-answer]');
+                        let allCorrect = true;
+                        
+                        inputsPinyin.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-pinyin').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        inputsLetter.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã làm đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ chưa đúng, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function checkSelects(exId) {
+                        const container = document.getElementById(exId);
+                        const selects = container.querySelectorAll('select[data-answer]');
+                        let allCorrect = true;
+                        
+                        selects.forEach(select => {
+                            const userAnswer = select.value;
+                            const correctAnswer = select.getAttribute('data-answer');
+                            
+                            if (userAnswer === correctAnswer) {
+                                select.style.borderColor = '#4caf50';
+                                select.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                select.style.borderColor = '#f44336';
+                                select.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Chính xác! Bạn đã chọn đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có đáp án chưa đúng, hãy xem lại nhé.</span>';
+                            }
+                        }
+                        if (answersDiv && !allCorrect) {
+                            answersDiv.style.display = 'block';
+                        }
+                    }
+
+                    function allowDrop(ev) { ev.preventDefault(); }
+                    function dragEnter(ev) {
+                        ev.preventDefault();
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.add('drag-over');
+                    }
+                    function dragLeave(ev) {
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.remove('drag-over');
+                    }
+                    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+                    function drop(ev) {
+                        ev.preventDefault();
+                        var data = ev.dataTransfer.getData("text");
+                        var draggedEl = document.getElementById(data);
+                        var targetEl = ev.target;
+
+                        if (targetEl.classList.contains('drag-word')) targetEl = targetEl.parentElement;
+
+                        if (targetEl.classList.contains('drop-zone')) {
+                            targetEl.classList.remove('drag-over');
+                            if (targetEl.children.length > 0) {
+                                let bankId = targetEl.closest('.lesson-card').querySelector('[id^="word-bank"]').id;
+                                let bank = document.getElementById(bankId); 
+                                bank.appendChild(targetEl.children[0]);
+                            }
+                            targetEl.appendChild(draggedEl);
+                        } else if (targetEl.id && targetEl.id.startsWith('word-bank')) {
+                            targetEl.appendChild(draggedEl);
+                        }
+                    }
+
+                    function checkExerciseDragDrop(exId) {
+                        const container = document.getElementById(exId);
+                        const zones = container.querySelectorAll('.drop-zone');
+                        let allCorrect = true;
+                        
+                        zones.forEach(zone => {
+                            const correctAnswer = zone.getAttribute('data-answer');
+                            let userAnswer = "";
+                            if (zone.children.length > 0) {
+                                userAnswer = zone.children[0].innerText.trim();
+                            }
+                            if (userAnswer === correctAnswer) {
+                                zone.style.borderColor = '#4caf50';
+                                zone.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                zone.style.borderColor = '#f44336';
+                                zone.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã kéo đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ sai, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    function toggleTranslation() {
+                        const translations = document.querySelectorAll('.vn-translation');
+                        translations.forEach(el => {
+                            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                        });
+                    }
+                </script>
 
                 <div class="next-lesson-footer">
                     <a href="bai4.html" class="next-btn">
