@@ -2,11 +2,15 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bài 2: 丝绸之路——文明的桥梁 | Trạm Ôn Tập CSCA</title>
+    <!-- Thư viện hỗ trợ Kéo Thả trên màn hình cảm ứng -->
+    <script src="https://bernardo-castilho.github.io/DragDropTouch/DragDropTouch.js"></script>
     <script>
         if(localStorage.getItem('csca-study-theme') === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-        if(localStorage.getItem('csca-sidebar-collapsed') === 'true') document.documentElement.classList.add('sidebar-collapsed');
+        if(localStorage.getItem('csca-sidebar-collapsed') === 'true' || window.innerWidth <= 768) {
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -34,19 +38,50 @@
         .menu-toggle-btn { background: transparent; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 8px; border-radius: 6px; }
         .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--primary); text-decoration: none; font-weight: 600; margin-bottom: 20px; font-size: 14.5px; }
         .lesson-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); margin-bottom: 30px; }
-        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; }
-        .lesson-sub { color: var(--text-muted); font-size: 14.5px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; }
-        table.vocab-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
-        table.vocab-table th, table.vocab-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
-        table.vocab-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
+        h1 { font-family: 'Lora', serif; color: var(--primary); font-size: 26px; margin-bottom: 10px; text-align: center; }
+        h2 { font-size: 20px; color: white; background: var(--primary); display: inline-block; padding: 6px 16px; border-radius: 20px; margin: 30px 0 20px 0; }
+        h3 { font-family: 'Lora', serif; color: var(--primary); margin: 25px 0 15px; font-size: 18px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        
+        table.vocab-table, table.custom-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; border: 1px solid var(--border-color); }
+        table.vocab-table th, table.vocab-table td, table.custom-table th, table.custom-table td { padding: 12px 15px; border: 1px solid var(--border-color); text-align: left; font-size: 15px; }
+        table.vocab-table th, table.custom-table th { background: var(--hover-bg); color: var(--primary); font-weight: 600; }
         .hanzi { font-size: 1.25em; font-weight: 500; color: var(--primary); }
-        ruby { ruby-align: center; margin-right: 4px; font-size: 1.35em; line-height: 2.8; }
-        rt { color: var(--text-muted); font-size: 0.5em; font-family: sans-serif; }
+        
+        .info-box { background: var(--hover-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .info-box p { margin-bottom: 10px; }
+        
+        ul.exercise-list { list-style: none; padding-left: 0; }
+        ul.exercise-list li { margin-bottom: 15px; }
+        
         .reading-box { background: var(--bg-body); padding: 25px; border-radius: 12px; border-left: 4px solid var(--primary); margin: 20px 0; border: 1px solid var(--border-color); }
+        .reading-box p { text-indent: 2em; margin-bottom: 15px; }
+        
         .next-lesson-footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; }
         .next-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--primary); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px; transition: 0.2s; }
         .next-btn:hover { filter: brightness(1.1); }
+        
+        .drag-word { background: white; border: 1px solid var(--primary); color: var(--primary); padding: 4px 14px; border-radius: 20px; cursor: grab; font-weight: 600; display: inline-block; user-select: none; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .drag-word:active { cursor: grabbing; transform: scale(0.95); }
+        .drop-zone { display: inline-flex; justify-content: center; align-items: center; min-width: 70px; height: 34px; border: 1px dashed #aaa; border-radius: 4px; vertical-align: middle; background: #fafafa; margin: 0 4px; transition: 0.2s; padding: 0 5px; }
+        .drop-zone.drag-over { border-color: var(--primary); background: #ffeef2; border-width: 2px; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); padding: 15px 20px; flex-shrink: 0; margin-left: 0 !important; box-shadow: none; }
+            .logo-area { border: none; padding: 0; margin-bottom: 15px; }
+            .subject-switcher { margin: 0 0 15px 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 0; border-bottom: none; }
+            .nav-item { padding: 8px 15px; }
+            .sidebar-footer, .top-bar { display: none; }
+            .main-content { padding: 25px 15px; overflow-y: auto; }
+            .lesson-card { padding: 20px 15px; border-radius: 12px; }
+            table.vocab-table, table.custom-table { display: block; overflow-x: auto; white-space: nowrap; }
+            input[type="text"] { width: 100% !important; margin: 5px 0 !important; box-sizing: border-box; }
+            .info-box, .reading-box { padding: 15px; }
+            .reading-box p { text-indent: 1em; }
+            h1 { font-size: 22px; }
+            .drag-word { touch-action: none; margin: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -76,52 +111,1585 @@
             <a href="../giao-trinh-xa-hoi.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Quay lại danh sách bài học</a>
 
             <div class="lesson-card">
-                <h1>Đơn vị 2: 丝绸之路——文明的桥梁 (Con đường tơ lụa)</h1>
-                <p class="lesson-sub">Khám phá lịch sử giao thương văn hóa Đông Tây và tầm ảnh hưởng của Con đường tơ lụa.</p>
+                <h1>第二单元: 丝绸之路——文明的桥梁</h1>
+                <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Unit 2: Silk Road — The Bridge among Civilizations<br>(Đơn vị 2: Con đường tơ lụa — Cây cầu của các nền văn minh)</p>
 
-                <h3>1. Từ Vựng Trọng Tâm (生词)</h3>
+                <!-- 学习目标 -->
+                <div class="info-box">
+                    <h3 style="margin-top: 0; border: none; padding: 0;"><i class="fa-solid fa-bullseye"></i> 学习目标 Learning Objectives (Mục tiêu bài học)</h3>
+                    
+                    <p><strong>1. 了解专业知识：中国为什么叫“China”、古代丝绸之路</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Hiểu kiến thức chuyên ngành: Tại sao Trung Quốc lại gọi là "China", Con đường tơ lụa cổ đại)</span></p>
+                    
+                    <p><strong>2. 掌握专业术语：汉（朝）、唐（朝）、丝绸之路、四大发明</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Nắm vững thuật ngữ chuyên môn: Triều Hán, Triều Đường, Con đường tơ lụa, Tứ đại phát minh)</span></p>
+                    
+                    <p><strong>3. 使用书面词语与格式：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Sử dụng từ ngữ và cấu trúc văn viết:)</span><br>
+                    • 对于……进行+动词 <span style="color: var(--text-muted); font-size: 14px;">(Đối với... tiến hành + Động từ)</span><br>
+                    • A与/跟/和B有关/相关 <span style="color: var(--text-muted); font-size: 14px;">(A có liên quan tới B)</span><br>
+                    • A与/跟/和B相近/相似 <span style="color: var(--text-muted); font-size: 14px;">(A tương tự/giống với B)</span><br>
+                    • 起(到/了/着)……的作用 <span style="color: var(--text-muted); font-size: 14px;">(Đóng vai trò / Phát huy tác dụng...)</span><br>
+                    • 向 (Hướng tới), 沿 (Dọc theo), 入/出 (Vào / Ra)
+                    </p>
+                    
+                    <p><strong>4. 进行功能表达：</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Thực hành diễn đạt chức năng:)</span><br>
+                    • 询问：为什么……，而（反而、却）……呢？<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(Hỏi đáp: Tại sao..., mà (trái lại, lại)... thế?)</span><br>
+                    • 比较（1）：与（同、和）……不同（不一样） / 与（同、和）……没什么差别（差别不大、差别很大）<br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">(So sánh: Khác với... / Không có sự khác biệt mấy so với...)</span></p>
+                </div>
+
+                <!-- 1-2 学时 -->
+                <h2>1—2 学时 Class Hours 1—2 (Tiết học 1—2)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 你知道中国历史上都有哪些朝代吗？请在知道的下面打“√”。</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Bạn có biết trong lịch sử Trung Quốc có những triều đại nào không? Hãy đánh dấu "√" vào dưới triều đại mà bạn biết.)</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; background: var(--bg-body); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 秦 Qín (Tần)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 汉 Hàn (Hán)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 唐 Táng (Đường)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 宋 Sòng (Tống)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 元 Yuán (Nguyên)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 明 Míng (Minh)</label>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;"><input type="checkbox"> 清 Qīng (Thanh)</label>
+                        </div>
+                    </li>
+                    <li>
+                        <strong>2. 说起中国历史，你最先想到的是什么？为什么？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Nhắc đến lịch sử Trung Quốc, điều đầu tiên bạn nghĩ đến là gì? Tại sao?)</span>
+                        <textarea placeholder="Nhập câu trả lời của bạn..." style="width: 100%; height: 80px; border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none;"></textarea>
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 2-1 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-1.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
                 <table class="vocab-table">
                     <thead>
                         <tr>
-                            <th width="25%">Chữ Hán</th>
-                            <th width="30%">Pinyin</th>
-                            <th width="15%">Từ loại</th>
-                            <th width="30%">Ý nghĩa (Tiếng Việt)</th>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="hanzi">文明</td>
-                            <td>wénmíng</td>
-                            <td>Danh từ</td>
-                            <td>Văn minh</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">桥梁</td>
-                            <td>qiáoliáng</td>
-                            <td>Danh từ</td>
-                            <td>Cầu nối</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">贸易</td>
-                            <td>màoyì</td>
-                            <td>Danh từ</td>
-                            <td>Thương mại</td>
-                        </tr>
-                        <tr>
-                            <td class="hanzi">交流</td>
-                            <td>jiāoliú</td>
-                            <td>Động từ</td>
-                            <td>Giao lưu</td>
-                        </tr>
+                        <tr><td>1</td><td class="hanzi">疑问</td><td>yíwèn</td><td>名</td><td>nghi vấn, thắc mắc</td></tr>
+                        <tr><td>2</td><td class="hanzi">对于</td><td>duìyú</td><td>介</td><td>đối với, về việc</td></tr>
+                        <tr><td>3</td><td class="hanzi">进行</td><td>jìnxíng</td><td>动</td><td>tiến hành, thực hiện</td></tr>
+                        <tr><td>4</td><td class="hanzi">研究</td><td>yánjiū</td><td>动</td><td>nghiên cứu</td></tr>
+                        <tr><td>5</td><td class="hanzi">说法</td><td>shuōfǎ</td><td>名</td><td>cách nói, quan điểm</td></tr>
+                        <tr><td>6</td><td class="hanzi">获得</td><td>huòdé</td><td>动</td><td>giành được, đạt được</td></tr>
+                        <tr><td>7</td><td class="hanzi">认同</td><td>rèntóng</td><td>动</td><td>tán thành, đồng tình</td></tr>
+                        <tr><td>8</td><td class="hanzi">瓷器</td><td>cíqì</td><td>名</td><td>đồ sứ</td></tr>
+                        <tr><td>9</td><td class="hanzi">土质</td><td>tǔzhì</td><td>名</td><td>chất đất</td></tr>
+                        <tr><td>10</td><td class="hanzi">玉石</td><td>yùshí</td><td>名</td><td>ngọc thạch</td></tr>
+                        <tr><td>11</td><td class="hanzi">精美</td><td>jīngměi</td><td>形</td><td>tinh xảo, đẹp đẽ</td></tr>
+                        <tr><td>12</td><td class="hanzi">闻名</td><td>wénmíng</td><td>动</td><td>nổi tiếng</td></tr>
+                        <tr><td>13</td><td class="hanzi">贵重</td><td>guìzhòng</td><td>形</td><td>quý giá, quý trọng</td></tr>
+                        <tr><td>14</td><td class="hanzi">物品</td><td>wùpǐn</td><td>名</td><td>vật phẩm, đồ đạc</td></tr>
+                        <tr><td>15</td><td class="hanzi">音译</td><td>yīnyì</td><td>名/动</td><td>phiên âm</td></tr>
+                        <tr><td>16</td><td class="hanzi">丝绸</td><td>sīchóu</td><td>名</td><td>tơ lụa</td></tr>
+                        <tr><td>17</td><td class="hanzi">演化</td><td>yǎnhuà</td><td>动</td><td>diễn hóa, tiến hóa</td></tr>
+                        <tr><td>18</td><td class="hanzi">宣传</td><td>xuānchuán</td><td>动</td><td>tuyên truyền</td></tr>
                     </tbody>
                 </table>
 
-                <h3>2. Luyện Đọc Hiểu Văn Bản (课文)</h3>
-                <div class="reading-box">
-                    <p style="margin-bottom: 15px; font-weight: bold; color: var(--primary);">课文 1: 中国为什么叫 "China"</p>
-                    <ruby>在<rt>zài</rt></ruby><ruby>英<rt>yīng</rt></ruby><ruby>语<rt>yǔ</rt></ruby><ruby>中<rt>zhōng</rt></ruby>，<ruby>中<rt>zhōng</rt></ruby><ruby>国<rt>guó</rt></ruby><ruby>的<rt>de</rt></ruby><ruby>名<rt>míng</rt></ruby><ruby>字<rt>zì</rt></ruby>叫<ruby>“<rt>“</rt></ruby><ruby>China<rt>China</rt></ruby>”[cite: 1]。<ruby>两<rt>liǎng</rt></ruby><ruby>种<rt>zhǒng</rt></ruby><ruby>说<rt>shuō</rt></ruby><ruby>法<rt>fǎ</rt></ruby><ruby>与<rt>yǔ</rt></ruby><ruby>瓷<rt>cí</rt></ruby><ruby>器<rt>qì</rt></ruby><ruby>和<rt>hé</rt></ruby><ruby>丝<rt>sī</rt></ruby><ruby>绸<rt>chóu</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>关<rt>guān</rt></ruby>[cite: 1]。
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 2-2 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-2.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
                 </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">汉(朝)</td><td>Hàn(cháo)</td><td>名</td><td>Triều đại nhà Hán</td></tr>
+                        <tr><td>2</td><td class="hanzi">唐(朝)</td><td>Táng(cháo)</td><td>名</td><td>Triều đại nhà Đường</td></tr>
+                        <tr><td>3</td><td class="hanzi">昌南</td><td>Chāngnán</td><td></td><td>Xương Nam (địa danh cổ)</td></tr>
+                        <tr><td>4</td><td class="hanzi">古罗马</td><td>Gǔ Luómǎ</td><td></td><td>La Mã cổ đại</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin: 20px 0 10px;">专有名词 Proper Nouns 2-3 (Danh từ riêng)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-3.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="50%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">欧洲</td><td>Ōuzhōu</td><td>Châu Âu (Europe)</td></tr>
+                        <tr><td>2</td><td class="hanzi">拉丁语</td><td>Lādīngyǔ</td><td>Tiếng Latinh (Latin language)</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 朗读并查找：朗读生词表中的生词，并在课文中画出这些生词。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 10px;">
+                            (Đọc to và tìm kiếm: Đọc to các từ mới trong bảng từ vựng, sau đó tìm và gạch chân những từ này trong phần bài đọc.)
+                        </p>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Matching -->
+                    <div id="exercise-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 生词连线：写拼音，连英文。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Nối từ: Viết Pinyin và điền chữ cái A-G tương ứng với nghĩa tiếng Anh vào ô trống.)
+                        </p>
+                        
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-weight: 500; min-width: 250px;">
+                                <li>1. 说法 &nbsp;&nbsp; <input type="text" data-pinyin="shuōfǎ" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="e" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>2. 瓷器 &nbsp;&nbsp; <input type="text" data-pinyin="cíqì" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="d" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>3. 宣传 &nbsp;&nbsp; <input type="text" data-pinyin="xuānchuán" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="b" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>4. 对于 &nbsp;&nbsp; <input type="text" data-pinyin="duìyú" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="g" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>5. 丝绸 &nbsp;&nbsp; <input type="text" data-pinyin="sīchóu" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="f" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>6. 演化 &nbsp;&nbsp; <input type="text" data-pinyin="yǎnhuà" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="a" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                                <li>7. 进行 &nbsp;&nbsp; <input type="text" data-pinyin="jìnxíng" placeholder="Pinyin" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> &nbsp; <input type="text" data-answer="c" maxlength="1" placeholder="A-G" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: uppercase;"></li>
+                            </ul>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; color: var(--text-muted);">
+                                <li>A. to evolve (tiến hóa)</li>
+                                <li>B. to propagandize (tuyên truyền)</li>
+                                <li>C. to carry out (tiến hành)</li>
+                                <li>D. porcelain (đồ sứ)</li>
+                                <li>E. version (of a story) (quan điểm, cách nói)</li>
+                                <li>F. silk (tơ lụa)</li>
+                                <li>G. with regard to (đối với)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Nút nộp bài 2 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExercise('exercise-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span><strong>1 - E</strong> (shuōfǎ)</span>
+                                <span><strong>2 - D</strong> (cíqì)</span>
+                                <span><strong>3 - B</strong> (xuānchuán)</span>
+                                <span><strong>4 - G</strong> (duìyú)</span>
+                                <span><strong>5 - F</strong> (sīchóu)</span>
+                                <span><strong>6 - A</strong> (yǎnhuà)</span>
+                                <span><strong>7 - C</strong> (jìnxíng)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 词语扩展：读一读下面的扩展形式，再写出两个。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Mở rộng từ vựng: Đọc các dạng mở rộng của từ dưới đây, sau đó tự viết thêm hai từ nữa.)
+                        </p>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>- 质</strong> (chất) — 土质 (chất đất), 水质 (chất nước), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（2）<strong>- 法</strong> (pháp) — 说法 (cách nói), 看法 (cách nhìn/quan điểm), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（3）<strong>研究</strong> (nghiên cứu) — 研究问题 (nghiên cứu vấn đề), 研究历史 (nghiên cứu LS), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（4）<strong>精美</strong> (tinh xảo) — 精美的瓷器 (đồ sứ tinh xảo), 很精美 (rất tinh xảo), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                            <p>（5）<strong>宣传</strong> (tuyên truyền) — 宣传中国 (tuyên truyền TQ), 宣传法律知识 (tuyên truyền PL), <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px;"></p>
+                        </div>
+
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án Bài 3</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）- 质 — <strong>素质</strong> (tố chất), <strong>物质</strong> (vật chất)<br>
+                                （2）- 法 — <strong>办法</strong> (biện pháp), <strong>做法</strong> (cách làm)<br>
+                                （3）研究 — <strong>研究报告</strong> (báo cáo nghiên cứu), <strong>研究生</strong> (nghiên cứu sinh)<br>
+                                （4）精美 — <strong>精美的礼物</strong> (món quà tinh xảo), <strong>包装精美</strong> (đóng gói tinh xảo)<br>
+                                （5）宣传 — <strong>宣传文化</strong> (tuyên truyền văn hóa), <strong>宣传海报</strong> (poster tuyên truyền)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Drag Drop -->
+                    <div id="exercise-4">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Điền từ vào chỗ trống: Kéo từ thích hợp ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)
+                        </p>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-4" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w4_1" ondragstart="drag(event)">闻名</span>
+                            <span class="drag-word" draggable="true" id="w4_2" ondragstart="drag(event)">认同</span>
+                            <span class="drag-word" draggable="true" id="w4_3" ondragstart="drag(event)">获得</span>
+                            <span class="drag-word" draggable="true" id="w4_4" ondragstart="drag(event)">疑问</span>
+                            <span class="drag-word" draggable="true" id="w4_5" ondragstart="drag(event)">音译</span>
+                            <span class="drag-word" draggable="true" id="w4_6" ondragstart="drag(event)">贵重</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）大卫是“David”的 <span class="drop-zone" data-answer="音译" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（2）旅行的时候， <span class="drop-zone" data-answer="贵重" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 物品一定要带在身边。</p>
+                            <p>（3）小明学习非常努力，最后 <span class="drop-zone" data-answer="获得" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 了第一名的好成绩。</p>
+                            <p>（4）他是远近 <span class="drop-zone" data-answer="闻名" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 的好人，大家都非常喜欢他。</p>
+                            <p>（5）对这个问题我还是有 <span class="drop-zone" data-answer="疑问" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                        </div>
+
+                        <!-- Nút nộp bài 4 -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('exercise-4')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="exercise-4-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="exercise-4-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）音译 (phiên âm)</span>
+                                <span>（2）贵重 (quý giá)</span>
+                                <span>（3）获得 (giành được)</span>
+                                <span>（4）闻名 (nổi tiếng)</span>
+                                <span>（5）疑问 (thắc mắc)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>课文 1 Text 1 (Bài đọc 1)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 听前任务 Pre-Listening Task (Nhiệm vụ trước khi nghe)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">听课文，在下表中填写关键词，并与同学讨论。<br>(Nghe bài khóa, điền từ khóa vào bảng dưới đây và thảo luận với bạn học.)</p>
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table class="custom-table" style="background: white;">
+                        <thead>
+                            <tr>
+                                <th width="33%" style="text-align: center;">中国为什么叫“China”</th>
+                                <th width="33%" style="text-align: center;">自己记录的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Ghi chép cá nhân)</span></th>
+                                <th width="33%" style="text-align: center;">同学补充的<br><span style="font-size: 13px; font-weight: normal; color: var(--text-muted);">(Bạn học bổ sung)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">第一种说法与什么有关？<br><span style="color: var(--text-muted); font-size: 13px;">(Quan điểm 1 liên quan đến gì?)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: center; font-weight: 500;">第二种说法与什么有关？<br><span style="color: var(--text-muted); font-size: 13px;">(Quan điểm 2 liên quan đến gì?)</span></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                                <td><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 4px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-4.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <!-- Tiêu đề và Nút Toggle Dịch -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">中国为什么叫“China”</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>在英语中，中国的名字叫“China”。很多人心里有疑问：为什么中国的名字不是“Han”（汉）或者“Tang”（唐），而是“China”呢？对于这个问题，历史学家进行了大量的研究，得出了很多种说法。其中，有两种说法获得了较多人的认同。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trong tiếng Anh, tên của Trung Quốc được gọi là "China". Trong lòng nhiều người có thắc mắc: Tại sao tên của Trung Quốc không phải là "Han" (Hán) hoặc "Tang" (Đường), mà lại là "China"? Đối với vấn đề này, các nhà sử học đã tiến hành nghiên cứu rất nhiều và đưa ra nhiều cách giải thích. Trong đó, có hai quan điểm nhận được sự đồng tình của khá nhiều người.)</span></p>
+                    
+                    <p>一种说法与瓷器有关。中国人很早就开始在昌南（今江西省景德镇）烧制瓷器。昌南的土质好，生产的白瓷、青瓷、青花瓷就像玉石一样精美，因而远近闻名，并大量出口欧洲。在欧洲，昌南的瓷器是十分受人喜爱的贵重物品，人们以能获得一件昌南的瓷器为荣。就这样，欧洲人就用“昌南”（Changnan）的音译作为瓷器（china）和生产瓷器的“中国”（China）的名称。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Một quan điểm có liên quan đến đồ sứ. Người Trung Quốc từ rất sớm đã bắt đầu nung đồ sứ ở Xương Nam (nay là Cảnh Đức Trấn, tỉnh Giang Tây). Chất đất ở Xương Nam rất tốt, các loại sứ trắng, sứ xanh, sứ thanh hoa được sản xuất ra tinh xảo giống hệt như ngọc thạch, vì vậy mà nổi tiếng gần xa, và được xuất khẩu số lượng lớn sang Châu Âu. Ở Châu Âu, đồ sứ Xương Nam là vật phẩm quý giá vô cùng được yêu thích, mọi người lấy việc có được một món đồ sứ Xương Nam làm vinh dự. Cứ như vậy, người châu Âu đã dùng phiên âm của "Xương Nam" (Changnan) làm tên gọi cho đồ sứ (china) và tên gọi cho "Trung Quốc" (China) - nơi sản xuất ra đồ sứ đó.)</span></p>
+                    
+                    <p>另一种说法与丝绸有关。古罗马时代欧洲人就知道东方有一个生产丝绸的国家，当时被称为“Serica”，意思是“丝国”。英语中的“silk”就来自“Serica”。这都跟汉语的“丝”发音相近。在拉丁语中，中国的名称是“Sinae”，英语中的“China”是从拉丁语演化来的，因此也与丝绸有关。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Một quan điểm khác có liên quan đến tơ lụa. Vào thời La Mã cổ đại, người châu Âu đã biết đến ở phương Đông có một quốc gia sản xuất tơ lụa, thời bấy giờ được gọi là "Serica", có nghĩa là "Đất nước tơ lụa". Từ "silk" trong tiếng Anh chính là bắt nguồn từ "Serica". Những từ này đều có phát âm gần giống với từ "丝" (tơ, lụa) trong tiếng Hán. Trong tiếng Latinh, tên gọi của Trung Quốc là "Sinae", từ "China" trong tiếng Anh được biến đổi từ tiếng Latinh mà ra, do đó nó cũng có liên quan đến tơ lụa.)</span></p>
+                    
+                    <p>西方人把中国叫“China”，不管是跟瓷器有关，还是跟丝绸有关，都说明瓷器和丝绸是代表中国的两大名片，对宣传中国文化起到了很大的作用。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Người phương Tây gọi Trung Quốc là "China", bất kể là liên quan đến đồ sứ hay tơ lụa, thì đều chứng tỏ đồ sứ và tơ lụa là hai tấm danh thiếp lớn đại diện cho Trung Quốc, phát huy tác dụng rất lớn đối với việc tuyên truyền văn hóa Trung Quốc.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Trắc nghiệm -->
+                    <div id="comp-ex-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 根据课文内容选择正确答案。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Chọn đáp án đúng dựa vào nội dung bài đọc.)
+                        </p>
+                        
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <div style="margin-bottom: 15px;">
+                                <strong>（1）中国叫“China”的原因，主要的说法有几种？</strong> <br>
+                                A 一种 &nbsp;&nbsp;&nbsp; B 两种 &nbsp;&nbsp;&nbsp; C 三种 &nbsp;&nbsp;&nbsp; D 很多种<br>
+                                <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（2）昌南在今天中国的哪个省？</strong> <br>
+                                A 江苏 &nbsp;&nbsp;&nbsp; B 广西 &nbsp;&nbsp;&nbsp; C 江西 &nbsp;&nbsp;&nbsp; D 陕西<br>
+                                <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（3）人们为什么在昌南烧制瓷器？</strong> <br>
+                                A 因为昌南的水质好 &nbsp;&nbsp;&nbsp; B 因为昌南的天气好<br>
+                                C 因为昌南人喜欢瓷器 &nbsp;&nbsp;&nbsp; D 因为昌南的土质好<br>
+                                <select data-answer="d" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（4）古代欧洲人把中国叫什么国？</strong> <br>
+                                A 茶国 &nbsp;&nbsp;&nbsp; B 丝国 &nbsp;&nbsp;&nbsp; C 瓷器国 &nbsp;&nbsp;&nbsp; D 昌南国<br>
+                                <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+
+                            <div style="margin-bottom: 15px;">
+                                <strong>（5）在古代的欧洲，什么样的人家里可能会有中国瓷器？</strong> <br>
+                                A 有钱人 &nbsp;&nbsp;&nbsp; B 一般人 &nbsp;&nbsp;&nbsp; C 每个人 &nbsp;&nbsp;&nbsp; D 穷人<br>
+                                <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                    <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkSelects('comp-ex-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Chấm điểm</button>
+                            <span id="comp-ex-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+                        
+                        <div id="comp-ex-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            （1）B 两种 &nbsp;&nbsp;|&nbsp;&nbsp; （2）C 江西 &nbsp;&nbsp;|&nbsp;&nbsp; （3）D 因为昌南的土质好 &nbsp;&nbsp;|&nbsp;&nbsp; （4）B 丝国 &nbsp;&nbsp;|&nbsp;&nbsp; （5）A 有钱人
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: True / False -->
+                    <div id="comp-ex-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 根据课文内容判断正误。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Đánh giá đúng sai dựa trên nội dung bài khóa: Chọn Đúng/Sai cho mỗi câu.)
+                        </p>
+                        
+                        <div style="margin-bottom: 15px; padding-left: 10px;">
+                            <!-- Câu 1 -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（1）关于中国为什么叫“China”，历史学家只得出了两种说法。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Câu 2 -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（2）昌南的土质好，因此生产出的瓷器比玉石更精美。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Câu 3 -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（3）昌南的瓷器在欧洲价格不贵。</span>
+                                </div>
+                                <select data-answer="false" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Câu 4 -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（4）有人认为“China”是“昌南”（Changnan）的音译。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Câu 5 -->
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 12px;">
+                                <div style="padding-right: 15px; line-height: 1.6;">
+                                    <span>（5）英语中的“China”是从拉丁语演化来的。</span>
+                                </div>
+                                <select data-answer="true" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; flex-shrink: 0;">
+                                    <option value="">- Chọn -</option><option value="true">正确 (Đúng)</option><option value="false">错误 (Sai)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkSelects('comp-ex-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Chấm điểm</button>
+                            <span id="comp-ex-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+                        <div id="comp-ex-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            💡 <strong>Giải thích lỗi sai:</strong><br>
+                            （1）Sai. Các nhà sử học đưa ra <strong>rất nhiều</strong> cách nói, chỉ là có 2 cách được đồng tình nhiều nhất.<br>
+                            （2）Sai. Sản xuất ra đồ sứ tinh xảo <strong>như</strong> ngọc thạch (就像玉石一样精美), chứ không phải <strong>hơn</strong> ngọc thạch (比玉石更精美).<br>
+                            （3）Sai. Đồ sứ Xương Nam ở Châu Âu là <strong>vật phẩm quý giá</strong> (贵重物品).
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Trả lời câu hỏi -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 根据课文内容回答问题。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Trả lời câu hỏi dựa trên nội dung bài khóa.)
+                        </p>
+                        <div style="line-height: 2.2; padding-left: 10px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）昌南生产的瓷器都有哪些品种？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）为什么昌南的瓷器像玉石一样精美？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）为什么在欧洲人们以能获得一件昌南的瓷器为荣？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý trả lời</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）有白瓷、青瓷、青花瓷。<br>
+                                （2）因为昌南的土质好。<br>
+                                （3）因为昌南的瓷器在欧洲是十分受人喜爱的贵重物品。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. 对于这个问题，历史学家进行了大量的研究，得出了很多种说法。</strong></p>
+                    <p style="color: var(--text-muted);">“对于……进行 + 动词” (Đối với... tiến hành + Động từ) dùng để dẫn dắt chủ đề, sau “进行” thường đi kèm các động từ như “研究” (nghiên cứu), “调查” (điều tra), “思考” (suy nghĩ)... Ví dụ:</p>
+                    <p>① <strong>对于</strong>在比赛中取得好成绩的班级，学校要<strong>进行</strong>表彰。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Đối với những lớp đạt thành tích tốt trong cuộc thi, nhà trường sẽ tiến hành khen thưởng.)</span></p>
+                    <p>② <strong>对于</strong>哪个牌子的电脑好，他<strong>进行</strong>了一些市场调查。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Về việc máy tính hãng nào tốt, anh ấy đã tiến hành điều tra thị trường.)</span></p>
+                    <p>③ <strong>对于</strong>事故的原因我们还需要<strong>进行</strong>调查。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Đối với nguyên nhân của vụ tai nạn, chúng ta vẫn cần phải tiến hành điều tra.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：用“对于……进行 + 动词”改写句子。</strong> (Viết lại câu)</p>
+                        <p>（1）在进入中国市场以前，我们还需要考察一下市场的情况。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（2）在这次会议上，专家们讨论了如何提高预科教学的效果。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（3）老师在邮件里向同学们说明了考试的方式。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）在进入中国市场以前，我们还需要<strong>对于市场的情况进行考察</strong>。<br>
+                                （2）在这次会议上，专家们<strong>对于如何提高预科教学的效果进行了讨论</strong>。<br>
+                                （3）<strong>对于考试的方式</strong>，老师在邮件里向同学们<strong>进行了说明</strong>。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 一种说法与瓷器有关。</strong></p>
+                    <p style="color: var(--text-muted);">“A与/跟/和B有关/相关” có nghĩa là "A có quan hệ với B". Hình thức phủ định là “A与/跟/和B没有关系/无关”. Tương tự có “A与/跟/和B相近/相似” (A và B gần giống/tương tự nhau). Ví dụ:</p>
+                    <p>① 他的好成绩<strong>与</strong>他的努力<strong>有关</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Thành tích tốt của anh ấy có liên quan tới sự nỗ lực của anh ấy.)</span></p>
+                    <p>② 这件事<strong>跟</strong>老王<strong>没有关系</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Việc này không có liên quan tới lão Vương.)</span></p>
+                    <p>③ 英语的“silk”<strong>跟</strong>汉语的“丝”发音<strong>相近</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Phát âm của "silk" trong tiếng Anh gần giống với chữ "丝" trong tiếng Hán.)</span></p>
+                    <p>④ 这篇文章<strong>和</strong>那篇文章内容非常<strong>相似</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Nội dung bài văn này và bài văn kia rất giống nhau.)</span></p>
+
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：用“有关/相关”或“相近/相似”改写句子。</strong> (Viết lại câu)</p>
+                        <p>（1）这件事很可能是他做的。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（2）我的方法和老师的方法差不多。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（3）这个句子的错误是词序方面的。<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）这件事很可能<strong>与他有关</strong>。<br>
+                                （2）我的方法<strong>和老师的方法相近/相似</strong>。<br>
+                                （3）这个句子的错误<strong>跟词序有关</strong>。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>3. 对宣传中国文化起到了很大的作用。</strong></p>
+                    <p style="color: var(--text-muted);">“起(到/了/着)……的作用” (Đóng vai trò... / Phát huy tác dụng...). Ví dụ:</p>
+                    <p>① 声调在汉语语音中<strong>起着</strong>非常重要的<strong>作用</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Thanh điệu đóng vai trò vô cùng quan trọng trong ngữ âm tiếng Trung.)</span></p>
+                    <p>② 这件事能成功，他<strong>起了</strong>很大的<strong>作用</strong>。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Việc này có thể thành công, anh ấy đã đóng vai trò rất lớn.)</span></p>
+
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 15px;">
+                        <p style="margin-top: 0;"><i class="fa-solid fa-pen"></i> <strong>练一练：用“起……的作用”回答下列问题。</strong> (Trả lời câu hỏi)</p>
+                        <p>（1）你觉得会说汉语对找工作能起作用吗？<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（2）多喝水对身体健康起的作用大不大？<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        <p>（3）每天看汉语节目对你提高汉语水平有帮助吗？<br>
+                        👉 <input type="text" style="width: 80%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）我觉得会说汉语对找工作能<strong>起很大的作用</strong>。<br>
+                                （2）多喝水对身体健康<strong>起着很大的作用</strong>。<br>
+                                （3）每天看汉语节目对我提高汉语水平<strong>起到了很大的作用</strong>。
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <!-- ========================================== -->
+                <!-- 3-4 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">3—4 学时 Class Hours 3—4 (Tiết học 3—4)</h2>
+
+                <h3><i class="fa-solid fa-fire"></i> 热身 Warm-up (Khởi động)</h3>
+                <ul class="exercise-list">
+                    <li style="margin-bottom: 20px;">
+                        <strong>1. 你有丝绸做的衣物吗？是什么？你觉得丝绸的手感怎么样？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Bạn có quần áo làm bằng tơ lụa không? Đó là gì? Bạn cảm thấy cảm giác khi sờ vào tơ lụa như thế nào?)</span>
+                        <input type="text" placeholder="Nhập câu trả lời của bạn..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 8px 0; margin-top: 5px;">
+                    </li>
+                    <li>
+                        <strong>2. 你知道中国什么地方出产的丝绸最有名吗？</strong><br>
+                        <span style="color: var(--text-muted); font-size: 14.5px;">(Bạn có biết tơ lụa sản xuất ở vùng nào của Trung Quốc là nổi tiếng nhất không?)</span>
+                        <input type="text" placeholder="Nhập câu trả lời của bạn..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent; padding: 8px 0; margin-top: 5px;">
+                    </li>
+                </ul>
+
+                <h3><i class="fa-solid fa-book-open"></i> 词语学习 Vocabulary Learning (Học từ vựng)</h3>
+                
+                <h4 style="margin: 20px 0 10px;">通用词语 Common Words 2-5 (Từ vựng thông dụng)</h4>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-5.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">之</td><td>zhī</td><td>助</td><td>trợ từ (của, ...)</td></tr>
+                        <tr><td>2</td><td class="hanzi">文明</td><td>wénmíng</td><td>名</td><td>văn minh</td></tr>
+                        <tr><td>3</td><td class="hanzi">桥梁</td><td>qiáoliáng</td><td>名</td><td>cây cầu, cầu nối</td></tr>
+                        <tr><td>4</td><td class="hanzi">公元前</td><td>gōngyuánqián</td><td></td><td>Trước Công nguyên (B.C.)</td></tr>
+                        <tr><td>5</td><td class="hanzi">世纪</td><td>shìjì</td><td>名</td><td>thế kỷ</td></tr>
+                        <tr><td>6</td><td class="hanzi">出使</td><td>chūshǐ</td><td>动</td><td>đi sứ (ngoại giao)</td></tr>
+                        <tr><td>7</td><td class="hanzi">源源不断</td><td>yuányuán-búduàn</td><td></td><td>cuồn cuộn không ngừng</td></tr>
+                        <tr><td>8</td><td class="hanzi">贸易</td><td>màoyì</td><td>名</td><td>thương mại</td></tr>
+                        <tr><td>9</td><td class="hanzi">率领</td><td>shuàilǐng</td><td>动</td><td>dẫn đầu, chỉ huy</td></tr>
+                        <tr><td>10</td><td class="hanzi">沿</td><td>yán</td><td>介</td><td>dọc theo</td></tr>
+                        <tr><td>11</td><td class="hanzi">交流</td><td>jiāoliú</td><td>动</td><td>giao lưu, trao đổi</td></tr>
+                        <tr><td>12</td><td class="hanzi">发明</td><td>fāmíng</td><td>名/动</td><td>phát minh</td></tr>
+                        <tr><td>13</td><td class="hanzi">艺术</td><td>yìshù</td><td>名</td><td>nghệ thuật</td></tr>
+                        <tr><td>14</td><td class="hanzi">宗教</td><td>zōngjiào</td><td>名</td><td>tôn giáo</td></tr>
+                        <tr><td>15</td><td class="hanzi">见证</td><td>jiànzhèng</td><td>名/动</td><td>chứng kiến, nhân chứng</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin: 20px 0 10px;">专业术语 Professional Terms 2-6 (Thuật ngữ chuyên ngành)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-6.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="15%">词性 (Từ loại)</th>
+                            <th width="35%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">丝绸之路</td><td>Sīchóuzhīlù</td><td></td><td>Con đường tơ lụa</td></tr>
+                        <tr><td>2</td><td class="hanzi">汉武帝</td><td>Hànwǔdì</td><td></td><td>Hán Vũ Đế (Hoàng đế t.thứ 6 nhà Hán)</td></tr>
+                        <tr><td>3</td><td class="hanzi">使臣</td><td>shǐchén</td><td>名</td><td>sứ thần</td></tr>
+                        <tr><td>4</td><td class="hanzi">张骞</td><td>Zhāng Qiān</td><td></td><td>Trương Khiên (nhà ngoại giao cổ đại TQ)</td></tr>
+                        <tr><td>5</td><td class="hanzi">西域</td><td>Xīyù</td><td>名</td><td>Tây Vực (khu vực phía tây TQ)</td></tr>
+                        <tr><td>6</td><td class="hanzi">长安</td><td>Cháng'ān</td><td>名</td><td>Trường An (tên gọi cổ của Tây An)</td></tr>
+                        <tr><td>7</td><td class="hanzi">明朝</td><td>Míngcháo</td><td>名</td><td>Triều đại nhà Minh</td></tr>
+                        <tr><td>8</td><td class="hanzi">郑和</td><td>Zhèng Hé</td><td></td><td>Trịnh Hòa (nhà thám hiểm cổ đại TQ)</td></tr>
+                        <tr><td>9</td><td class="hanzi">四大发明</td><td>sì dà fāmíng</td><td></td><td>Tứ đại phát minh</td></tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin: 20px 0 10px;">专有名词 Proper Nouns 2-7 (Danh từ riêng)</h4>
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-7.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <table class="vocab-table">
+                    <thead>
+                        <tr>
+                            <th width="10%">STT</th>
+                            <th width="20%">生词 (Từ mới)</th>
+                            <th width="20%">拼音 (Pinyin)</th>
+                            <th width="50%">释义 (Ý nghĩa)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="hanzi">阿拉伯</td><td>Ālābó</td><td>Ả Rập (Arabia)</td></tr>
+                        <tr><td>2</td><td class="hanzi">亚洲</td><td>Yàzhōu</td><td>Châu Á (Asia)</td></tr>
+                        <tr><td>3</td><td class="hanzi">非洲</td><td>Fēizhōu</td><td>Châu Phi (Africa)</td></tr>
+                        <tr><td>4</td><td class="hanzi">莫桑比克</td><td>Mòsāngbǐkè</td><td>Mozambique</td></tr>
+                        <tr><td>5</td><td class="hanzi">佛教</td><td>Fójiào</td><td>Phật giáo (Buddhism)</td></tr>
+                        <tr><td>6</td><td class="hanzi">敦煌</td><td>Dūnhuáng</td><td>Đôn Hoàng (Trạm dừng quan trọng trên CĐTL)</td></tr>
+                        <tr><td>7</td><td class="hanzi">莫高窟</td><td>Mògāokū</td><td>Hang Mạc Cao (Mogao Caves)</td></tr>
+                    </tbody>
+                </table>
+
+                <h3><i class="fa-solid fa-gamepad"></i> 词语练习 Vocabulary Exercises (Bài tập từ vựng)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Đọc ví dụ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 读例句，学生词：朗读下面词语的用例，思考这些词语的用法。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Đọc ví dụ, học từ mới: Đọc to các ví dụ dưới đây, suy nghĩ về cách sử dụng của những từ này.)
+                        </p>
+                        
+                        <div style="line-height: 1.8; background: var(--bg-body); padding: 15px; border-radius: 8px; border-left: 3px solid var(--primary);">
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 0;">（1）之</p>
+                            <p>① 在我们家，妈妈是一家之主，很多大事都是她拿主意。</p>
+                            <p>② 通过丝绸之路，中国的丝绸和茶叶出口到了欧洲。</p>
+                            <p>③ 故宫里的很多东西都是无价之宝。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（2）世纪</p>
+                            <p>① 现在是二十一世纪。</p>
+                            <p>② 公元前七世纪，古希腊人就知道中国了。</p>
+                            <p>③ 手机和电脑都是上个世纪的伟大发明。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（3）源源不断</p>
+                            <p>① 中国的瓷器和丝绸源源不断地运向世界各地。</p>
+                            <p>② 新事物源源不断地出现，我们也应该不断学习。</p>
+                            <p>③ 近几年，中国各行各业的人才正在源源不断地流向西部，推动了中国西部地区的发展。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（4）率领</p>
+                            <p>① 他率领的球队取得了第一名的好成绩。</p>
+                            <p>② 张骞率领的使臣团队成功地到达了西域。</p>
+                            <p>③ 公元15世纪，郑和率领船队出使亚洲和非洲。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（5）交流</p>
+                            <p>① 我和同学们每天用汉语交流。</p>
+                            <p>② 我们一边喝咖啡，一边交流学习汉语的方法。</p>
+                            <p>③ 丝绸之路是东西方文明交流的桥梁。</p>
+
+                            <p style="font-weight: bold; color: var(--primary); margin-top: 15px;">（6）见证</p>
+                            <p>① 爷爷是个老北京，他见证了这60年来北京的发展。</p>
+                            <p>② 我是这场事故的见证人。</p>
+                            <p>③ 敦煌莫高窟是中外文化交流的历史见证。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Mở rộng từ -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 词语扩展：读一读下面的扩展形式，再写出两个。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Mở rộng từ vựng: Đọc các dạng mở rộng dưới đây, sau đó tự viết thêm hai từ nữa.)
+                        </p>
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）<strong>- 向</strong> (hướng) — 通向, 走向, <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></p>
+                            <p>（2）<strong>- 入</strong> (vào) — 传入, 进入, <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></p>
+                            <p>（3）<strong>出 -</strong> (ra) — 出国, 出使, <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px;"></p>
+                            <p>（4）<strong>交流</strong> (giao lưu) — 文化交流, 交流经验, <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                            <p>（5）<strong>贸易</strong> (thương mại) — 出口贸易, 贸易公司, <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"> , <input type="text" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 100px;"></p>
+                        </div>
+                        <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）- 向 — <strong>跑向</strong> (chạy hướng về), <strong>飞向</strong> (bay hướng về)<br>
+                                （2）- 入 — <strong>带入</strong> (mang vào), <strong>买入</strong> (mua vào)<br>
+                                （3）出 - — <strong>出口</strong> (xuất khẩu), <strong>出发</strong> (xuất phát)<br>
+                                （4）交流 — <strong>交流思想</strong> (giao lưu tư tưởng), <strong>国际交流</strong> (giao lưu quốc tế)<br>
+                                （5）贸易 — <strong>国际贸易</strong> (thương mại quốc tế), <strong>自由贸易</strong> (thương mại tự do)
+                            </div>
+                        </details>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Kéo thả điền từ -->
+                    <div id="t34-voc-ex-3" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 选词填空：读一读给出的生词，并选择合适的放在下列句子中。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Điền từ vào chỗ trống: Kéo từ thích hợp ở khung bên dưới và thả vào chỗ trống tương ứng trong câu.)
+                        </p>
+                        
+                        <!-- Khung chứa từ vựng (Word Bank) -->
+                        <div id="word-bank-34-ex-3" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w34_1" ondragstart="drag(event)">文明</span>
+                            <span class="drag-word" draggable="true" id="w34_2" ondragstart="drag(event)">源源不断</span>
+                            <span class="drag-word" draggable="true" id="w34_3" ondragstart="drag(event)">艺术</span>
+                            <span class="drag-word" draggable="true" id="w34_4" ondragstart="drag(event)">出使</span>
+                            <span class="drag-word" draggable="true" id="w34_5" ondragstart="drag(event)">桥梁</span>
+                            <span class="drag-word" draggable="true" id="w34_6" ondragstart="drag(event)">发明</span>
+                        </div>
+                        
+                        <!-- Các câu hỏi chứa Drop Zone -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）今年是母校60岁生日，校友们从世界各地 <span class="drop-zone" data-answer="源源不断" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="min-width: 100px;"></span> 地发来贺信。</p>
+                            <p>（2）公元前138年，汉武帝派张骞 <span class="drop-zone" data-answer="出使" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 西域。</p>
+                            <p>（3）这条河上有好几座 <span class="drop-zone" data-answer="桥梁" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 。</p>
+                            <p>（4）爱迪生（Àidíshēng, Thomas Alva Edison）是一位 <span class="drop-zone" data-answer="发明" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 家。</p>
+                            <p>（5）中华 <span class="drop-zone" data-answer="文明" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></span> 有5000多年的历史。</p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t34-voc-ex-3')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-voc-ex-3-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t34-voc-ex-3-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）源源不断</span>
+                                <span>（2）出使</span>
+                                <span>（3）桥梁</span>
+                                <span>（4）发明</span>
+                                <span>（5）文明</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Nối từ với giải thích -->
+                    <div id="t34-voc-ex-4" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 将左边的词语和右边的解释连接起来。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Nối từ vựng bên trái với lời giải thích tương ứng bên phải: Điền A-E vào ô trống.)
+                        </p>
+                        
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 15px;">
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-weight: 500; min-width: 250px;">
+                                <li>（1）长安 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" data-answer="d" maxlength="1" placeholder="a-e" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: lowercase;"></li>
+                                <li>（2）佛教 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" data-answer="a" maxlength="1" placeholder="a-e" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: lowercase;"></li>
+                                <li>（3）丝绸之路 &nbsp;&nbsp; <input type="text" data-answer="e" maxlength="1" placeholder="a-e" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: lowercase;"></li>
+                                <li>（4）使臣 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" data-answer="c" maxlength="1" placeholder="a-e" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: lowercase;"></li>
+                                <li>（5）公元前 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" data-answer="b" maxlength="1" placeholder="a-e" style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; width: 50px; text-align: center; text-transform: lowercase;"></li>
+                            </ul>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; color: var(--text-muted);">
+                                <li>a. 起源于古印度的一种宗教 (Một tôn giáo có nguồn gốc từ Ấn Độ cổ đại)</li>
+                                <li>b. B.C. (Before Christ) (Trước Công nguyên)</li>
+                                <li>c. 代表国家访问外国的人 (Người đại diện quốc gia đi thăm nước ngoài)</li>
+                                <li>d. 古代西安的名字 (Tên gọi cổ của Tây An)</li>
+                                <li>e. 以丝绸贸易为主的商路 (Con đường thương mại chủ yếu buôn bán tơ lụa)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExercise('t34-voc-ex-4')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-voc-ex-4-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <div id="t34-voc-ex-4-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                                <span><strong>（1）- d</strong></span>
+                                <span><strong>（2）- a</strong></span>
+                                <span><strong>（3）- e</strong></span>
+                                <span><strong>（4）- c</strong></span>
+                                <span><strong>（5）- b</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h2>课文 2 Text 2 (Bài đọc 2)</h2>
+                
+                <h3><i class="fa-solid fa-headphones"></i> 读前任务 Pre-Reading Task (Nhiệm vụ trước khi đọc)</h3>
+                <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">1. 课文主要介绍了哪两条丝绸之路？<br><span style="font-size: 14px;">(Bài khóa chủ yếu giới thiệu hai con đường tơ lụa nào?)</span><br>2. “丝绸之路”的影响如何？<br><span style="font-size: 14px;">(Sức ảnh hưởng của "Con đường tơ lụa" như thế nào?)</span></p>
+
+                <!-- BẮT ĐẦU THẺ AUDIO -->
+                <div style="margin-bottom: 15px;">
+                    <audio controls>
+                        <source src="DWK-2-8.wav" type="audio/wav">
+                        Trình duyệt của bạn không hỗ trợ thẻ audio.
+                    </audio>
+                </div>
+                <!-- KẾT THÚC THẺ AUDIO -->
+
+                <div class="reading-box" style="margin-top: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <p style="text-indent: 0; font-weight: bold; color: var(--primary); font-size: 18px; margin: 0;">丝绸之路——文明的桥梁</p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 6px 15px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 14px; font-weight: 600; transition: 0.2s;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                    </div>
+                    
+                    <p>公元前七世纪，古代欧洲人就知道世界的东方有一个文明古国，但他们对这个国家还不是很了解。直到公元前138年，汉武帝派使臣张骞出使西域，找到了通向西方国家的道路，才打开了东西方互相了解的大门。通过这条道路，中国的丝绸、茶叶等，源源不断地运向西方。由于这条道路以丝绸贸易为主，所以人们称它为“丝绸之路”。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Vào thế kỷ 7 TCN, người châu Âu cổ đại đã biết ở phương Đông của thế giới có một quốc gia cổ đại văn minh, nhưng họ vẫn chưa hiểu rõ lắm về quốc gia này. Cho đến năm 138 TCN, Hán Vũ Đế phái sứ thần Trương Khiên đi sứ Tây Vực, tìm được con đường thông đến các quốc gia phương Tây, mới mở ra cánh cửa để phương Đông và phương Tây thấu hiểu lẫn nhau. Thông qua con đường này, tơ lụa, lá trà của Trung Quốc... cuồn cuộn không ngừng được vận chuyển sang phương Tây. Bởi vì con đường này chủ yếu là thương mại tơ lụa, nên mọi người gọi nó là "Con đường tơ lụa".)</span></p>
+                    
+                    <p>“丝绸之路”的起点是长安（今西安），从长安往西经过天山到达中亚，最远到达欧洲。后来又出现了一条“海上丝绸之路”，它是以广州等地为起点，至朝鲜、日本、东南亚、南亚、阿拉伯和东非等国家与地区的海上商路。明朝的郑和曾率领船队，先后七次沿“海上丝绸之路”出使亚洲、非洲，访问了三十多个国家，最远到达了非洲的莫桑比克。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Điểm khởi đầu của "Con đường tơ lụa" là Trường An (Tây An ngày nay), từ Trường An đi về phía tây qua dãy Thiên Sơn đến Trung Á, xa nhất đến tận châu Âu. Sau này lại xuất hiện thêm một "Con đường tơ lụa trên biển", đây là con đường thương mại trên biển lấy Quảng Châu và các nơi khác làm điểm xuất phát, đến Triều Tiên, Nhật Bản, Đông Nam Á, Nam Á, Ả Rập và Đông Phi cùng các quốc gia và khu vực khác. Trịnh Hòa triều nhà Minh từng dẫn đầu hạm đội, trước sau 7 lần dọc theo "Con đường tơ lụa trên biển" đi sứ Châu Á, Châu Phi, thăm hơn 30 quốc gia, xa nhất đến tận Mozambique của châu Phi.)</span></p>
+                    
+                    <p>“丝绸之路”不仅仅是一条商路，它更是东西方文明交流的桥梁。中国古代的四大发明通过“丝绸之路”传入西方，影响了这些国家文明的发展，而西方的艺术、宗教等则通过这条道路传入中国。对中国文化产生极大影响的佛教，就是沿“丝绸之路”传入中国的，闻名世界的敦煌莫高窟就是中外文化交流的历史见证。<br>
+                    <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">("Con đường tơ lụa" không chỉ đơn thuần là một con đường thương mại, nó càng là chiếc cầu nối giao lưu văn minh giữa phương Đông và phương Tây. Tứ đại phát minh của Trung Quốc cổ đại thông qua "Con đường tơ lụa" truyền sang phương Tây, ảnh hưởng đến sự phát triển văn minh của những quốc gia này, trong khi đó nghệ thuật, tôn giáo... của phương Tây thì thông qua con đường này truyền vào Trung Quốc. Phật giáo có ảnh hưởng vô cùng lớn đến văn hóa Trung Quốc, chính là dọc theo "Con đường tơ lụa" truyền vào Trung Quốc, Hang Mạc Cao ở Đôn Hoàng nổi tiếng thế giới chính là minh chứng lịch sử cho sự giao lưu văn hóa trong và ngoài nước.)</span></p>
+                </div>
+
+                <h3><i class="fa-solid fa-list-check"></i> 理解课文 Comprehension of the Text (Đọc hiểu bài khóa 2)</h3>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Hỏi đáp P1 -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 边读边画：读课文 2 第一段，画出下面问题的答案。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Vừa đọc vừa tìm: Đọc đoạn 1 bài 2 và trả lời các câu hỏi sau.)
+                        </p>
+                        <div style="line-height: 2.2; padding-left: 10px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）公元前138年，汉武帝派谁出使西域？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）这次出使西域的意义是什么？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）为什么称这条道路为“丝绸之路”？</strong><br><input type="text" placeholder="Nhập câu trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Điền từ Đoạn 2 -->
+                    <div id="t34-comp-ex-2" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 边读边填：读课文 2 第二段，完形填空。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Vừa đọc vừa điền: Đọc đoạn 2 của Bài 2 và gõ từ thích hợp vào chỗ trống.)
+                        </p>
+                        
+                        <div style="line-height: 2.4; padding-left: 10px; margin-bottom: 20px;">
+                            <p>
+                                “丝绸之路”的 <input type="text" data-answer="起点" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 是长安，从长安往西 <input type="text" data-answer="经过" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 天山 <input type="text" data-answer="到达" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 中亚，<input type="text" data-answer="最远" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 到达欧洲。后来又出现了一条“ <input type="text" data-answer="海上丝绸之路" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 120px; text-align: center;"> ”，它是以广州等地为起点，至 <input type="text" data-answer="朝鲜" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 、日本、东南亚、南亚、<input type="text" data-answer="阿拉伯" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 和东非等国家与地区的 <input type="text" data-answer="海上商路" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 80px; text-align: center;"> 。明朝的 <input type="text" data-answer="郑和" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 曾率领船队，先后 <input type="text" data-answer="七" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 40px; text-align: center;"> 次沿“海上丝绸之路”出使亚洲、非洲，访问了 <input type="text" data-answer="三十" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 多个国家，最远到达了 <input type="text" data-answer="非洲" style="padding: 4px; border: 1px solid #ccc; border-radius: 4px; width: 60px; text-align: center;"> 的莫桑比克。
+                            </p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                            <button onclick="checkExercise('t34-comp-ex-2')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t34-comp-ex-2-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t34-comp-ex-2-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án chi tiết:</h5>
+                            <p style="margin-top: 0;">“丝绸之路”的 <strong style="color: var(--primary);">起点</strong> 是长安，从长安往西 <strong style="color: var(--primary);">经过</strong> 天山 <strong style="color: var(--primary);">到达</strong> 中亚，<strong style="color: var(--primary);">最远</strong> 到达欧洲。后来又出现了一条“<strong style="color: var(--primary);">海上丝绸之路</strong>”，它是以广州等地为起点，至 <strong style="color: var(--primary);">朝鲜</strong>、日本、东南亚、南亚、<strong style="color: var(--primary);">阿拉伯</strong> 和东非等国家与地区的 <strong style="color: var(--primary);">海上商路</strong>。明朝的 <strong style="color: var(--primary);">郑和</strong> 曾率领船队，先后 <strong style="color: var(--primary);">七</strong> 次沿“海上丝绸之路”出使亚洲、非洲，访问了 <strong style="color: var(--primary);">三十</strong> 多个国家，最远到达了 <strong style="color: var(--primary);">非洲</strong> 的莫桑比克。</p>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 3: Framework Retell -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            3. 框架复述：熟读课文 2 第三段，按照提示词进行复述。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Tóm tắt theo khung: Đọc thuộc đoạn 3 của bài khóa 2 và thuật lại dựa theo từ gợi ý.)
+                        </p>
+                        <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; font-weight: bold; color: var(--primary); line-height: 2;">
+                            “丝绸之路”不仅仅是……，它更是……桥梁。中国古代……通过“丝绸之路”传入……，影响了这些国家……，而西方的……等则通过这条道路……。对中国文化产生极大影响的……，就是……传入中国的，闻名世界的……就是中外文化交流的……。
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 4: Summarize -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            4. 概括全文大意。 (Summarize the general idea of the passage.)
+                        </h4>
+                        <div style="line-height: 2.2; padding-left: 10px;">
+                            <p style="margin-bottom: 5px;"><strong>第一段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>第二段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                            <p style="margin-bottom: 5px;"><strong>第三段：</strong><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fa-solid fa-pen-nib"></i> 学习书面词语与格式 (Học từ ngữ và cấu trúc văn viết)</h3>
+                
+                <div class="info-box" style="background: transparent;">
+                    <p><strong>1. 汉武帝派使臣张骞出使西域，找到了通向西方国家的道路</strong></p>
+                    <p style="color: var(--text-muted);">“向” (hướng về/đến), 介词，用在动词后，表示朝着某个方向或目标，常用的有：通向、走向、跑向、飞向等。例如：<br>
+                    (Là giới từ, dùng sau động từ, biểu thị hướng tới một phương hướng hoặc mục tiêu nào đó. Thường dùng: 通向 /thông tới/, 走向 /đi về hướng/, 跑向 /chạy về hướng/, 飞向 /bay về hướng/...)</p>
+                    <p>① 这条路通<strong>向</strong>图书馆。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Con đường này thông tới thư viện.)</span></p>
+                    <p>② 孩子们一下课就跑<strong>向</strong>了运动场。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Bọn trẻ vừa tan học liền chạy về hướng sân vận động.)</span></p>
+                    <p>③ 他下了楼，走<strong>向</strong>自己的汽车。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Anh ấy xuống lầu, đi về phía xe ô tô của mình.)</span></p>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 明朝的郑和曾率领船队，先后七次沿“海上丝绸之路”出使亚洲、非洲</strong></p>
+                    <p style="color: var(--text-muted);">“沿” (dọc theo), 介词，表示顺着，说明经过的路线或处所，后面常加“着”，与“江河、道路”等搭配。例如：<br>
+                    (Giới từ, biểu thị sự thuận theo, giải thích tuyến đường hoặc nơi chốn đi qua. Phía sau thường thêm "着", kết hợp với "sông ngòi, đường sá".)</p>
+                    <p>① <strong>沿着</strong>这条路走就能到火车站。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Đi dọc theo con đường này là có thể đến ga xe lửa.)</span></p>
+                    <p>② 我特别喜欢<strong>沿着</strong>海边散步。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Tôi đặc biệt thích đi dạo dọc theo bờ biển.)</span></p>
+                    <p>③ 现在已经看不到小商人<strong>沿街</strong>叫卖商品了。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Bây giờ đã không còn thấy những tiểu thương rao bán hàng hóa dọc phố nữa rồi.)</span></p>
+                </div>
+
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>3. 中国古代的四大发明通过“丝绸之路”传入西方</strong></p>
+                    <p style="color: var(--text-muted);">“入 / 出” (Vào / Ra) 可以用在动词后，说明动作的方向，常用的有：传入 / 传出、带入 / 带出、买入 / 卖出等。例如：<br>
+                    (Có thể dùng sau động từ, giải thích phương hướng của hành động. Thường dùng: 传入 /truyền vào/ - 传出 /truyền ra/, 带入 /mang vào/ - 带出 /mang ra/, 买入 /mua vào/ - 卖出 /bán ra/...)</p>
+                    <p>① 西方的艺术、宗教通过“丝绸之路”传<strong>入</strong>中国。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Nghệ thuật, tôn giáo của phương Tây thông qua "Con đường tơ lụa" truyền vào Trung Quốc.)</span></p>
+                    <p>② 考试的时候，电子词典是不能带<strong>入</strong>教室的。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Khi thi, từ điển điện tử không được phép mang vào phòng học.)</span></p>
+                    <p>③ 这幅画已经被高价卖<strong>出</strong>了。<br>
+                    <span style="color: var(--text-muted); font-size: 14px;">(Bức tranh này đã được bán ra với giá cao rồi.)</span></p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <!-- Bài 1: Chọn từ đúng (Dropdown) -->
+                        <div id="t34-form-ex-1">
+                            <p><strong>1. 选择正确的词语。(Chọn từ đúng)</strong></p>
+                            <div style="padding-left: 10px; line-height: 2;">
+                                <p>（1）他从家里出来，快速 <select data-answer="走向" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">-- Chọn --</option><option value="走向">走向</option><option value="通向">通向</option></select> 一辆白色的汽车。</p>
+                                <p>（2）佛教是从印度 <select data-answer="传入" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">-- Chọn --</option><option value="传入">传入</option><option value="传出">传出</option></select> 中国的。</p>
+                                <p>（3）<select data-answer="沿着" style="padding: 2px; border-radius: 4px; border: 1px solid #ccc;"><option value="">-- Chọn --</option><option value="跟着">跟着</option><option value="沿着">沿着</option></select> 这条路走，五分钟就能到图书馆。</p>
+                            </div>
+                            <!-- Nút chấm điểm Dropdown -->
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <button onclick="checkSelects('t34-form-ex-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                                <span id="t34-form-ex-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 25px;">
+                            <p><strong>2. 用所给词语改写句子。(Viết lại câu sử dụng từ đã cho)</strong></p>
+                            <p>（1）天突然下起雨来，他忙向路边的咖啡厅跑去。 <span style="color: var(--primary); float: right;">（跑向）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（2）郑和走“海上丝绸之路”到达了非洲的莫桑比克。 <span style="color: var(--primary); float: right;">（沿）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（3）从这条路一直走，就可以到邮局。 <span style="color: var(--primary); float: right;">（沿）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（4）中国古代的四大发明是通过“丝绸之路”到欧洲的。 <span style="color: var(--primary); float: right;">（传入）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            <p>（5）这件事最早是李明告诉我们的。 <span style="color: var(--primary); float: right;">（传出）</span><br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none; margin-top: 5px;"></p>
+                            
+                            <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                                <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 2</summary>
+                                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                    （1）天突然下起雨来，他忙<strong>跑向</strong>路边的咖啡厅。<br>
+                                    （2）郑和<strong>沿（着）</strong>“海上丝绸之路”到达了非洲的莫桑比克。<br>
+                                    （3）<strong>沿（着）</strong>这条路一直走，就可以到邮局。<br>
+                                    （4）中国古代的四大发明是通过“丝绸之路”<strong>传入</strong>欧洲的。<br>
+                                    （5）这件事最早是从李明那里<strong>传出</strong>来的。
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+                <!-- ========================================== -->
+                <!-- 5-6 学时 -->
+                <!-- ========================================== -->
+                <h2 style="margin-top: 50px;">5—6 学时 Class Hours 5—6 (Tiết học 5—6)</h2>
+
+                <h3><i class="fa-solid fa-puzzle-piece"></i> 综合运用 Integrated Use (Vận dụng tổng hợp)</h3>
+                
+                <h4 style="color: var(--primary); font-size: 16px; margin: 20px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    专业术语运用 Use of Professional Terms (Vận dụng thuật ngữ chuyên ngành)
+                </h4>
+                
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    
+                    <!-- Bài 1: Kéo thả điền từ chuyên ngành -->
+                    <div id="t56-ex-1" style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            1. 选词填空：读一读给出的专业术语，并选择合适的放在下列句子中。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Điền từ: Kéo thuật ngữ chuyên ngành ở khung bên dưới và thả vào chỗ trống thích hợp.)
+                        </p>
+                        
+                        <!-- Word Bank -->
+                        <div id="word-bank-t56-1" style="min-height: 50px; border: 2px dashed var(--primary); background: var(--hover-bg); padding: 15px; text-align: center; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <span class="drag-word" draggable="true" id="w56_a" ondragstart="drag(event)">郑和</span>
+                            <span class="drag-word" draggable="true" id="w56_b" ondragstart="drag(event)">使臣</span>
+                            <span class="drag-word" draggable="true" id="w56_c" ondragstart="drag(event)">古罗马</span>
+                            <span class="drag-word" draggable="true" id="w56_d" ondragstart="drag(event)">唐朝</span>
+                            <span class="drag-word" draggable="true" id="w56_e" ondragstart="drag(event)">四大发明</span>
+                            <span class="drag-word" draggable="true" id="w56_f" ondragstart="drag(event)">丝绸之路</span>
+                        </div>
+                        
+                        <!-- Drop Zones -->
+                        <div style="line-height: 2.2; margin-bottom: 15px; padding-left: 10px;">
+                            <p>（1）公元前 138 年，汉武帝派 <span class="drop-zone" data-answer="使臣" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 张骞出使西域。</p>
+                            <p>（2） <span class="drop-zone" data-answer="唐朝" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 时的长安，人口超过 100 万，是当时世界上人口最多的城市。</p>
+                            <p>（3）中国古代的 <span class="drop-zone" data-answer="四大发明" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 100px;"></span> 传入西方，对世界文明的影响极大。</p>
+                            <p>（4） <span class="drop-zone" data-answer="郑和" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 80px;"></span> 曾经率领船队先后七次出使亚洲、非洲。</p>
+                            <p>（5）“海上 <span class="drop-zone" data-answer="丝绸之路" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" style="width: 100px;"></span> ”是以广州等地为起点，至朝鲜、日本、东南亚、南亚、阿拉伯和东非等国家与地区的海上商路。</p>
+                        </div>
+
+                        <!-- Nút nộp bài -->
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <button onclick="checkExerciseDragDrop('t56-ex-1')" style="background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-paper-plane"></i> Nộp bài kiểm tra</button>
+                            <span id="t56-ex-1-feedback" style="font-weight: 500;"></span>
+                        </div>
+
+                        <!-- Khung đáp án chi tiết -->
+                        <div id="t56-ex-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: var(--hover-bg); border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                            <h5 style="margin: 0 0 10px 0; color: var(--primary); font-size: 15px;"><i class="fa-solid fa-key"></i> Đáp án đúng:</h5>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                                <span>（1）使臣</span>
+                                <span>（2）唐朝</span>
+                                <span>（3）四大发明</span>
+                                <span>（4）郑和</span>
+                                <span>（5）丝绸之路</span>
+                                <span style="grid-column: span 2; color: var(--text-muted); font-size: 14px;">*Từ thừa không sử dụng: 古罗马 (La Mã cổ đại)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border: none; border-top: 1px dashed var(--border-color); margin: 20px 0;">
+
+                    <!-- Bài 2: Tra cứu khái niệm -->
+                    <div>
+                        <h4 style="color: var(--text-main); font-size: 16px; margin-bottom: 10px;">
+                            2. 概念速查：通过工具书或网络查一查下面这些术语的解释并写下来。
+                        </h4>
+                        <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">
+                            (Tra cứu khái niệm: Thông qua từ điển hoặc mạng internet, hãy tra cứu giải thích của các thuật ngữ dưới đây và viết ra.)
+                        </p>
+                        <div style="line-height: 2.2; padding-left: 10px;">
+                            <p style="margin-bottom: 5px;"><strong>（1）公元 (Công nguyên):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（2）印刷术 (Thuật in ấn):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（3）造纸术 (Thuật làm giấy):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（4）历史事件 (Sự kiện lịch sử):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                            <p style="margin-bottom: 5px;"><strong>（5）朝代 (Triều đại):</strong><br><input type="text" placeholder="Nhập giải thích..." style="width: 100%; border: 1px solid #ccc; border-radius: 6px; padding: 8px; outline: none;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    语篇与功能 Discourse and Function (Diễn ngôn và Chức năng)
+                </h4>
+
+                <!-- Info Box 1: 询问 -->
+                <div class="info-box" style="background: transparent;">
+                    <p style="font-weight: bold; font-size: 16px;">常用功能表达</p>
+                    <p><strong>1. 询问 (Hỏi đáp)：为什么……，而（反而、却）……呢？</strong></p>
+                    <p style="color: var(--text-muted); font-size: 14.5px;">(Mẫu câu dùng để hỏi sự trái ngược: Tại sao..., mà (trái lại, lại)... thế?)</p>
+                    <p>（1）<strong>为什么</strong>中国的名字不是“Han”（汉）或者“Tang”（唐），<strong>而</strong>是“China”<strong>呢</strong>？</p>
+                    <p>（2）<strong>为什么</strong>你不听医生的话在家好好休息，<strong>反而</strong>去看足球比赛<strong>呢</strong>？</p>
+                    <p>（3）<strong>为什么</strong>你明明知道这件事<strong>却</strong>不愿意告诉我<strong>呢</strong>？</p>
+                </div>
+
+                <!-- Info Box 2: 比较 -->
+                <div class="info-box" style="background: transparent; border-top: 1px dashed var(--border-color); border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+                    <p><strong>2. 比较（1）(So sánh 1)：与（同、和）……不同（不一样） / 与（同、和）……没什么差别（差别不大、差别很大）</strong></p>
+                    <p style="color: var(--text-muted); font-size: 14.5px;">(Mẫu câu so sánh: Khác với... / Không có sự khác biệt mấy so với... / Khác biệt rất lớn với...)</p>
+                    <p>（1）四川菜<strong>和</strong>上海菜的味道完全<strong>不同</strong>。</p>
+                    <p>（2）对这个问题我<strong>与</strong>你的看法不太<strong>一样</strong>。</p>
+                    <p>（3）在中国，北方人<strong>和</strong>南方人的生活习惯<strong>差别很大</strong>。</p>
+                    
+                    <div style="background: var(--hover-bg); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                        <p style="margin-top: 0; font-weight: bold; color: var(--primary);"><i class="fa-solid fa-pen"></i> 练一练 (Luyện tập)</p>
+                        
+                        <p><strong>1. 用本单元所学功能表达词语改写句子。(Viết lại câu sử dụng các mẫu câu chức năng đã học)</strong></p>
+                        <div style="padding-left: 10px; line-height: 2.2;">
+                            <p>（1）询问：为什么……，而……呢？<br>
+                            你为什么要当记者呢？你大学明明学的是医学。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（2）询问：为什么……，却……呢？<br>
+                            用电脑写东西多方便啊，你为什么一定要用手写呢？<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                            
+                            <p>（3）比较：与……不一样<br>
+                            我哥哥喜欢安静，可是我很喜欢热闹。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+
+                            <p>（4）比较：同……没什么差别<br>
+                            英式英语与美式英语的发音和语法不一样的地方不太大多。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+
+                            <p>（5）比较：和……差别很大<br>
+                            丝绸的价格很贵，而棉布的价格则非常便宜。<br>
+                            👉 <input type="text" style="width: 100%; border: none; border-bottom: 1px solid #333; background: transparent; outline: none;"></p>
+                        </div>
+                        
+                        <details style="background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px; margin-bottom: 25px;">
+                            <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Xem gợi ý đáp án Bài 1</summary>
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                                （1）为什么你大学明明学的是医学，<strong>而</strong>要当记者呢？<br>
+                                （2）为什么用电脑写东西多方便，你<strong>却</strong>一定要用手写呢？<br>
+                                （3）我<strong>与</strong>我哥哥的性格<strong>不一样</strong>，他喜欢安静，而我喜欢热闹。<br>
+                                （4）英式英语<strong>同</strong>美式英语的发音和语法<strong>没什么差别</strong>。<br>
+                                （5）丝绸的价格<strong>和</strong>棉布的价格<strong>差别很大</strong>。
+                            </div>
+                        </details>
+
+                        <!-- Bài 2: Semantic Matching Multiple Choice -->
+                        <div id="t56-mcq-1">
+                            <p><strong>2. 语义匹配：选择一个正确答案完成句子。(Lựa chọn từ phù hợp với ngữ nghĩa để hoàn thành câu)</strong></p>
+                            <div style="padding-left: 10px; line-height: 2;">
+                                <div style="margin-bottom: 15px;">
+                                    （1）在欧洲，昌南的瓷器是十分受人喜爱的 __________。<br>
+                                    A 日常用品 &nbsp;&nbsp;&nbsp; B 十分稀有 &nbsp;&nbsp;&nbsp; C 贵重物品 &nbsp;&nbsp;&nbsp; D 不可多得<br>
+                                    <select data-answer="c" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （2）中国丝绸 __________，高贵典雅，很受外国朋友的喜爱。<br>
+                                    A 制作精美 &nbsp;&nbsp;&nbsp; B 质量不好 &nbsp;&nbsp;&nbsp; C 价格很贵 &nbsp;&nbsp;&nbsp; D 种类不多<br>
+                                    <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （3）我们不仅仅学习语言， __________，我们还学习历史、政治和法律。<br>
+                                    A 除此之外 &nbsp;&nbsp;&nbsp; B 不仅如此 &nbsp;&nbsp;&nbsp; C 无论如何 &nbsp;&nbsp;&nbsp; D 源源不断<br>
+                                    <select data-answer="a" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （4）中华文明 __________，源远流长。<br>
+                                    A 很有内容 &nbsp;&nbsp;&nbsp; B 历史悠久 &nbsp;&nbsp;&nbsp; C 特点很多 &nbsp;&nbsp;&nbsp; D 很有影响<br>
+                                    <select data-answer="b" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                                <div style="margin-bottom: 15px;">
+                                    （5）每年都有 __________ 的中外游客参观敦煌莫高窟。<br>
+                                    A 闻名世界 &nbsp;&nbsp;&nbsp; B 大大小小 &nbsp;&nbsp;&nbsp; C 聪明可爱 &nbsp;&nbsp;&nbsp; D 成千上万<br>
+                                    <select data-answer="d" style="padding: 4px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                                        <option value="">- Chọn đáp án -</option><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Nút chấm điểm Trắc nghiệm -->
+                            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                                <button onclick="checkSelects('t56-mcq-1')" style="background: var(--primary); color: white; border: none; padding: 6px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px;"><i class="fa-solid fa-check"></i> Chấm điểm</button>
+                                <span id="t56-mcq-1-feedback" style="font-weight: 500; font-size: 14px;"></span>
+                            </div>
+                            <div id="t56-mcq-1-answers" style="display: none; margin-top: 15px; padding: 15px; background: white; border-radius: 6px; border: 1px dashed var(--primary); line-height: 1.8;">
+                                💡 <strong>Đáp án đúng:</strong> (1) C | (2) A | (3) A | (4) B | (5) D
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    交际与写作 Communication and Writing (Giao tiếp và Viết)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 小组讨论 (Thảo luận nhóm)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">用下面的句式与你的同学就丝绸之路对中外文化交流的作用进行讨论。<br>(Sử dụng các mẫu câu dưới đây để thảo luận với bạn học về vai trò của Con đường tơ lụa đối với sự giao lưu văn hóa trong và ngoài nước.)</span></p>
+                    
+                    <div style="background: var(--bg-body); padding: 15px; border-radius: 8px; margin: 15px 0; line-height: 1.8;">
+                        <p>• <strong>引出话题 (Dẫn dắt chủ đề)：</strong>你认为……吗？/ 就……，你有什么看法？/ 你觉得……吗？</p>
+                        <p>• <strong>初步应答 (Phản hồi bước đầu)：</strong>对于……，我个人认为…… / 对于……，我的观点是…… / 对……我是这么看的 / 是这样的，……</p>
+                        <p>• <strong>表示赞同 (Bày tỏ tán thành)：</strong>我同意……的看法 / 我也觉得……</p>
+                        <p>• <strong>表示反对 (Bày tỏ phản đối)：</strong>我不这么认为，我觉得…… / 对……的看法我大部分同意，但是……</p>
+                        <p>• <strong>结束话题 (Kết thúc chủ đề)：</strong>总之，我认为…… / 不管怎么说，在……方面，……</p>
+                    </div>
+
+                    <p><strong>2. 写一写 (Viết)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">使用“比较”这一功能的表达词语，说明学习历史的重要性，要求不少于 200 字。<br>(Sử dụng các từ ngữ biểu đạt chức năng "so sánh", giải thích tầm quan trọng của việc học lịch sử. Yêu cầu không dưới 200 chữ.)</span></p>
+                    <textarea placeholder="Nhập bài viết của bạn vào đây..." style="width: 100%; height: 150px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    活学活用 Learn and Use with Flexibility (Học đi đôi với hành)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <p><strong>1. 读下面这段文章，然后回答问题。(Đọc đoạn văn sau rồi trả lời câu hỏi.)</strong></p>
+                    <div class="reading-box" style="margin-top: 15px; margin-bottom: 20px;">
+                        <p>中国古人非常有智慧，他们用自己的聪明才智为世界文明的发展做出了很大贡献。他们发明了造纸术、印刷术、指南针和火药，这四种发明被称为中国古代的四大发明。在四大发明中，造纸术对世界文明的发展和社会进步的作用最大。造纸术的发明大大降低了书籍的成本，使文化教育得到了普及。印刷术为世界文明的传播和保存做出了重大贡献。火药的发明和传播，是军事史上的重大事件。指南针的发明和传播，为欧洲航海家探索新航路提供了重要条件。这些发明都曾改变了世界。<br>
+                        <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Người Trung Quốc cổ đại vô cùng có trí tuệ, họ đã dùng sự thông minh tài trí của mình để đóng góp to lớn cho sự phát triển của văn minh thế giới. Họ đã phát minh ra thuật làm giấy, thuật in ấn, la bàn và thuốc súng, bốn loại phát minh này được gọi là Tứ đại phát minh của Trung Quốc cổ đại. Trong Tứ đại phát minh, thuật làm giấy có tác dụng lớn nhất đối với sự phát triển văn minh thế giới và tiến bộ xã hội. Sự phát minh ra thuật làm giấy đã làm giảm đáng kể giá thành của sách vở, khiến văn hóa giáo dục được phổ cập. Thuật in ấn đã đóng góp to lớn cho việc lưu giữ và truyền bá văn minh thế giới. Sự phát minh và truyền bá thuốc súng là sự kiện trọng đại trong lịch sử quân sự. Sự phát minh và truyền bá la bàn đã cung cấp điều kiện quan trọng cho các nhà hàng hải châu Âu khám phá những tuyến đường biển mới. Những phát minh này đều đã từng thay đổi thế giới.)</span></p>
+                        <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right;">
+                            <i class="fa-solid fa-language"></i> Trung - Việt
+                        </button>
+                        <div style="clear: both;"></div>
+                    </div>
+
+                    <div style="line-height: 2.2; padding-left: 10px;">
+                        <p>（1）中国古代的四大发明是什么？<br><input type="text" placeholder="Trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p>（2）哪项发明对世界文明发展和社会进步的作用最大？<br><input type="text" placeholder="Trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p>（3）哪项发明为欧洲航海家探索新航路提供了重要的条件？<br><input type="text" placeholder="Trả lời..." style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                    </div>
+                    <details style="background: var(--hover-bg); padding: 10px 15px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 15px;">
+                        <summary style="font-weight: 600; color: var(--primary); outline: none;"><i class="fa-solid fa-lightbulb"></i> Gợi ý đáp án</summary>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border-color); line-height: 1.8;">
+                            （1）造纸术、印刷术、指南针和火药。<br>
+                            （2）造纸术。<br>
+                            （3）指南针。
+                        </div>
+                    </details>
+
+                    <p style="margin-top: 25px;"><strong>2. 社会调查 Social survey (Khảo sát xã hội)</strong><br>
+                    <span style="color: var(--text-muted); font-size: 14.5px;">为了发扬“丝绸之路”经济、人文、商贸的千年传承，并赋予其新的合作意义，中国政府提出了“一带一路”的倡议。请你收集相关资料，说一说什么是“一带一路”。你认为“一带一路”会给你的国家在哪些方面带来发展机会？<br>(Để phát huy sự kế thừa hàng ngàn năm về kinh tế, nhân văn, thương mại của "Con đường tơ lụa", đồng thời trao cho nó ý nghĩa hợp tác mới, chính phủ Trung Quốc đã đề xuất sáng kiến "Một vành đai, Một con đường". Hãy thu thập tài liệu liên quan và cho biết "Một vành đai, Một con đường" là gì? Bạn cho rằng nó sẽ mang lại cơ hội phát triển cho quốc gia của bạn trên những phương diện nào?)</span></p>
+                    <textarea placeholder="Ghi chú khảo sát của bạn..." style="width: 100%; height: 100px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; margin-top: 10px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+                <h4 style="color: var(--primary); font-size: 16px; margin: 30px 0 10px; border-bottom: 2px solid var(--border-color); padding-bottom: 5px;">
+                    扩展阅读 Extended Reading (Đọc mở rộng)
+                </h4>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+                    <h1 style="font-size: 22px; text-align: center; margin-bottom: 20px; color: var(--primary);">永远的长安</h1>
+                    <p style="text-align: center; color: var(--text-muted); margin-top: -15px; margin-bottom: 30px;">Forever Chang'an (Trường An vĩnh cửu)</p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                        <!-- Bài đọc -->
+                        <div class="reading-box" style="flex: 1; min-width: 60%; margin: 0;">
+                            <button onclick="toggleTranslation()" style="background: var(--hover-bg); color: var(--primary); border: 1px solid var(--primary); padding: 4px 12px; border-radius: 6px; cursor: pointer; font-family: 'Be Vietnam Pro', sans-serif; font-size: 13px; font-weight: 600; transition: 0.2s; float: right; margin-bottom: 10px;">
+                                <i class="fa-solid fa-language"></i> Trung - Việt
+                            </button>
+                            <div style="clear: both;"></div>
+
+                            <p>长安在中国历史上曾是十三个朝代的首都，有3100多年的历史。到了明朝，长安才改称西安，并一直使用至今。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trường An trong lịch sử Trung Quốc từng là thủ đô của 13 triều đại, có bề dày lịch sử hơn 3100 năm. Đến triều nhà Minh, Trường An mới đổi tên thành Tây An, và được sử dụng cho đến ngày nay.)</span></p>
+                            
+                            <p>长安正式作为首都是从汉朝开始的。“长安”，意思是“长治久安”。当时的长安规模很大，是汉朝的政治、文化中心，同时也是丝绸之路的起点。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trường An chính thức trở thành thủ đô là bắt đầu từ triều nhà Hán. "Trường An", có nghĩa là "lâu dài bình yên". Quy mô của Trường An lúc bấy giờ rất lớn, là trung tâm chính trị, văn hóa của nhà Hán, đồng thời cũng là điểm khởi đầu của Con đường tơ lụa.)</span></p>
+
+                            <p>长安在唐朝进入了它的黄金时代。当时的长安东西长9721米，南北长8651米，总面积达84平方公里，是古罗马城的4倍；人口已超过100万，是当时世界上人口最多的城市，也是最大的城市。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trường An vào triều Đường đã bước vào thời kỳ hoàng kim của nó. Trường An lúc bấy giờ dài 9721 mét từ Đông sang Tây, dài 8651 mét từ Nam đến Bắc, tổng diện tích đạt 84 km vuông, gấp 4 lần thành La Mã cổ đại; dân số đã vượt quá 1 triệu người, là thành phố đông dân nhất thế giới thời bấy giờ, và cũng là thành phố lớn nhất.)</span></p>
+
+                            <p>长安不仅仅是一座城市，更是许多人一生追求梦想的地方。来自不同地方和国家的人带着不同的梦想来到长安：求学、传教、经商、定居。那时的长安，街头游走着外国商人，酒馆中有貌美如花的异域酒娘，宾馆里住着等待唐朝皇帝接见的外国使臣，国子监传来留学生朗朗的读书声。长安以博大的胸怀迎接来自四面八方的新鲜事物，并一一融入自己的古老文化之中。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Trường An không chỉ là một thành phố, nó càng là nơi theo đuổi ước mơ cả đời của rất nhiều người. Những người đến từ những nơi và những quốc gia khác nhau mang theo những giấc mơ khác nhau tới Trường An: cầu học, truyền giáo, buôn bán, định cư. Trường An khi đó, trên phố có các thương nhân nước ngoài đi dạo, trong quán rượu có những cô đào dị vực xinh đẹp như hoa, trong nhà khách có những sứ thần ngoại quốc đang chờ Hoàng đế nhà Đường tiếp kiến, Quốc Tử Giám vọng lại tiếng đọc sách vang vọng của lưu học sinh. Trường An lấy tấm lòng rộng lớn để đón nhận những sự vật mới mẻ đến từ bốn phương tám hướng, và lần lượt hòa tan chúng vào nền văn hóa cổ xưa của chính mình.)</span></p>
+
+                            <p>从宋朝开始，由于中国社会经济结构的变化，长安逐渐淡出了历史舞台。直到1974年3月，在今西安市临潼区，发现了举世闻名的秦始皇兵马俑，西安才再次成为世界的焦点。如今的西安，又成为“新丝绸之路经济带”的中心。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Bắt đầu từ triều đại nhà Tống, do sự thay đổi trong cơ cấu kinh tế xã hội của Trung Quốc, Trường An dần dần mờ nhạt khỏi vũ đài lịch sử. Cho đến tháng 3 năm 1974, tại khu Lâm Đồng, thành phố Tây An ngày nay, người ta phát hiện ra Đội quân đất nung của Tần Thủy Hoàng nổi tiếng khắp thế giới, Tây An mới lại một lần nữa trở thành tiêu điểm của thế giới. Tây An ngày nay, lại trở thành trung tâm của "Vành đai kinh tế Con đường tơ lụa mới".)</span></p>
+
+                            <p>一座城市的历史就是一个民族的历史。西安，这座中国历史上的文化名城，在当代中国的经济文化活动中发挥着越来越重要的作用。<br>
+                            <span class="vn-translation" style="display: none; color: var(--text-muted); font-size: 14.5px; text-indent: 0; margin-top: 5px;">(Lịch sử của một thành phố cũng chính là lịch sử của một dân tộc. Tây An, tòa thành văn hóa nổi tiếng trong lịch sử Trung Quốc này, đang phát huy tác dụng ngày càng quan trọng trong các hoạt động kinh tế văn hóa của Trung Quốc đương đại.)</span><br>
+                            <span style="font-size: 14px; color: var(--text-muted); text-align: right; display: block;">(根据纪录片《永远的长安》改写 - <em>Cải biên theo phim tài liệu "Trường An vĩnh cửu"</em>)</span></p>
+                        </div>
+
+                        <!-- Chú thích từ vựng -->
+                        <div style="flex: 1; min-width: 250px; background: var(--bg-body); padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            <h5 style="color: var(--primary); margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid var(--border-color); padding-bottom: 5px;"><i class="fa-solid fa-book"></i> 生词 Vocab</h5>
+                            <ul style="list-style: none; padding: 0; line-height: 2.2; font-size: 14.5px;">
+                                <li>1. <strong>长治久安</strong> chángzhì-jiǔ'ān <span style="color: var(--text-muted);">(lâu dài bình yên)</span></li>
+                                <li>2. <strong>规模</strong> guīmó <span style="color: var(--text-muted);">(quy mô)</span></li>
+                                <li>3. <strong>政治</strong> zhèngzhì <span style="color: var(--text-muted);">(chính trị)</span></li>
+                                <li>4. <strong>黄金时代</strong> huángjīn shídài <span style="color: var(--text-muted);">(thời kỳ hoàng kim)</span></li>
+                                <li>5. <strong>面积</strong> miànjī <span style="color: var(--text-muted);">(diện tích)</span></li>
+                                <li>6. <strong>平方</strong> píngfāng <span style="color: var(--text-muted);">(mét vuông)</span></li>
+                                <li>7. <strong>公里</strong> gōnglǐ <span style="color: var(--text-muted);">(km)</span></li>
+                                <li>8. <strong>倍</strong> bèi <span style="color: var(--text-muted);">(lần/gấp)</span></li>
+                                <li>9. <strong>传教</strong> chuánjiào <span style="color: var(--text-muted);">(truyền giáo)</span></li>
+                                <li>10. <strong>定居</strong> dìngjū <span style="color: var(--text-muted);">(định cư)</span></li>
+                                <li>11. <strong>貌美如花</strong> màoměirúhuā <span style="color: var(--text-muted);">(xinh đẹp như hoa)</span></li>
+                                <li>12. <strong>异域</strong> yìyù <span style="color: var(--text-muted);">(dị vực / vùng đất khác)</span></li>
+                                <li>13. <strong>接见</strong> jiējiàn <span style="color: var(--text-muted);">(tiếp kiến)</span></li>
+                                <li>14. <strong>*国子监</strong> Guózǐjiàn <span style="color: var(--text-muted);">(Quốc Tử Giám)</span></li>
+                                <li>15. <strong>朗朗</strong> lǎnglǎng <span style="color: var(--text-muted);">(sang sảng)</span></li>
+                                <li>16. <strong>博大</strong> bódà <span style="color: var(--text-muted);">(rộng lớn)</span></li>
+                                <li>17. <strong>胸怀</strong> xiōnghuái <span style="color: var(--text-muted);">(tấm lòng)</span></li>
+                                <li>18. <strong>融入</strong> róngrù <span style="color: var(--text-muted);">(hòa nhập, dung nhập)</span></li>
+                                <li>19. <strong>由于</strong> yóuyú <span style="color: var(--text-muted);">(do, bởi vì)</span></li>
+                                <li>20. <strong>经济</strong> jīngjì <span style="color: var(--text-muted);">(kinh tế)</span></li>
+                                <li>21. <strong>结构</strong> jiégòu <span style="color: var(--text-muted);">(cấu trúc, cơ cấu)</span></li>
+                                <li>22. <strong>逐渐</strong> zhújiàn <span style="color: var(--text-muted);">(dần dần)</span></li>
+                                <li>23. <strong>淡出</strong> dànchū <span style="color: var(--text-muted);">(mờ nhạt, rút lui khỏi)</span></li>
+                                <li>24. <strong>举世闻名</strong> jǔshì-wénmíng <span style="color: var(--text-muted);">(nổi tiếng thế giới)</span></li>
+                                <li>25. <strong>*秦始皇</strong> Qínshǐhuáng <span style="color: var(--text-muted);">(Tần Thủy Hoàng)</span></li>
+                                <li>26. <strong>*兵马俑</strong> Bīngmǎyǒng <span style="color: var(--text-muted);">(Đội quân đất nung)</span></li>
+                                <li>27. <strong>焦点</strong> jiāodiǎn <span style="color: var(--text-muted);">(tiêu điểm)</span></li>
+                                <li>28. <strong>发挥</strong> fāhuī <span style="color: var(--text-muted);">(phát huy)</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">1. 读后回答问题。 (Read the passage and then answer the questions.)</p>
+                    <div style="line-height: 2.2; padding-left: 10px;">
+                        <p style="margin-bottom: 5px;">（1）“长治久安”是什么意思？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p style="margin-bottom: 5px;">（2）长安的黄金时代是在哪个朝代？当时的长安有多大？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p style="margin-bottom: 5px;">（3）在唐代，人们来长安的目的主要有哪些？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                        <p style="margin-bottom: 5px;">（4）“新丝绸之路经济带”的中心在哪里？<br><input type="text" style="width: 100%; border: none; border-bottom: 1px solid #ccc; outline: none; background: transparent;"></p>
+                    </div>
+
+                    <p style="margin-top: 30px; font-weight: bold;">2. “从宋朝开始，由于中国社会经济结构的变化，长安逐渐淡出了历史舞台。” 请你查找相关资料，说明长安淡出历史舞台的原因。</p>
+                    <p style="color: var(--text-muted); font-size: 14.5px; margin-bottom: 15px;">("Từ thời Tống, do sự thay đổi về cơ cấu kinh tế xã hội, Trường An dần mờ nhạt khỏi vũ đài lịch sử." Hãy tra cứu tài liệu và giải thích nguyên nhân.)</p>
+                    <textarea placeholder="Ghi chú kết quả tra cứu của bạn vào đây..." style="width: 100%; height: 120px; border: 1px solid #ccc; border-radius: 6px; padding: 15px; resize: vertical; font-family: inherit; outline: none; line-height: 1.6;"></textarea>
+                </div>
+
+
+                <!-- JAVASCRIPT CHO TÍNH NĂNG CHẤM ĐIỂM BÀI TẬP VÀ KÉO THẢ -->
+                <script>
+                    // Logic Input Text Pinyin / A-G Matching
+                    function checkExercise(exId) {
+                        const container = document.getElementById(exId);
+                        const inputsPinyin = container.querySelectorAll('input[data-pinyin]');
+                        const inputsLetter = container.querySelectorAll('input[data-answer]');
+                        let allCorrect = true;
+                        
+                        // Check Pinyin
+                        inputsPinyin.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-pinyin').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        // Check Letters
+                        inputsLetter.forEach(input => {
+                            const userAnswer = input.value.trim().toLowerCase();
+                            const correctAnswer = input.getAttribute('data-answer').toLowerCase();
+                            if (userAnswer === correctAnswer) {
+                                input.style.borderColor = '#4caf50';
+                                input.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                input.style.borderColor = '#f44336';
+                                input.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã làm đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ chưa đúng, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    // Logic Select (Dropdown)
+                    function checkSelects(exId) {
+                        const container = document.getElementById(exId);
+                        const selects = container.querySelectorAll('select[data-answer]');
+                        let allCorrect = true;
+                        
+                        selects.forEach(select => {
+                            const userAnswer = select.value;
+                            const correctAnswer = select.getAttribute('data-answer');
+                            
+                            if (userAnswer === correctAnswer) {
+                                select.style.borderColor = '#4caf50';
+                                select.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                select.style.borderColor = '#f44336';
+                                select.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Chính xác! Bạn đã chọn đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có đáp án chưa đúng, hãy xem lại nhé.</span>';
+                            }
+                        }
+                        if (answersDiv && !allCorrect) {
+                            answersDiv.style.display = 'block';
+                        }
+                    }
+
+                    // Logic Drag and Drop
+                    function allowDrop(ev) { ev.preventDefault(); }
+                    function dragEnter(ev) {
+                        ev.preventDefault();
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.add('drag-over');
+                    }
+                    function dragLeave(ev) {
+                        if(ev.target.classList.contains('drop-zone')) ev.target.classList.remove('drag-over');
+                    }
+                    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+                    function drop(ev) {
+                        ev.preventDefault();
+                        var data = ev.dataTransfer.getData("text");
+                        var draggedEl = document.getElementById(data);
+                        var targetEl = ev.target;
+
+                        if (targetEl.classList.contains('drag-word')) targetEl = targetEl.parentElement;
+
+                        if (targetEl.classList.contains('drop-zone')) {
+                            targetEl.classList.remove('drag-over');
+                            if (targetEl.children.length > 0) {
+                                // Find parent word bank to return old word
+                                let bank = document.getElementById('word-bank-4');
+                                bank.appendChild(targetEl.children[0]);
+                            }
+                            targetEl.appendChild(draggedEl);
+                        } else if (targetEl.id && targetEl.id.startsWith('word-bank')) {
+                            targetEl.appendChild(draggedEl);
+                        }
+                    }
+
+                    function checkExerciseDragDrop(exId) {
+                        const container = document.getElementById(exId);
+                        const zones = container.querySelectorAll('.drop-zone');
+                        let allCorrect = true;
+                        
+                        zones.forEach(zone => {
+                            const correctAnswer = zone.getAttribute('data-answer');
+                            let userAnswer = "";
+                            if (zone.children.length > 0) {
+                                userAnswer = zone.children[0].innerText.trim();
+                            }
+                            if (userAnswer === correctAnswer) {
+                                zone.style.borderColor = '#4caf50';
+                                zone.style.backgroundColor = '#e8f5e9';
+                            } else {
+                                zone.style.borderColor = '#f44336';
+                                zone.style.backgroundColor = '#ffebee';
+                                allCorrect = false;
+                            }
+                        });
+
+                        const feedback = document.getElementById(exId + '-feedback');
+                        const answersDiv = document.getElementById(exId + '-answers');
+                        if (feedback) {
+                            if (allCorrect) {
+                                feedback.innerHTML = '<span style="color: #4caf50;"><i class="fa-solid fa-check-circle"></i> Tuyệt vời! Bạn đã kéo đúng hết.</span>';
+                            } else {
+                                feedback.innerHTML = '<span style="color: #f44336;"><i class="fa-solid fa-times-circle"></i> Có chỗ sai, hãy xem đáp án nhé!</span>';
+                            }
+                        }
+                        if (answersDiv) answersDiv.style.display = 'block';
+                    }
+
+                    // Dịch Toggle
+                    function toggleTranslation() {
+                        const translations = document.querySelectorAll('.vn-translation');
+                        translations.forEach(el => {
+                            el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+                        });
+                    }
+                </script>
 
                 <div class="next-lesson-footer">
                     <a href="bai3.html" class="next-btn">
